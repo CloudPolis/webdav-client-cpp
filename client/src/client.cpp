@@ -6,10 +6,11 @@
 #include "fsinfo.hpp"
 #include "callback.hpp"
 #include <curl/curl.h>
+#include <pugixml/pugixml.hpp>
 
 namespace WebDAV
 {
-	Client::Client(std::map<string, string> options)
+	Client::Client(std::map<std::string, std::string> options)
 	{
 		this->webdav_hostname = options["webdav_hostname"];
 		this->webdav_login = options["webdav_login"];
@@ -25,10 +26,10 @@ namespace WebDAV
 		this->init();
 	}
 
-	std::map<string, string>
+	std::map<std::string, std::string>
 	Client::options()
 	{
-		return std::map < string, string > 
+		return std::map < std::string, std::string >
 		{
 			{ "webdav_hostname", this->webdav_hostname }, 
 			{ "webdav_login", this->webdav_login },
@@ -55,10 +56,10 @@ namespace WebDAV
 	long long
 	Client::free_size()
 	{
-		curl_slist * slist = nullptr;
-		slist = curl_slist_append(slist, "Accept: */*");
-		slist = curl_slist_append(slist, "Depth: 0");
-		slist = curl_slist_append(slist, "Content-Type: text/xml");
+		curl_slist *header = nullptr;
+		header = curl_slist_append(header, "Accept: */*");
+		header = curl_slist_append(header, "Depth: 0");
+		header = curl_slist_append(header, "Content-Type: text/xml");
 
 		pugi::xml_document document;
 		auto propfind = document.append_child("D:propfind");
@@ -76,15 +77,15 @@ namespace WebDAV
 		Request request(this->options());
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
-		request.set(CURLOPT_HTTPHEADER, slist);
+		request.set(CURLOPT_HTTPHEADER, header);
 		request.set(CURLOPT_POSTFIELDS, document_print.c_str());
 		request.set(CURLOPT_POSTFIELDSIZE, (curl_off_t)size);
 		request.set(CURLOPT_HEADER, 0);
 		request.set(CURLOPT_WRITEDATA, &data);
-		request.set(CURLOPT_WRITEFUNCTION, Callback::Append::buffer);
+		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Append::buffer);
 
 		auto is_performed = request.perform();
-		if (slist != nullptr) curl_slist_free_all(slist);
+		if (header != nullptr) curl_slist_free_all(header);
 		if (!is_performed) return 0;
 
 		document.load_buffer(data.buffer, data.size);
@@ -94,18 +95,18 @@ namespace WebDAV
 		pugi::xml_node propstat = response.select_single_node("d:propstat").node();
 		prop = propstat.select_single_node("d:prop").node();
 		pugi::xml_node quota_available_bytes = prop.select_single_node("d:quota-available-bytes").node();
-		string free_size_text = quota_available_bytes.first_child().value();
+		std::string free_size_text = quota_available_bytes.first_child().value();
 
-		auto free_size = _atoi64(free_size_text.c_str());
+		auto free_size = atoi(free_size_text.c_str());
 		return free_size;
 	}
 
 	bool
-	Client::check(string remote_resource, string remote_root)
+	Client::check(std::string remote_resource, std::string remote_root)
 	{
-		curl_slist * slist = nullptr;
-		slist = curl_slist_append(slist, "Accept: */*");
-		slist = curl_slist_append(slist, "Depth: 1");
+		curl_slist *header = nullptr;
+		header = curl_slist_append(header, "Accept: */*");
+		header = curl_slist_append(header, "Depth: 1");
 
 		Data data = { 0, 0, 0 };
 
@@ -117,22 +118,22 @@ namespace WebDAV
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, slist);
+		request.set(CURLOPT_HTTPHEADER, header);
 		request.set(CURLOPT_WRITEDATA, &data);
-		request.set(CURLOPT_WRITEFUNCTION, Callback::Append::buffer);
+		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Append::buffer);
 
 		bool is_performed = request.perform();
 
-		if (slist != nullptr) curl_slist_free_all(slist);
+		if (header != nullptr) curl_slist_free_all(header);
 		return is_performed;
 	}
 
 	std::map<std::string, std::string>
 	Client::info(std::string remote_resource, std::string remote_root)
 	{
-		curl_slist * slist = nullptr;
-		slist = curl_slist_append(slist, "Accept: */*");
-		slist = curl_slist_append(slist, "Depth: 1");
+		curl_slist *header = nullptr;
+		header = curl_slist_append(header, "Accept: */*");
+		header = curl_slist_append(header, "Depth: 1");
 
 		Data data = { 0, 0, 0 };
 
@@ -144,13 +145,13 @@ namespace WebDAV
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, slist);
+		request.set(CURLOPT_HTTPHEADER, header);
 		request.set(CURLOPT_WRITEDATA, &data);
-		request.set(CURLOPT_WRITEFUNCTION, Callback::Append::buffer);
+		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Append::buffer);
 
 		bool is_performed = request.perform();
 
-		if (slist != nullptr) curl_slist_free_all(slist);
+		if (header != nullptr) curl_slist_free_all(header);
 
 		if (!is_performed) return std::map<std::string, std::string>();
 
@@ -158,12 +159,12 @@ namespace WebDAV
 		document.load_buffer(data.buffer, data.size);
 		auto multistatus = document.select_single_node("d:multistatus").node();
 		auto responses = multistatus.select_nodes("d:response");
-		for_each(responses.begin(), responses.end(), [=](auto response)
+		std::for_each(responses.begin(), responses.end(), [=](auto response)
 		{
 			pugi::xml_node href = response.node().select_single_node("d:href").node();
-			string encode_file_name = href.first_child().value();
-			string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
-			if (resource_path.compare(resource_urn.path()) != 0) continue;
+			std::string encode_file_name = href.first_child().value();
+			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
+			if (resource_path.compare(resource_urn.path()) != 0) return;
 			auto propstat = response.node().select_single_node("d:propstat").node();
 			auto prop = propstat.select_single_node("d:prop").node();
 			auto creation_date = prop.select_single_node("d:creationdate").node();
@@ -195,18 +196,18 @@ namespace WebDAV
 		return is_directory;
 	}
 
-	vector<string>
-	Client::list(string remote_directory, string remote_root)
+	std::vector<std::string>
+	Client::list(std::string remote_directory, std::string remote_root)
 	{
 		bool is_existed = this->check(remote_directory, remote_root);
-		if (!is_existed) return vector<string>();
+		if (!is_existed) return std::vector<std::string>();
 
 		bool is_directory = this->is_dir(remote_directory, remote_root);
-		if (!is_directory) return vector<string>();
+		if (!is_directory) return std::vector<std::string>();
 
-		curl_slist * slist = nullptr;
-		slist = curl_slist_append(slist, "Accept: */*");
-		slist = curl_slist_append(slist, "Depth: 1");
+		curl_slist *header = nullptr;
+		header = curl_slist_append(header, "Accept: */*");
+		header = curl_slist_append(header, "Depth: 1");
 
 		Data data = { 0, 0, 0 };
 
@@ -218,27 +219,27 @@ namespace WebDAV
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, slist);
+		request.set(CURLOPT_HTTPHEADER, header);
 		request.set(CURLOPT_HEADER, 0);
 		request.set(CURLOPT_WRITEDATA, &data);
-		request.set(CURLOPT_WRITEFUNCTION, Callback::Append::buffer);
+		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Append::buffer);
 
 		bool is_performed = request.perform();
 
-		if (slist != nullptr) curl_slist_free_all(slist);
+		if (header != nullptr) curl_slist_free_all(header);
 
-		vector<string> resources;
+		std::vector<std::string> resources;
 
 		pugi::xml_document document;
 		document.load_buffer(data.buffer, data.size);
 		auto multistatus = document.select_single_node("d:multistatus").node();
 		auto responses = multistatus.select_nodes("d:response");
-		for_each(responses.begin(), responses.end(), [=](auto response)
+		std::for_each(responses.begin(), responses.end(), [=](auto response)
 		{
 			pugi::xml_node href = response->node().select_single_node("d:href").node();
-			string encode_file_name = href.first_child().value();
-			string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
-			if (resource_path.compare(directory_urn.path()) == 0) continue;
+			std::string encode_file_name = href.first_child().value();
+			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
+			if (resource_path.compare(directory_urn.path()) == 0) return;
 			Urn resource_urn(resource_path);
 			resources.push_back(resource_urn.name());
 		});
@@ -247,12 +248,12 @@ namespace WebDAV
 	}
 
 	bool
-	Client::download(string remote_file, wstring local_file, string remote_root, function<void(bool)> callback)
+	Client::download(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback)
 	{
 		bool is_existed = this->check(remote_file, remote_root);
 		if (!is_existed) return false;
 
-		ofstream file_stream(local_file, ios::binary);
+		std::ofstream file_stream(local_file, std::ios::binary);
 
 		Request request(this->options());
 
@@ -264,7 +265,7 @@ namespace WebDAV
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HEADER, 0L);
 		request.set(CURLOPT_WRITEDATA, &file_stream);
-		request.set(CURLOPT_WRITEFUNCTION, Callback::Write::file);
+		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Write::file);
 
 		bool is_performed = request.perform();
 
@@ -273,14 +274,14 @@ namespace WebDAV
 	}
 
 	void
-	Client::async_download(string remote_file, wstring local_file, string remote_root, function<void(bool)> callback)
+	Client::async_download(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback)
 	{
-		thread downloading([=](){ this->download(remote_file, local_file, remote_root, callback); });
+		std::thread downloading([=](){ this->download(remote_file, local_file, remote_root, callback); });
 		downloading.detach();
 	}
 
 	bool
-	Client::download_to(string remote_file, char * buffer_ptr, size_t buffer_size, string remote_root, function<void(bool)> callback)
+	Client::download_to(std::string remote_file, char * buffer_ptr, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback)
 	{
 		if (buffer_size == 0) return false;
 
@@ -299,32 +300,32 @@ namespace WebDAV
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HEADER, 0L);
 		request.set(CURLOPT_WRITEDATA, &data);
-		request.set(CURLOPT_WRITEFUNCTION, Callback::Write::buffer);
+		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Write::buffer);
 
 		bool is_performed = request.perform();
 		if (callback != nullptr) callback(is_performed);
 		if (!is_performed) return false;
 
-		memcpy_s(buffer_ptr, buffer_size, data.buffer, data.size);
+		memcpy(buffer_ptr, data.buffer, data.size);
 		return true;
 	}
 
 	void
-	Client::async_download_to(string remote_file, char * buffer, size_t buffer_size, string remote_root, function<void(bool)> callback)
+	Client::async_download_to(std::string remote_file, char * buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback)
 	{
-		thread downloading([=](){ this->download_to(remote_file, buffer, buffer_size, remote_root, callback); });
+		std::thread downloading([=](){ this->download_to(remote_file, buffer, buffer_size, remote_root, callback); });
 		downloading.detach();
 	}
 
 	bool
-	Client::create_directory(string remote_directory)
+	Client::create_directory(std::string remote_directory)
 	{
 		bool is_existed = this->check(remote_directory);
 		if (is_existed) return true;
 
-		curl_slist * slist = nullptr;
-		slist = curl_slist_append(slist, "Accept: */*");
-		slist = curl_slist_append(slist, "Connection: Keep-Alive");
+		curl_slist *header = nullptr;
+		header = curl_slist_append(header, "Accept: */*");
+		header = curl_slist_append(header, "Connection: Keep-Alive");
 
 		Request request(this->options());
 
@@ -334,21 +335,20 @@ namespace WebDAV
 
 		request.set(CURLOPT_CUSTOMREQUEST, "MKCOL");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, slist);
+		request.set(CURLOPT_HTTPHEADER, header);
 
 		bool is_performed = request.perform();
-		if (slist != nullptr) curl_slist_free_all(slist);
+		if (header != nullptr) curl_slist_free_all(header);
 		return is_performed;
 	}
 
 	bool
-	Client::upload(string remote_file, wstring local_file, string remote_root, function<void(bool)> callback)
+	Client::upload(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback)
 	{
 		bool is_existed = FileInfo::exists(local_file);
 		if (!is_existed) return false;
 
-		FILE * file;
-		_wfopen_s(&file, local_file.c_str(), L"rb");
+		std::ifstream file_stream(local_file, std::ios::binary);
 		auto size = FileInfo::size(local_file);
 
 		Request request(this->options());
@@ -359,27 +359,26 @@ namespace WebDAV
 
 		request.set(CURLOPT_UPLOAD, 1L);
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_READDATA, file);
-		request.set(CURLOPT_READFUNCTION, Callback::Read::file);
+		request.set(CURLOPT_READDATA, &file_stream);
+		request.set(CURLOPT_READFUNCTION, (void *)Callback::Read::file);
 		request.set(CURLOPT_INFILESIZE_LARGE, (curl_off_t)size);
 		request.set(CURLOPT_BUFFERSIZE, buffer_size);
 
 		bool is_performed = request.perform();
-		fclose(file);
 
 		if (callback != nullptr) callback(is_performed);
 		return is_performed;
 	}
 
 	void
-	Client::async_upload(string remote_file, wstring local_file, string remote_root, function<void(bool)> callback)
+	Client::async_upload(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback)
 	{
-		thread uploading([=](){ this->upload(remote_file, local_file, remote_root, callback); });
+		std::thread uploading([=](){ this->upload(remote_file, local_file, remote_root, callback); });
 		uploading.detach();
 	}
 
 	bool
-	Client::upload_from(string remote_file, char* buffer, size_t buffer_size, string remote_root, function<void(bool)> callback)
+	Client::upload_from(std::string remote_file, char* buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback)
 	{
 		Data data = { buffer, 0, buffer_size };
 
@@ -392,7 +391,7 @@ namespace WebDAV
 		request.set(CURLOPT_UPLOAD, 1L);
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_READDATA, &data);
-		request.set(CURLOPT_READFUNCTION, Callback::Read::buffer);
+		request.set(CURLOPT_READFUNCTION, (void *)Callback::Read::buffer);
 		request.set(CURLOPT_INFILESIZE_LARGE, (curl_off_t)buffer_size);
 		request.set(CURLOPT_BUFFERSIZE, (long long)buffer_size);
 
@@ -403,21 +402,21 @@ namespace WebDAV
 	}
 
 	void
-	Client::async_upload_from(string remote_file, char* buffer, size_t buffer_size, string remote_root, function<void(bool)> callback)
+	Client::async_upload_from(std::string remote_file, char* buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback)
 	{
-		thread uploading([=](){ this->upload_from(remote_file, buffer, buffer_size, remote_root, callback); });
+		std::thread uploading([=](){ this->upload_from(remote_file, buffer, buffer_size, remote_root, callback); });
 		uploading.detach();
 	}
 
 	bool
-	Client::clean(string remote_resource, string remote_root)
+	Client::clean(std::string remote_resource, std::string remote_root)
 	{
 		bool is_existed = this->check(remote_resource, remote_root);
 		if (!is_existed) return true;
 
-		curl_slist * slist = nullptr;
-		slist = curl_slist_append(slist, "Accept: */*");
-		slist = curl_slist_append(slist, "Connection: Keep-Alive");
+		curl_slist * header = nullptr;
+		header = curl_slist_append(header, "Accept: */*");
+		header = curl_slist_append(header, "Connection: Keep-Alive");
 
 		Request request(this->options());
 
@@ -427,11 +426,11 @@ namespace WebDAV
 
 		request.set(CURLOPT_CUSTOMREQUEST, "DELETE");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, slist);
+		request.set(CURLOPT_HTTPHEADER, header);
 
 		bool is_performed = request.perform();
 
-		if (slist != nullptr) curl_slist_free_all(slist);
+		if (header != nullptr) curl_slist_free_all(header);
 
 		return is_performed;
 	}

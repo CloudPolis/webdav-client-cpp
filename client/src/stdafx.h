@@ -1,9 +1,5 @@
 #pragma once
 
-#define _CRT_SECURE_NO_WARNINGS
-
-#define NOMINMAX
-
 #pragma region STL
 #include <algorithm>
 #include <fstream>
@@ -15,10 +11,6 @@
 #include <vector>
 #include <thread>
 #pragma endregion
-
-#define USE_SSLEAY
-#define USE_OPENSSL
-#define CURL_STATICLIB
 
 #include <openssl/ssl.h>
 #include <openssl/x509.h>
