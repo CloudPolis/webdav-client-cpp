@@ -1,6 +1,5 @@
 #pragma once
 
-#pragma region STL
 #include <algorithm>
 #include <fstream>
 #include <functional>
@@ -10,8 +9,5 @@
 #include <string>
 #include <vector>
 #include <thread>
-#pragma endregion
 
-#include <openssl/ssl.h>
-#include <openssl/x509.h>
-#include <openssl/pem.h>
+#include "string.h"

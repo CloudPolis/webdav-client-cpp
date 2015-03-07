@@ -1,8 +1,8 @@
 #pragma once
 
-#include <WebDAV/Client.hpp>
+#include "client.hpp"
 
-#include "curl/curl.h"
+#include <curl/curl.h>
 
 namespace WebDAV
 {
@@ -20,15 +20,16 @@ namespace WebDAV
 
 		~Request();
 
-		bool set(CURLoption option, void * value);
+		template<typename T>
+		bool set(CURLoption option, T value);
 
-		bool set(CURLoption option, char * value);
+		//bool set(CURLoption option, char * value);
 
-		bool set(CURLoption option, const char * value);
+		//bool set(CURLoption option, const char * value);
 
-		bool set(CURLoption option, int value);
+		//bool set(CURLoption option, int value);
 
-		bool set(CURLoption option, long long value);
+		//bool set(CURLoption option, long long value);
 
 		bool perform();
 

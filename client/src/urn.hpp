@@ -10,6 +10,8 @@ public:
 
 	Urn(std::string path, bool directory = false);
 
+	Urn(std::nullptr_t);
+
 	std::string path();
 
 	std::string quote(void * request);

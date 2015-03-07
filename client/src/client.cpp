@@ -1,12 +1,10 @@
 #include "stdafx.h"
-#include "client.hpp"
+#include <client.hpp>
 #include "pugiext.hpp"
 #include "request.hpp"
 #include "urn.hpp"
 #include "fsinfo.hpp"
 #include "callback.hpp"
-#include <curl/curl.h>
-#include <pugixml/pugixml.hpp>
 
 namespace WebDAV
 {
@@ -79,7 +77,7 @@ namespace WebDAV
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_HTTPHEADER, header);
 		request.set(CURLOPT_POSTFIELDS, document_print.c_str());
-		request.set(CURLOPT_POSTFIELDSIZE, (curl_off_t)size);
+		request.set(CURLOPT_POSTFIELDSIZE, (long long)size);
 		request.set(CURLOPT_HEADER, 0);
 		request.set(CURLOPT_WRITEDATA, &data);
 		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Append::buffer);
@@ -159,29 +157,29 @@ namespace WebDAV
 		document.load_buffer(data.buffer, data.size);
 		auto multistatus = document.select_single_node("d:multistatus").node();
 		auto responses = multistatus.select_nodes("d:response");
-		std::for_each(responses.begin(), responses.end(), [=](auto response)
-		{
+		std::for_each(responses.begin(), responses.end(), [&resource_urn](pugi::xpath_node response){
 			pugi::xml_node href = response.node().select_single_node("d:href").node();
 			std::string encode_file_name = href.first_child().value();
 			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
-			if (resource_path.compare(resource_urn.path()) != 0) return;
-			auto propstat = response.node().select_single_node("d:propstat").node();
-			auto prop = propstat.select_single_node("d:prop").node();
-			auto creation_date = prop.select_single_node("d:creationdate").node();
-			auto display_name = prop.select_single_node("d:displayname").node();
-			auto content_length = prop.select_single_node("d:getcontentlength").node();
-			auto modified_date = prop.select_single_node("d:getlastmodified").node();
-			auto resource_type = prop.select_single_node("d:resourcetype").node();
+			if (resource_path.compare(resource_urn.path()) == 0) {
+				auto propstat = response.node().select_single_node("d:propstat").node();
+				auto prop = propstat.select_single_node("d:prop").node();
+				auto creation_date = prop.select_single_node("d:creationdate").node();
+				auto display_name = prop.select_single_node("d:displayname").node();
+				auto content_length = prop.select_single_node("d:getcontentlength").node();
+				auto modified_date = prop.select_single_node("d:getlastmodified").node();
+				auto resource_type = prop.select_single_node("d:resourcetype").node();
 
-			std::map<std::string, std::string> information = {
-				{ "created", creation_date.first_child().value() },
-				{ "name", display_name.first_child().value() },
-				{ "size", content_length.first_child().value() },
-				{ "modified", modified_date.first_child().value() },
-				{ "type", resource_type.first_child().name() }
-			};
+				std::map<std::string, std::string> information = {
+						{"created", creation_date.first_child().value()},
+						{"name", display_name.first_child().value()},
+						{"size", content_length.first_child().value()},
+						{"modified", modified_date.first_child().value()},
+						{"type", resource_type.first_child().name()}
+				};
 
-			return information;
+				return information;
+			}
 		});
 
 		return std::map<std::string, std::string>();
@@ -213,7 +211,6 @@ namespace WebDAV
 
 		Request request(this->options());
 
-		bool resource_is_dir = true;
 		auto directory_urn = Urn(remote_root) + remote_directory;
 		auto url = this->webdav_hostname + directory_urn.quote(request.handle);
 
@@ -228,15 +225,16 @@ namespace WebDAV
 
 		if (header != nullptr) curl_slist_free_all(header);
 
+		if (!is_performed) return std::vector<std::string>();
+
 		std::vector<std::string> resources;
 
 		pugi::xml_document document;
 		document.load_buffer(data.buffer, data.size);
 		auto multistatus = document.select_single_node("d:multistatus").node();
 		auto responses = multistatus.select_nodes("d:response");
-		std::for_each(responses.begin(), responses.end(), [=](auto response)
-		{
-			pugi::xml_node href = response->node().select_single_node("d:href").node();
+		std::for_each(responses.begin(), responses.end(), [&directory_urn, &resources](pugi::xpath_node response){
+			pugi::xml_node href = response.node().select_single_node("d:href").node();
 			std::string encode_file_name = href.first_child().value();
 			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
 			if (resource_path.compare(directory_urn.path()) == 0) return;
@@ -362,7 +360,7 @@ namespace WebDAV
 		request.set(CURLOPT_READDATA, &file_stream);
 		request.set(CURLOPT_READFUNCTION, (void *)Callback::Read::file);
 		request.set(CURLOPT_INFILESIZE_LARGE, (curl_off_t)size);
-		request.set(CURLOPT_BUFFERSIZE, buffer_size);
+		request.set(CURLOPT_BUFFERSIZE, Client::buffer_size);
 
 		bool is_performed = request.perform();
 

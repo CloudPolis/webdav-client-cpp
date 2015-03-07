@@ -12,7 +12,7 @@ set(${PROJECT_NAME}_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/stdafx.cpp
 
 set(${PROJECT_NAME}_headers ${CMAKE_CURRENT_SOURCE_DIR}/src/stdafx.h
                             ${CMAKE_CURRENT_SOURCE_DIR}/src/callback.hpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/src/client.hpp
+                            inc/client.hpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/src/fsinfo.hpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/src/request.hpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/src/urn.hpp

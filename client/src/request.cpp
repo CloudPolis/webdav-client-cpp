@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "request.hpp"
 #include "fsinfo.hpp"
+#include <curl/curl.h>
 
 bool inline check_code(CURLcode code)
 {
@@ -68,44 +69,12 @@ namespace WebDAV
 		if (this->handle != nullptr) curl_easy_cleanup(this->handle);
 	}
 
+	template <typename T>
 	bool
-	Request::set(CURLoption option, void * value)
+	Request::set(CURLoption option, T value)
 	{
 		if (this->handle == nullptr) return false;
-		auto result = check_code(curl_easy_setopt(this->handle, option, value));
-		return true;
-	}
-
-	bool
-	Request::set(CURLoption option, char * value)
-	{
-		if (this->handle == nullptr) return false;
-		auto result = check_code(curl_easy_setopt(this->handle, option, value));
-		return true;
-	}
-
-	bool
-	Request::set(CURLoption option, const char * value)
-	{
-		if (this->handle == nullptr) return false;
-		auto result = check_code(curl_easy_setopt(this->handle, option, value));
-		return true;
-	}
-
-	bool
-	Request::set(CURLoption option, int value)
-	{
-		if (this->handle == nullptr) return false;
-		auto result = check_code(curl_easy_setopt(this->handle, option, value));
-		return true;
-	}
-
-	bool
-	Request::set(CURLoption option, long long value)
-	{
-		if (this->handle == nullptr) return false;
-		auto result = check_code(curl_easy_setopt(this->handle, option, value));
-		return true;
+		return check_code(curl_easy_setopt(this->handle, option, value));
 	}
 
 	bool Request::perform()
@@ -141,7 +110,7 @@ namespace WebDAV
 		if (!cert_is_existed) return false;
 		if (key_path.empty()) return false;
 		bool key_is_existed = FileInfo::exists(key_path);
-		if (!key_is_existed) return false;
-		return true;
+		if (key_is_existed) return true;
+		return false;
 	}
 }

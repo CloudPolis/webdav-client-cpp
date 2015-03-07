@@ -16,6 +16,11 @@ Urn::Urn(std::string path, bool directory)
 	m_path = path;
 }
 
+Urn::Urn(std::nullptr_t)
+{
+	m_path = nullptr;
+}
+
 std::string Urn::path()
 {
 	return m_path;
