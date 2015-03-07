@@ -55,4 +55,4 @@ typedef std::string tstring;
 #endif
 #pragma endregion
 
-#include "Config.hpp"
+#include "config.hpp"

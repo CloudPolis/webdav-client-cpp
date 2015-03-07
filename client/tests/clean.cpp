@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <Catch/catch.hpp>
+#include "catch.hpp"
 
 SCENARIO("Client must clean an existing remote resources", "[clean]") {
 
