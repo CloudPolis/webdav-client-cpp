@@ -3,8 +3,6 @@ project(webdavclient)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-add_subdirectory(tests)
-
 include_directories(./inc/)
 
 set(${PROJECT_NAME}_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/stdafx.cpp
@@ -27,3 +25,5 @@ add_definitions(-DUSE_SSLEAY -DUSE_OPENSSL -DCURL_STATICLIB -DNOMINMAX)
 add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 
 install(FILES ${${PROJECT_NAME}_headers} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+add_subdirectory(tests)
