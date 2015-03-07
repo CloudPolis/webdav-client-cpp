@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "request.hpp"
 #include "fsinfo.hpp"
-#include <curl/curl.h>
 
 bool inline check_code(CURLcode code)
 {

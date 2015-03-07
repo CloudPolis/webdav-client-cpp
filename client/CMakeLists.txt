@@ -22,4 +22,6 @@ include_directories(./inc/)
 
 add_definitions(-DUSE_SSLEAY -DUSE_OPENSSL -DCURL_STATICLIB -DNOMINMAX)
 
-add_library(webdavclient STATIC ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
+add_subdirectory(tests)
+
+add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})

@@ -5,7 +5,7 @@ SCENARIO("Client must list a remote files and a remote directories", "[list]") {
 
   std::unique_ptr<WebDAV::Client> client(new WebDAV::Client(options));
 
-    GIVEN("A remote directory with 5 files and 5 directories") {
+  GIVEN("A remote directory with 5 files and 5 directories") {
 
     std::string root = "dir_with_files_and_dirs/";
 
