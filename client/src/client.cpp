@@ -316,7 +316,7 @@ namespace WebDAV
 	}
 
 	bool
-	Client::create_directory(std::string remote_directory)
+	Client::create_directory(std::string remote_directory, bool recursive)//TODO
 	{
 		bool is_existed = this->check(remote_directory);
 		if (is_existed) return true;
@@ -338,6 +338,16 @@ namespace WebDAV
 		bool is_performed = request.perform();
 		if (header != nullptr) curl_slist_free_all(header);
 		return is_performed;
+	}
+
+	bool Client::move(std::string remote_source, std::string remote_destination)
+	{
+		//TODO
+	}
+
+	bool Client::copy(std::string remote_source, std::string remote_destination)
+	{
+		//TODO
 	}
 
 	bool

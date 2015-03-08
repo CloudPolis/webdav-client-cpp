@@ -50,6 +50,12 @@ namespace WebDAV
 
 		std::vector<std::string> list(std::string remote_directory = "", std::string remote_root = "");
 
+		bool create_directory(std::string remote_directory, bool recursive = false);
+
+		bool move(std::string remote_source, std::string remote_destination);
+
+		bool copy(std::string remote_source, std::string remote_destination);
+
 		bool download(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr);
 
 		bool download_to(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "", std::function<void(bool)> callback = nullptr);
@@ -57,8 +63,6 @@ namespace WebDAV
 		void async_download(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr);
 
 		void async_download_to(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "", std::function<void(bool)> callback = nullptr);
-
-		bool create_directory(std::string remote_directory);
 
 		bool upload(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr);
 
