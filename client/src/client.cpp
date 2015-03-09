@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <client.hpp>
 #include "pugiext.hpp"
+#include "header.hpp"
 #include "request.hpp"
 #include "urn.hpp"
 #include "fsinfo.hpp"
@@ -8,7 +9,7 @@
 
 namespace WebDAV
 {
-	Client::Client(std::map<std::string, std::string> options)
+	Client::Client(std::map<std::string, std::string> options) noexcept
 	{
 		this->webdav_hostname = options["webdav_hostname"];
 		this->webdav_login = options["webdav_login"];
@@ -25,7 +26,7 @@ namespace WebDAV
 	}
 
 	std::map<std::string, std::string>
-	Client::options()
+	Client::options() noexcept
 	{
 		return std::map < std::string, std::string >
 		{
@@ -40,24 +41,25 @@ namespace WebDAV
 		};
 	}
 
-	Client::~Client()
+	Client::~Client() noexcept
 	{
 		curl_global_cleanup();
 	}
 
 	void
-	Client::init()
+	Client::init() noexcept
 	{
 		curl_global_init(CURL_GLOBAL_DEFAULT);
 	}
 
 	long long
-	Client::free_size()
+	Client::free_size() noexcept
 	{
-		curl_slist *header = nullptr;
-		header = curl_slist_append(header, "Accept: */*");
-		header = curl_slist_append(header, "Depth: 0");
-		header = curl_slist_append(header, "Content-Type: text/xml");
+		Header header = {
+				"Accept: */*",
+				"Depth: 0",
+				"Content-Type: text/xml"
+		};
 
 		pugi::xml_document document;
 		auto propfind = document.append_child("D:propfind");
@@ -75,7 +77,7 @@ namespace WebDAV
 		Request request(this->options());
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
-		request.set(CURLOPT_HTTPHEADER, header);
+		request.set(CURLOPT_HTTPHEADER, header.handle);
 		request.set(CURLOPT_POSTFIELDS, document_print.c_str());
 		request.set(CURLOPT_POSTFIELDSIZE, (long long)size);
 		request.set(CURLOPT_HEADER, 0);
@@ -83,7 +85,6 @@ namespace WebDAV
 		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Append::buffer);
 
 		auto is_performed = request.perform();
-		if (header != nullptr) curl_slist_free_all(header);
 		if (!is_performed) return 0;
 
 		document.load_buffer(data.buffer, data.size);
@@ -100,56 +101,55 @@ namespace WebDAV
 	}
 
 	bool
-	Client::check(std::string remote_resource, std::string remote_root)
+	Client::check(std::string remote_resource, std::string remote_root) noexcept
 	{
-		curl_slist *header = nullptr;
-		header = curl_slist_append(header, "Accept: */*");
-		header = curl_slist_append(header, "Depth: 1");
+		auto root_urn = Urn(remote_root);
+		auto resource_urn = root_urn + remote_resource;
+
+		Header header = {
+				"Accept: */*",
+				"Depth: 1"
+		};
 
 		Data data = { 0, 0, 0 };
 
 		Request request(this->options());
 
-		auto root_urn = Urn(remote_root);
-		auto resource_urn = root_urn + remote_resource;
 		auto url = this->webdav_hostname + resource_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, header);
+		request.set(CURLOPT_HTTPHEADER, header.handle);
 		request.set(CURLOPT_WRITEDATA, &data);
 		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Append::buffer);
 
-		bool is_performed = request.perform();
-
-		if (header != nullptr) curl_slist_free_all(header);
-		return is_performed;
+		return request.perform();
 	}
 
 	std::map<std::string, std::string>
-	Client::info(std::string remote_resource, std::string remote_root)
+	Client::info(std::string remote_resource, std::string remote_root) noexcept
 	{
-		curl_slist *header = nullptr;
-		header = curl_slist_append(header, "Accept: */*");
-		header = curl_slist_append(header, "Depth: 1");
+		auto root_urn = Urn(remote_root);
+		auto resource_urn = root_urn + remote_resource;
+
+		Header header = {
+				"Accept: */*",
+				"Depth: 1"
+		};
 
 		Data data = { 0, 0, 0 };
 
 		Request request(this->options());
 
-		auto root_urn = Urn(remote_root);
-		auto resource_urn = root_urn + remote_resource;
 		auto url = this->webdav_hostname + resource_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, header);
+		request.set(CURLOPT_HTTPHEADER, header.handle);
 		request.set(CURLOPT_WRITEDATA, &data);
 		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Append::buffer);
 
 		bool is_performed = request.perform();
-
-		if (header != nullptr) curl_slist_free_all(header);
 
 		if (!is_performed) return std::map<std::string, std::string>();
 
@@ -157,7 +157,8 @@ namespace WebDAV
 		document.load_buffer(data.buffer, data.size);
 		auto multistatus = document.select_single_node("d:multistatus").node();
 		auto responses = multistatus.select_nodes("d:response");
-		std::for_each(responses.begin(), responses.end(), [&resource_urn](pugi::xpath_node response){
+		for (auto response : responses)
+		{
 			pugi::xml_node href = response.node().select_single_node("d:href").node();
 			std::string encode_file_name = href.first_child().value();
 			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
@@ -180,13 +181,13 @@ namespace WebDAV
 
 				return information;
 			}
-		});
+		}
 
 		return std::map<std::string, std::string>();
 	}
 
 	bool 
-	Client::is_dir(std::string remote_resource, std::string remote_root)
+	Client::is_dir(std::string remote_resource, std::string remote_root) noexcept
 	{
 		auto information = this->info(remote_resource, remote_root);
 		auto resource_type = information["type"];
@@ -195,7 +196,7 @@ namespace WebDAV
 	}
 
 	std::vector<std::string>
-	Client::list(std::string remote_directory, std::string remote_root)
+	Client::list(std::string remote_directory, std::string remote_root) noexcept
 	{
 		bool is_existed = this->check(remote_directory, remote_root);
 		if (!is_existed) return std::vector<std::string>();
@@ -203,27 +204,27 @@ namespace WebDAV
 		bool is_directory = this->is_dir(remote_directory, remote_root);
 		if (!is_directory) return std::vector<std::string>();
 
-		curl_slist *header = nullptr;
-		header = curl_slist_append(header, "Accept: */*");
-		header = curl_slist_append(header, "Depth: 1");
+		auto directory_urn = Urn(remote_root) + remote_directory;
+
+		Header header = {
+				"Accept: */*",
+				"Depth: 1"
+		};
 
 		Data data = { 0, 0, 0 };
 
 		Request request(this->options());
 
-		auto directory_urn = Urn(remote_root) + remote_directory;
 		auto url = this->webdav_hostname + directory_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, header);
+		request.set(CURLOPT_HTTPHEADER, header.handle);
 		request.set(CURLOPT_HEADER, 0);
 		request.set(CURLOPT_WRITEDATA, &data);
 		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Append::buffer);
 
 		bool is_performed = request.perform();
-
-		if (header != nullptr) curl_slist_free_all(header);
 
 		if (!is_performed) return std::vector<std::string>();
 
@@ -233,30 +234,32 @@ namespace WebDAV
 		document.load_buffer(data.buffer, data.size);
 		auto multistatus = document.select_single_node("d:multistatus").node();
 		auto responses = multistatus.select_nodes("d:response");
-		std::for_each(responses.begin(), responses.end(), [&directory_urn, &resources](pugi::xpath_node response){
+		for(auto response : responses)
+		{
 			pugi::xml_node href = response.node().select_single_node("d:href").node();
 			std::string encode_file_name = href.first_child().value();
 			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
-			if (resource_path.compare(directory_urn.path()) == 0) return;
+			if (resource_path.compare(directory_urn.path()) == 0) continue;
 			Urn resource_urn(resource_path);
 			resources.push_back(resource_urn.name());
-		});
+		}
 
 		return resources;
 	}
 
 	bool
-	Client::download(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback)
+	Client::download(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
 		bool is_existed = this->check(remote_file, remote_root);
 		if (!is_existed) return false;
+
+		auto root_urn = Urn(remote_root);
+		auto file_urn = root_urn + remote_file;
 
 		std::ofstream file_stream(local_file, std::ios::binary);
 
 		Request request(this->options());
 
-		auto root_urn = Urn(remote_root);
-		auto file_urn = root_urn + remote_file;
 		auto url = this->webdav_hostname + file_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "GET");
@@ -272,26 +275,27 @@ namespace WebDAV
 	}
 
 	void
-	Client::async_download(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback)
+	Client::async_download(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
 		std::thread downloading([=](){ this->download(remote_file, local_file, remote_root, callback); });
 		downloading.detach();
 	}
 
 	bool
-	Client::download_to(std::string remote_file, char * buffer_ptr, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback)
+	Client::download_to(std::string remote_file, char * buffer_ptr, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
 		if (buffer_size == 0) return false;
 
 		bool is_existed = this->check(remote_file, remote_root);
 		if (!is_existed) return false;
 
+		auto root_urn = Urn(remote_root);
+		auto file_urn = root_urn + remote_file;
+
 		Data data = { new char[buffer_size], 0, buffer_size };
 
 		Request request(this->options());
-		
-		auto root_urn = Urn(remote_root);
-		auto file_urn = root_urn + remote_file;
+
 		auto url = this->webdav_hostname + file_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "GET");
@@ -309,60 +313,105 @@ namespace WebDAV
 	}
 
 	void
-	Client::async_download_to(std::string remote_file, char * buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback)
+	Client::async_download_to(std::string remote_file, char * buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
 		std::thread downloading([=](){ this->download_to(remote_file, buffer, buffer_size, remote_root, callback); });
 		downloading.detach();
 	}
 
 	bool
-	Client::create_directory(std::string remote_directory, bool recursive)//TODO
+	Client::create_directory(std::string remote_directory, bool recursive) noexcept
 	{
 		bool is_existed = this->check(remote_directory);
 		if (is_existed) return true;
 
-		curl_slist *header = nullptr;
-		header = curl_slist_append(header, "Accept: */*");
-		header = curl_slist_append(header, "Connection: Keep-Alive");
+		bool resource_is_dir = true;
+		Urn directory_urn(remote_directory, resource_is_dir);
+
+		if (recursive) {
+			auto remote_parent_directory = directory_urn.parent();
+			bool is_created = this->create_directory(remote_parent_directory, true);
+			if (!is_created) return false;
+		}
+
+		Header header = {
+				"Accept: */*",
+				"Connection: Keep-Alive"
+		};
 
 		Request request(this->options());
 
-		bool resource_is_dir = true;
-		Urn directory_urn(remote_directory, resource_is_dir);
 		auto url = this->webdav_hostname + directory_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "MKCOL");
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HTTPHEADER, header);
 
-		bool is_performed = request.perform();
-		if (header != nullptr) curl_slist_free_all(header);
-		return is_performed;
+		return request.perform();
 	}
 
-	bool Client::move(std::string remote_source, std::string remote_destination)
+	bool Client::move(std::string remote_source_resource, std::string remote_destination_resource) noexcept
 	{
-		//TODO
+		bool is_existed = this->check(remote_source_resource);
+		if (!is_existed) return false;
+
+		auto source_resource_urn = Urn(remote_source_resource);
+		auto destination_resource_urn = Urn(remote_destination_resource);
+
+		Header header = {
+				"Accept: */*",
+				"Destination: " + destination_resource_urn.path()
+		};
+
+		Request request(this->options());
+
+		auto url = this->webdav_hostname + source_resource_urn.quote(request.handle);
+
+		request.set(CURLOPT_CUSTOMREQUEST, "MOVE");
+		request.set(CURLOPT_URL, url.c_str());
+		request.set(CURLOPT_HTTPHEADER, header.handle);
+
+		return request.perform();
 	}
 
-	bool Client::copy(std::string remote_source, std::string remote_destination)
+	bool Client::copy(std::string remote_source_resource, std::string remote_destination_resource) noexcept
 	{
-		//TODO
+		bool is_existed = this->check(remote_source_resource);
+		if (!is_existed) return false;
+
+		auto source_resource_urn = Urn(remote_source_resource);
+		auto destination_resource_urn = Urn(remote_destination_resource);
+
+		Header header = {
+				"Accept: */*",
+				"Destination: " + destination_resource_urn.path()
+		};
+
+		Request request(this->options());
+
+		auto url = this->webdav_hostname + source_resource_urn.quote(request.handle);
+
+		request.set(CURLOPT_CUSTOMREQUEST, "COPY");
+		request.set(CURLOPT_URL, url.c_str());
+		request.set(CURLOPT_HTTPHEADER, header.handle);
+
+		return request.perform();
 	}
 
 	bool
-	Client::upload(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback)
+	Client::upload(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
 		bool is_existed = FileInfo::exists(local_file);
 		if (!is_existed) return false;
+
+		auto root_urn = Urn(remote_root);
+		auto file_urn = root_urn + remote_file;
 
 		std::ifstream file_stream(local_file, std::ios::binary);
 		auto size = FileInfo::size(local_file);
 
 		Request request(this->options());
 
-		auto root_urn = Urn(remote_root);
-		auto file_urn = root_urn + remote_file;
 		auto url = this->webdav_hostname + file_urn.quote(request.handle);
 
 		request.set(CURLOPT_UPLOAD, 1L);
@@ -379,21 +428,22 @@ namespace WebDAV
 	}
 
 	void
-	Client::async_upload(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback)
+	Client::async_upload(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
 		std::thread uploading([=](){ this->upload(remote_file, local_file, remote_root, callback); });
 		uploading.detach();
 	}
 
 	bool
-	Client::upload_from(std::string remote_file, char* buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback)
+	Client::upload_from(std::string remote_file, char* buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
+		auto root_urn = Urn(remote_root);
+		auto file_urn = root_urn + remote_file;
+
 		Data data = { buffer, 0, buffer_size };
 
 		Request request(this->options());
 
-		auto root_urn = Urn(remote_root);
-		auto file_urn = root_urn + remote_file;
 		auto url = this->webdav_hostname + file_urn.quote(request.handle);
 
 		request.set(CURLOPT_UPLOAD, 1L);
@@ -410,36 +460,34 @@ namespace WebDAV
 	}
 
 	void
-	Client::async_upload_from(std::string remote_file, char* buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback)
+	Client::async_upload_from(std::string remote_file, char* buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
 		std::thread uploading([=](){ this->upload_from(remote_file, buffer, buffer_size, remote_root, callback); });
 		uploading.detach();
 	}
 
 	bool
-	Client::clean(std::string remote_resource, std::string remote_root)
+	Client::clean(std::string remote_resource, std::string remote_root) noexcept
 	{
 		bool is_existed = this->check(remote_resource, remote_root);
 		if (!is_existed) return true;
 
-		curl_slist * header = nullptr;
-		header = curl_slist_append(header, "Accept: */*");
-		header = curl_slist_append(header, "Connection: Keep-Alive");
+		auto root_urn = Urn(remote_root);
+		auto resource_urn = root_urn + remote_resource;
+
+		Header header = {
+				"Accept: */*",
+				"Connection: Keep-Alive"
+		};
 
 		Request request(this->options());
 
-		auto root_urn = Urn(remote_root);
-		auto resource_urn = root_urn + remote_resource;
 		auto url = this->webdav_hostname + resource_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "DELETE");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, header);
+		request.set(CURLOPT_HTTPHEADER, header.handle);
 
-		bool is_performed = request.perform();
-
-		if (header != nullptr) curl_slist_free_all(header);
-
-		return is_performed;
+		return request.perform();
 	}
 }

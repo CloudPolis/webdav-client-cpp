@@ -1,26 +1,28 @@
 #pragma once
 
-class Urn
+namespace WebDAV
 {
-	static const std::string separate;
+	class Urn {
+		static const std::string separate;
 
-	std::string m_path;
+		std::string m_path;
 
-public:
+	public:
 
-	Urn(std::string path, bool directory = false);
+		Urn(std::string path, bool directory = false);
 
-	Urn(std::nullptr_t);
+		Urn(std::nullptr_t);
 
-	std::string path();
+		std::string path();
 
-	std::string quote(void * request);
+		std::string quote(void *request);
 
-	std::string name();
+		std::string name();
 
-	std::string parent();
+		std::string parent();
 
-	bool is_dir();
+		bool is_dir();
 
-	Urn operator + (std::string resource_path);
-};
+		Urn operator+(std::string resource_path);
+	};
+}

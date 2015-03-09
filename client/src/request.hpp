@@ -10,28 +10,20 @@ namespace WebDAV
 	{
 		std::map<std::string, std::string> options;
 
-		bool proxy_enabled();
+		bool proxy_enabled() noexcept;
 
-		bool cert_required();
+		bool cert_required() noexcept;
 
 	public:
 
-		Request(std::map<std::string, std::string> options);
+		Request(std::map<std::string, std::string> options) noexcept;
 
-		~Request();
+		~Request() noexcept;
 
 		template<typename T>
-		bool set(CURLoption option, T value);
+		bool set(CURLoption option, T value) noexcept;
 
-		//bool set(CURLoption option, char * value);
-
-		//bool set(CURLoption option, const char * value);
-
-		//bool set(CURLoption option, int value);
-
-		//bool set(CURLoption option, long long value);
-
-		bool perform();
+		bool perform() noexcept;
 
 		void * handle;
 	};

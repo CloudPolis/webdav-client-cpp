@@ -2,76 +2,71 @@
 #include "urn.hpp"
 #include <curl/curl.h>
 
-const std::string Urn::separate = "/";
+namespace WebDAV {
 
-Urn::Urn(std::string path, bool directory)
-{
-	if (path.empty()) path = Urn::separate;
-	auto first_position = path.find_first_of(Urn::separate);
-	if (first_position != 0) path = Urn::separate + path;
-	auto last_symbol_index = path.length() - 1;
-	auto last_symbol = std::string{ path[last_symbol_index] };
-	auto is_dir = Urn::separate.compare(last_symbol) == 0;
-	if (directory && !is_dir) path += Urn::separate;
-	m_path = path;
-}
+	const std::string Urn::separate = "/";
 
-Urn::Urn(std::nullptr_t)
-{
-	m_path = nullptr;
-}
+	Urn::Urn(std::string path, bool directory) {
+		if (path.empty()) path = Urn::separate;
+		auto first_position = path.find_first_of(Urn::separate);
+		if (first_position != 0) path = Urn::separate + path;
+		auto last_symbol_index = path.length() - 1;
+		auto last_symbol = std::string{path[last_symbol_index]};
+		auto is_dir = Urn::separate.compare(last_symbol) == 0;
+		if (directory && !is_dir) path += Urn::separate;
+		m_path = path;
+	}
 
-std::string Urn::path()
-{
-	return m_path;
-}
+	Urn::Urn(std::nullptr_t) {
+		m_path = nullptr;
+	}
 
-std::string Urn::quote(void * request)
-{
-	int length = 0;
-	std::string path = curl_easy_unescape(request, m_path.c_str(), (int)m_path.length(), &length);
-	return path;
-}
+	std::string Urn::path() {
+		return m_path;
+	}
 
-std::string Urn::name()
-{
-	auto path = this->path();
-	auto is_root = Urn::separate.compare(path) == 0;
-	if (is_root) return std::string{ "" };
+	std::string Urn::quote(void *request) {
+		int length = 0;
+		std::string path = curl_easy_unescape(request, m_path.c_str(), (int) m_path.length(), &length);
+		return path;
+	}
 
-	auto last_separate_position = path.find_last_of(Urn::separate);
+	std::string Urn::name() {
+		auto path = this->path();
+		auto is_root = Urn::separate.compare(path) == 0;
+		if (is_root) return std::string{""};
 
-	auto name = path.substr(last_separate_position + 1);
-	return name;
-}
+		auto last_separate_position = path.find_last_of(Urn::separate);
 
-std::string Urn::parent()
-{
-	auto path = this->path();
-	auto is_root = Urn::separate.compare(path) == 0;
-	if (is_root) return path;
-	
-	auto last_separate_position = path.find_last_of(Urn::separate);
-	if (last_separate_position == 0) return Urn::separate;
+		auto name = path.substr(last_separate_position + 1);
+		return name;
+	}
 
-	auto parent = path.substr(0, last_separate_position+1);
-	return parent;
-}
+	std::string Urn::parent() {
+		auto path = this->path();
+		auto is_root = Urn::separate.compare(path) == 0;
+		if (is_root) return path;
 
-bool Urn::is_dir()
-{
-	auto path = this->path();
-	auto last_symbol_index = path.length() - 1;
-	auto last_symbol = std::string{ path[last_symbol_index] };
-	auto is_equal = Urn::separate.compare(last_symbol) == 0;
-	return is_equal;
-}
+		auto last_separate_position = path.find_last_of(Urn::separate);
+		if (last_separate_position == 0) return Urn::separate;
 
-Urn Urn::operator + (std::string resource_path)
-{
-	bool is_directory = this->is_dir();
-	if (!is_directory) return nullptr;
-	auto directory_path = this->path();
-	resource_path = directory_path + resource_path;
-	return Urn(resource_path);
+		auto parent = path.substr(0, last_separate_position + 1);
+		return parent;
+	}
+
+	bool Urn::is_dir() {
+		auto path = this->path();
+		auto last_symbol_index = path.length() - 1;
+		auto last_symbol = std::string{path[last_symbol_index]};
+		auto is_equal = Urn::separate.compare(last_symbol) == 0;
+		return is_equal;
+	}
+
+	Urn Urn::operator+(std::string resource_path) {
+		bool is_directory = this->is_dir();
+		if (!is_directory) return nullptr;
+		auto directory_path = this->path();
+		resource_path = directory_path + resource_path;
+		return Urn(resource_path);
+	}
 }

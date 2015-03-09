@@ -9,7 +9,7 @@ bool inline check_code(CURLcode code)
 
 namespace WebDAV
 {
-	Request::Request(std::map<std::string, std::string> options)
+	Request::Request(std::map<std::string, std::string> options) noexcept
 	{
 		this->options = options;
 
@@ -63,20 +63,20 @@ namespace WebDAV
 		}
 	}
 
-	Request::~Request()
+	Request::~Request() noexcept
 	{
 		if (this->handle != nullptr) curl_easy_cleanup(this->handle);
 	}
 
 	template <typename T>
 	bool
-	Request::set(CURLoption option, T value)
+	Request::set(CURLoption option, T value) noexcept
 	{
 		if (this->handle == nullptr) return false;
 		return check_code(curl_easy_setopt(this->handle, option, value));
 	}
 
-	bool Request::perform()
+	bool Request::perform() noexcept
 	{
 		if (this->handle == nullptr) return false;
 		auto is_performed = check_code(curl_easy_perform(this->handle));
@@ -87,7 +87,7 @@ namespace WebDAV
 		return true;
 	}
 
-	bool Request::proxy_enabled()
+	bool Request::proxy_enabled() noexcept
 	{
 		auto proxy_hostname = options["proxy_hostname"];
 		auto proxy_login = options["proxy_login"];
@@ -100,7 +100,7 @@ namespace WebDAV
 		return true;
 	}
 
-	bool Request::cert_required()
+	bool Request::cert_required() noexcept
 	{
 		auto cert_path = options["cert_path"];
 		auto key_path = options["key_path"];
@@ -108,8 +108,6 @@ namespace WebDAV
 		bool cert_is_existed = FileInfo::exists(cert_path);
 		if (!cert_is_existed) return false;
 		if (key_path.empty()) return false;
-		bool key_is_existed = FileInfo::exists(key_path);
-		if (key_is_existed) return true;
-		return false;
+		return FileInfo::exists(key_path);
 	}
 }
