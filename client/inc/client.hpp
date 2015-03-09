@@ -21,6 +21,13 @@ namespace WebDAV
 
 		std::map<std::string, std::string> options() noexcept;
 
+		bool sync_download(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+		bool sync_download_to(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+
+		bool sync_upload(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+		bool sync_upload_from(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+
+
 	public:
 
 		// Options:
@@ -56,17 +63,17 @@ namespace WebDAV
 
 		bool copy(std::string remote_source_resource, std::string remote_destination_resource) noexcept;
 
-		bool download(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+		bool download(std::string remote_file, std::string local_file, std::string remote_root = "") noexcept;
 
-		bool download_to(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+		bool download_to(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "") noexcept;
 
 		void async_download(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
 
 		void async_download_to(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
 
-		bool upload(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+		bool upload(std::string remote_file, std::string local_file, std::string remote_root = "") noexcept;
 
-		bool upload_from(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+		bool upload_from(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "") noexcept;
 
 		void async_upload(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
 

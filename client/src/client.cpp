@@ -248,7 +248,7 @@ namespace WebDAV
 	}
 
 	bool
-	Client::download(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
+	Client::sync_download(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
 		bool is_existed = this->check(remote_file, remote_root);
 		if (!is_existed) return false;
@@ -274,15 +274,20 @@ namespace WebDAV
 		return is_performed;
 	}
 
+	bool Client::download(std::string remote_file, std::string local_file, std::string remote_root = "") noexcept
+	{
+		return this->sync_download(remote_file, local_file, remote_root, nullptr);
+	}
+
 	void
 	Client::async_download(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
-		std::thread downloading([=](){ this->download(remote_file, local_file, remote_root, callback); });
+		std::thread downloading([=](){ this->sync_download(remote_file, local_file, remote_root, callback); });
 		downloading.detach();
 	}
 
 	bool
-	Client::download_to(std::string remote_file, char * buffer_ptr, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
+	Client::sync_download_to(std::string remote_file, char * buffer_ptr, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
 		if (buffer_size == 0) return false;
 
@@ -312,11 +317,17 @@ namespace WebDAV
 		return true;
 	}
 
+	bool
+	Client::download_to(std::string remote_file, char * buffer_ptr, size_t buffer_size, std::string remote_root) noexcept
+	{
+		return sync_download_to(remote_file, buffer_ptr, buffer_size, remote_root, nullptr);
+	}
+
 	void
 	Client::async_download_to(std::string remote_file, char * buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
-		std::thread downloading([=](){ this->download_to(remote_file, buffer, buffer_size, remote_root, callback); });
-		downloading.detach();
+		std::thread downloading([=](){ this->sync_download_to(remote_file, buffer, buffer_size, remote_root, callback); });
+		downloading.join();
 	}
 
 	bool
@@ -399,7 +410,7 @@ namespace WebDAV
 	}
 
 	bool
-	Client::upload(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
+	Client::sync_upload(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
 		bool is_existed = FileInfo::exists(local_file);
 		if (!is_existed) return false;
@@ -427,15 +438,22 @@ namespace WebDAV
 		return is_performed;
 	}
 
+
+	bool
+	Client::upload(std::string remote_file, std::string local_file, std::string remote_root) noexcept
+	{
+		return this->sync_upload(remote_file, local_file, remote_root, nullptr);
+	}
+
 	void
 	Client::async_upload(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
-		std::thread uploading([=](){ this->upload(remote_file, local_file, remote_root, callback); });
-		uploading.detach();
+		std::thread uploading([=](){ this->sync_upload(remote_file, local_file, remote_root, callback); });
+		uploading.join();
 	}
 
 	bool
-	Client::upload_from(std::string remote_file, char* buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
+	Client::sync_upload_from(std::string remote_file, char* buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
 		auto root_urn = Urn(remote_root);
 		auto file_urn = root_urn + remote_file;
@@ -459,10 +477,16 @@ namespace WebDAV
 		return is_performed;
 	}
 
+	bool
+	Client::upload_from(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root) noexcept
+	{
+		return this->sync_upload_from(remote_file, buffer_ptr, buffer_size, remote_root, nullptr);
+	}
+
 	void
 	Client::async_upload_from(std::string remote_file, char* buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
 	{
-		std::thread uploading([=](){ this->upload_from(remote_file, buffer, buffer_size, remote_root, callback); });
+		std::thread uploading([=](){ this->sync_upload_from(remote_file, buffer, buffer_size, remote_root, callback); });
 		uploading.detach();
 	}
 
