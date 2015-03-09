@@ -2,6 +2,12 @@
 
 namespace WebDAV
 {
+	///
+	/// \brief WebDAV client
+	/// \author designerror
+	/// \version 1.0
+	/// \date Март 2015 года
+	///
 	class Client
 	{
 		enum { buffer_size = 1000 * 1000 };
@@ -9,6 +15,7 @@ namespace WebDAV
 		void init() noexcept;
 
 		std::string webdav_hostname;
+		std::string webdav_root;
 		std::string webdav_login;
 		std::string webdav_password;
 
@@ -21,62 +28,165 @@ namespace WebDAV
 
 		std::map<std::string, std::string> options() noexcept;
 
-		bool sync_download(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
-		bool sync_download_to(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+		bool sync_download(std::string remote_file, std::string local_file, std::function<void(bool)> callback = nullptr) noexcept;
+		bool sync_download_to(std::string remote_file, char* & buffer_ptr, long long int & buffer_size, std::function<void(bool)> callback = nullptr) noexcept;
 
-		bool sync_upload(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
-		bool sync_upload_from(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+		bool sync_upload(std::string remote_file, std::string local_file, std::function<void(bool)> callback = nullptr) noexcept;
+		bool sync_upload_from(std::string remote_file, char* buffer_ptr, long long int buffer_size, std::function<void(bool)> callback = nullptr) noexcept;
 
 
 	public:
 
-		// Options:
-		// - Required:
-		//    - webdav_hostname
-		//    - webdav_login
-		//    - webdav_password
-		// - Optional:
-		//    - proxy_hostname
-		//    - proxy_login
-		//    - proxy_password
-		//    - cert_path
-		//    - key_path
-		Client(std::map<std::string, std::string> options) noexcept;
+		///
+		/// \param[in] webdav_hostname
+		/// \param[in] webdav_root
+		/// \param[in] webdav_login
+		/// \param[in] webdav_password
+		/// \param[in] proxy_hostname
+		/// \param[in] proxy_login
+		/// \param[in] proxy_password
+		/// \param[in] cert_path
+		/// \param[in] key_path
+		/// \example init.cpp
+		///
+		Client(std::map<std::string, std::string> & options) noexcept;
 
 		~Client() noexcept;
 
+		///
+		/// Get free size of the WebDAV server
+		/// \return size in bytes
+		/// \example size.cpp
+		///
 		long long free_size() noexcept;
 
-		bool check(std::string remote_resource = "/", std::string remote_root = "") noexcept;
+		///
+		/// Check for existence of a remote resource
+		/// \param[in] remote_resource
+		/// \example check.cpp
+		///
+		bool check(std::string remote_resource = "/") noexcept;
 
-		std::map<std::string, std::string> info(std::string remote_resource, std::string remote_root = "") noexcept;
+		///
+		/// Get information of a remote resource
+		/// \param[in] remote_resource
+		/// \example info.cpp
+		///
+		std::map<std::string, std::string> info(std::string remote_resource) noexcept;
 
-		bool clean(std::string remote_resource, std::string remote_root = "") noexcept;
+		///
+		/// Clean an remote resource
+		/// \param[in] remote_resource
+		/// \example clean.cpp
+		///
+		bool clean(std::string remote_resource) noexcept;
 
-		bool is_dir(std::string remote_resource, std::string remote_root) noexcept;
+		///
+		/// Checks whether the resource directory
+		/// \param[in] remote_resource
+		///
+		bool is_dir(std::string remote_resource) noexcept;
 
-		std::vector<std::string> list(std::string remote_directory = "", std::string remote_root = "") noexcept;
+		///
+		/// List a remote directory
+		/// \param[in] remote_directory
+		/// \example list.cpp
+		///
+		std::vector<std::string> list(std::string remote_directory = "") noexcept;
 
+		///
+		/// Create a remote directory
+		/// \param[in] remote_directory
+		/// \param[in] recursive
+		/// \example mkdir.cpp
+		///
 		bool create_directory(std::string remote_directory, bool recursive = false) noexcept;
 
+		///
+		/// Move a remote resource
+		/// \param[in] remote_source_resource
+		/// \param[in] remote_destination_resource
+		/// \example move.cpp
+		///
 		bool move(std::string remote_source_resource, std::string remote_destination_resource) noexcept;
 
+		///
+		/// Copy a remote resource
+		/// \param[in] remote_source_resource
+		/// \param[in] remote_destination_resource
+		/// \example copy.cpp
+		///
 		bool copy(std::string remote_source_resource, std::string remote_destination_resource) noexcept;
 
-		bool download(std::string remote_file, std::string local_file, std::string remote_root = "") noexcept;
+		///
+		/// Download a remote file to a local file
+		/// \param[in] remote_file
+		/// \param[in] local_file
+		/// \snippet download.cpp download_from_file
+		///
+		bool download(std::string remote_file, std::string local_file) noexcept;
 
-		bool download_to(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "") noexcept;
+		///
+		/// Download a remote file to a buffer
+		/// \param[in] remote_file
+		/// \param[out] buffer_ptr
+		/// \param[out] buffer_size
+		/// \snippet download.cpp download_from_buffer
+		///
+		bool download_to(std::string remote_file, char* & buffer_ptr, long long int & buffer_size) noexcept;
 
-		void async_download(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+		///
+		/// Asynchronously download a remote file to a local file
+		/// \param[in] remote_file
+		/// \param[in] local_file
+		/// \snippet download.cpp async_download_from_file
+		///
+		void async_download(std::string remote_file, std::string local_file, std::function<void(bool)> callback = nullptr) noexcept;
 
-		void async_download_to(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+		///
+		/// Asynchronously download a remote file to a buffer
+		/// \param[in] remote_file
+		/// \param[out] buffer_ptr
+		/// \param[out] buffer_size
+		/// \param[in] callback
+		/// \snippet download.cpp async_download_from_buffer
+		///
+		void async_download_to(std::string remote_file, char* & buffer_ptr, long long int & buffer_size, std::function<void(bool)> callback = nullptr) noexcept;
 
-		bool upload(std::string remote_file, std::string local_file, std::string remote_root = "") noexcept;
+		///
+		/// Upload a remote file from a local file
+		/// \param[in] remote_file
+		/// \param[in] local_file
+		/// \snippet upload.cpp upload_from_file
+		///
+		bool upload(std::string remote_file, std::string local_file) noexcept;
 
-		bool upload_from(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "") noexcept;
+		///
+		/// Upload a remote file from a buffer
+		/// \param[in] remote_file
+		/// \param[in] buffer_ptr
+		/// \param[in] buffer_size
+		/// \snippet upload.cpp upload_from_buffer
+		///
+		bool upload_from(std::string remote_file, char* buffer_ptr, long long int buffer_size) noexcept;
 
-		void async_upload(std::string remote_file, std::string local_file, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+		///
+		/// Asynchronously upload a remote file from a local file
+		/// \param[in] remote_file
+		/// \param[in] local_file
+		/// \param[in] callback
+		/// \snippet upload.cpp async_upload_from_file
+		///
+		void async_upload(std::string remote_file, std::string local_file, std::function<void(bool)> callback = nullptr) noexcept;
 
-		void async_upload_from(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root = "", std::function<void(bool)> callback = nullptr) noexcept;
+		///
+		/// Asynchronously upload a remote file from a buffer
+		/// \param[in] remote_file
+		/// \param[in] buffer_ptr
+		/// \param[in] buffer_size
+		/// \param[in] callback
+		/// \snippet upload.cpp async_upload_from_buffer
+		///
+		void async_upload_from(std::string remote_file, char* buffer_ptr, long long int buffer_size, std::function<void(bool)> callback = nullptr) noexcept;
 	};
 }

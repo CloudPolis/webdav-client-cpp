@@ -3,8 +3,8 @@
 struct Data
 {
 	char* buffer;
-	size_t position;
-	size_t size;
+	long long int position;
+	long long int size;
 };
 
 namespace Callback

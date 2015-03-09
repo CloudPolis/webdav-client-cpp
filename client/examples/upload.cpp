@@ -4,8 +4,10 @@
 #include <vector>
 #include <client.hpp>
 
-int main() {
+//! [ upload_to_file ]
 
+void upload_to_file()
+{
     std::map<std::string, std::string> options =
             {
                     {"webdav_hostname", "https://webdav.yandex.ru"},
@@ -19,11 +21,93 @@ int main() {
     auto remote_file = "dir/file.dat";
     auto local_file = "/home/user/Downloads/file.dat";
 
-    client.upload(remote_file, local_file);
+    bool is_uploaded = client.upload(remote_file, local_file);
+
+    std::cout << remote_file << " resource is" << is_uploaded ? "" : "not" << "uploaded" << std::endl;
+}
+
+/// dir/file.dat resource is uploaded
+
+//! [ upload_to_file ]
+
+//! [ async_upload_to_file ]
+
+void async_upload_to_file()
+{
+    std::map<std::string, std::string> options =
+            {
+                    {"webdav_hostname", "https://webdav.yandex.ru"},
+                    {"webdav_login", "{webdav_login}"},
+                    {"webdav_password", "{webdav_password}"}
+            };
+
+
+    WebDAV::Client client(options);
+
+    auto remote_file = "dir/file.dat";
+    auto local_file = "/home/user/Downloads/file.dat";
+
     client.async_upload(remote_file, local_file, [&remote_file](bool is_uploaded)
     {
-        std::cout << remote_file << "is" << is_uploaded ? "" : "not" << "uploaded" << std::endl;
+        std::cout << remote_file << " resource is" << is_uploaded ? "" : "not" << "uploaded" << std::endl;
     });
 }
 
 /// dir/file.dat resource is uploaded
+
+//! [ async_upload_to_file ]
+
+//! [ upload_to_buffer ]
+
+void upload_to_buffer()
+{
+    std::map<std::string, std::string> options =
+            {
+                    {"webdav_hostname", "https://webdav.yandex.ru"},
+                    {"webdav_login", "{webdav_login}"},
+                    {"webdav_password", "{webdav_password}"}
+            };
+
+
+    WebDAV::Client client(options);
+
+    auto remote_file = "dir/file.dat";
+    char * buffer_ptr = nullptr;
+    long long int buffer_size = 0;
+
+    bool is_uploaded = client.upload(remote_file, buffer_ptr, buffer_size);
+
+    std::cout << remote_file << " resource is" << is_uploaded ? "" : "not" << "uploaded" << std::endl;
+}
+
+/// dir/file.dat resource is uploaded
+
+//! [ upload_to_buffer ]
+
+//! [ async_upload_to_buffer ]
+
+void async_upload_to_buffer()
+{
+    std::map<std::string, std::string> options =
+            {
+                    {"webdav_hostname", "https://webdav.yandex.ru"},
+                    {"webdav_login", "{webdav_login}"},
+                    {"webdav_password", "{webdav_password}"}
+            };
+
+
+    WebDAV::Client client(options);
+
+    auto remote_file = "dir/file.dat";
+    char * buffer_ptr = nullptr;
+    long long int buffer_size = 0;
+
+    client.async_upload(remote_file, buffer_ptr, buffer_size, [&remote_file](bool is_uploaded)
+    {
+        std::cout << remote_file << " resource is" << is_uploaded ? "" : "not" << "uploaded" << std::endl;
+    });
+}
+
+/// dir/file.dat resource is uploaded
+
+//! [ async_upload_to_buffer ]

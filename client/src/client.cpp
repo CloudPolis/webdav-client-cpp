@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <client.hpp>
+#include "client.hpp"
 #include "pugiext.hpp"
 #include "header.hpp"
 #include "request.hpp"
@@ -9,9 +9,10 @@
 
 namespace WebDAV
 {
-	Client::Client(std::map<std::string, std::string> options) noexcept
+	Client::Client(std::map<std::string, std::string> & options) noexcept
 	{
 		this->webdav_hostname = options["webdav_hostname"];
+		this->webdav_root = options["webdav_root"];
 		this->webdav_login = options["webdav_login"];
 		this->webdav_password = options["webdav_password"];
 
@@ -30,7 +31,8 @@ namespace WebDAV
 	{
 		return std::map < std::string, std::string >
 		{
-			{ "webdav_hostname", this->webdav_hostname }, 
+			{ "webdav_hostname", this->webdav_hostname },
+			{ "webdav_root", this->webdav_root },
 			{ "webdav_login", this->webdav_login },
 			{ "webdav_password", this->webdav_password },
 			{ "proxy_hostname", this->proxy_hostname },
@@ -87,7 +89,7 @@ namespace WebDAV
 		auto is_performed = request.perform();
 		if (!is_performed) return 0;
 
-		document.load_buffer(data.buffer, data.size);
+		document.load_buffer(data.buffer, (size_t)data.size);
 
 		pugi::xml_node multistatus = document.select_single_node("d:multistatus").node();
 		pugi::xml_node response = multistatus.select_single_node("d:response").node();
@@ -101,9 +103,9 @@ namespace WebDAV
 	}
 
 	bool
-	Client::check(std::string remote_resource, std::string remote_root) noexcept
+	Client::check(std::string remote_resource) noexcept
 	{
-		auto root_urn = Urn(remote_root);
+		auto root_urn = Urn(this->webdav_root);
 		auto resource_urn = root_urn + remote_resource;
 
 		Header header = {
@@ -127,9 +129,9 @@ namespace WebDAV
 	}
 
 	std::map<std::string, std::string>
-	Client::info(std::string remote_resource, std::string remote_root) noexcept
+	Client::info(std::string remote_resource) noexcept
 	{
-		auto root_urn = Urn(remote_root);
+		auto root_urn = Urn(this->webdav_root);
 		auto resource_urn = root_urn + remote_resource;
 
 		Header header = {
@@ -154,7 +156,7 @@ namespace WebDAV
 		if (!is_performed) return std::map<std::string, std::string>();
 
 		pugi::xml_document document;
-		document.load_buffer(data.buffer, data.size);
+		document.load_buffer(data.buffer, (size_t)data.size);
 		auto multistatus = document.select_single_node("d:multistatus").node();
 		auto responses = multistatus.select_nodes("d:response");
 		for (auto response : responses)
@@ -187,24 +189,24 @@ namespace WebDAV
 	}
 
 	bool 
-	Client::is_dir(std::string remote_resource, std::string remote_root) noexcept
+	Client::is_dir(std::string remote_resource) noexcept
 	{
-		auto information = this->info(remote_resource, remote_root);
+		auto information = this->info(remote_resource);
 		auto resource_type = information["type"];
 		bool is_directory = resource_type.compare("d:collection") == 0;
 		return is_directory;
 	}
 
 	std::vector<std::string>
-	Client::list(std::string remote_directory, std::string remote_root) noexcept
+	Client::list(std::string remote_directory) noexcept
 	{
-		bool is_existed = this->check(remote_directory, remote_root);
+		bool is_existed = this->check(remote_directory);
 		if (!is_existed) return std::vector<std::string>();
 
-		bool is_directory = this->is_dir(remote_directory, remote_root);
+		bool is_directory = this->is_dir(remote_directory);
 		if (!is_directory) return std::vector<std::string>();
 
-		auto directory_urn = Urn(remote_root) + remote_directory;
+		auto directory_urn = Urn(this->webdav_root) + remote_directory;
 
 		Header header = {
 				"Accept: */*",
@@ -231,14 +233,14 @@ namespace WebDAV
 		std::vector<std::string> resources;
 
 		pugi::xml_document document;
-		document.load_buffer(data.buffer, data.size);
+		document.load_buffer(data.buffer, (size_t)data.size);
 		auto multistatus = document.select_single_node("d:multistatus").node();
 		auto responses = multistatus.select_nodes("d:response");
 		for(auto response : responses)
 		{
 			pugi::xml_node href = response.node().select_single_node("d:href").node();
 			std::string encode_file_name = href.first_child().value();
-			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
+			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int) encode_file_name.length());
 			if (resource_path.compare(directory_urn.path()) == 0) continue;
 			Urn resource_urn(resource_path);
 			resources.push_back(resource_urn.name());
@@ -248,12 +250,12 @@ namespace WebDAV
 	}
 
 	bool
-	Client::sync_download(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
+	Client::sync_download(std::string remote_file, std::string local_file, std::function<void(bool)> callback) noexcept
 	{
-		bool is_existed = this->check(remote_file, remote_root);
+		bool is_existed = this->check(remote_file);
 		if (!is_existed) return false;
 
-		auto root_urn = Urn(remote_root);
+		auto root_urn = Urn(this->webdav_root);
 		auto file_urn = root_urn + remote_file;
 
 		std::ofstream file_stream(local_file, std::ios::binary);
@@ -274,30 +276,30 @@ namespace WebDAV
 		return is_performed;
 	}
 
-	bool Client::download(std::string remote_file, std::string local_file, std::string remote_root = "") noexcept
+	bool Client::download(std::string remote_file, std::string local_file) noexcept
 	{
-		return this->sync_download(remote_file, local_file, remote_root, nullptr);
+		return this->sync_download(remote_file, local_file, nullptr);
 	}
 
 	void
-	Client::async_download(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
+	Client::async_download(std::string remote_file, std::string local_file, std::function<void(bool)> callback) noexcept
 	{
-		std::thread downloading([=](){ this->sync_download(remote_file, local_file, remote_root, callback); });
+		std::thread downloading([=](){ this->sync_download(remote_file, local_file, callback); });
 		downloading.detach();
 	}
 
 	bool
-	Client::sync_download_to(std::string remote_file, char * buffer_ptr, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
+	Client::sync_download_to(std::string remote_file, char * & buffer_ptr, long long int & buffer_size, std::function<void(bool)> callback) noexcept
 	{
 		if (buffer_size == 0) return false;
 
-		bool is_existed = this->check(remote_file, remote_root);
+		bool is_existed = this->check(remote_file);
 		if (!is_existed) return false;
 
-		auto root_urn = Urn(remote_root);
+		auto root_urn = Urn(this->webdav_root);
 		auto file_urn = root_urn + remote_file;
 
-		Data data = { new char[buffer_size], 0, buffer_size };
+		Data data = { 0, 0, 0 };
 
 		Request request(this->options());
 
@@ -307,26 +309,27 @@ namespace WebDAV
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HEADER, 0L);
 		request.set(CURLOPT_WRITEDATA, &data);
-		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Write::buffer);
+		request.set(CURLOPT_WRITEFUNCTION, (void *)Callback::Append::buffer);
 
 		bool is_performed = request.perform();
 		if (callback != nullptr) callback(is_performed);
 		if (!is_performed) return false;
 
-		memcpy(buffer_ptr, data.buffer, data.size);
+		buffer_ptr = data.buffer;
+		buffer_size = data.size;
 		return true;
 	}
 
 	bool
-	Client::download_to(std::string remote_file, char * buffer_ptr, size_t buffer_size, std::string remote_root) noexcept
+	Client::download_to(std::string remote_file, char * & buffer_ptr, long long int & buffer_size) noexcept
 	{
-		return sync_download_to(remote_file, buffer_ptr, buffer_size, remote_root, nullptr);
+		return sync_download_to(remote_file, buffer_ptr, buffer_size, nullptr);
 	}
 
 	void
-	Client::async_download_to(std::string remote_file, char * buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
+	Client::async_download_to(std::string remote_file, char * & buffer, long long int & buffer_size, std::function<void(bool)> callback) noexcept
 	{
-		std::thread downloading([=](){ this->sync_download_to(remote_file, buffer, buffer_size, remote_root, callback); });
+		std::thread downloading([=](){ this->sync_download_to(remote_file, buffer, buffer_size, callback); });
 		downloading.join();
 	}
 
@@ -366,8 +369,9 @@ namespace WebDAV
 		bool is_existed = this->check(remote_source_resource);
 		if (!is_existed) return false;
 
-		auto source_resource_urn = Urn(remote_source_resource);
-		auto destination_resource_urn = Urn(remote_destination_resource);
+		Urn root_urn(this->webdav_root);
+		auto source_resource_urn = root_urn + remote_source_resource;
+		auto destination_resource_urn = root_urn + remote_destination_resource;
 
 		Header header = {
 				"Accept: */*",
@@ -390,8 +394,9 @@ namespace WebDAV
 		bool is_existed = this->check(remote_source_resource);
 		if (!is_existed) return false;
 
-		auto source_resource_urn = Urn(remote_source_resource);
-		auto destination_resource_urn = Urn(remote_destination_resource);
+		Urn root_urn(this->webdav_root);
+		auto source_resource_urn = root_urn + remote_source_resource;
+		auto destination_resource_urn = root_urn + remote_destination_resource;
 
 		Header header = {
 				"Accept: */*",
@@ -410,12 +415,12 @@ namespace WebDAV
 	}
 
 	bool
-	Client::sync_upload(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
+	Client::sync_upload(std::string remote_file, std::string local_file, std::function<void(bool)> callback) noexcept
 	{
 		bool is_existed = FileInfo::exists(local_file);
 		if (!is_existed) return false;
 
-		auto root_urn = Urn(remote_root);
+		auto root_urn = Urn(this->webdav_root);
 		auto file_urn = root_urn + remote_file;
 
 		std::ifstream file_stream(local_file, std::ios::binary);
@@ -440,22 +445,22 @@ namespace WebDAV
 
 
 	bool
-	Client::upload(std::string remote_file, std::string local_file, std::string remote_root) noexcept
+	Client::upload(std::string remote_file, std::string local_file) noexcept
 	{
-		return this->sync_upload(remote_file, local_file, remote_root, nullptr);
+		return this->sync_upload(remote_file, local_file, nullptr);
 	}
 
 	void
-	Client::async_upload(std::string remote_file, std::string local_file, std::string remote_root, std::function<void(bool)> callback) noexcept
+	Client::async_upload(std::string remote_file, std::string local_file, std::function<void(bool)> callback) noexcept
 	{
-		std::thread uploading([=](){ this->sync_upload(remote_file, local_file, remote_root, callback); });
+		std::thread uploading([=](){ this->sync_upload(remote_file, local_file, callback); });
 		uploading.join();
 	}
 
 	bool
-	Client::sync_upload_from(std::string remote_file, char* buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
+	Client::sync_upload_from(std::string remote_file, char* buffer, long long int buffer_size, std::function<void(bool)> callback) noexcept
 	{
-		auto root_urn = Urn(remote_root);
+		auto root_urn = Urn(this->webdav_root);
 		auto file_urn = root_urn + remote_file;
 
 		Data data = { buffer, 0, buffer_size };
@@ -478,25 +483,25 @@ namespace WebDAV
 	}
 
 	bool
-	Client::upload_from(std::string remote_file, char* buffer_ptr, size_t buffer_size, std::string remote_root) noexcept
+	Client::upload_from(std::string remote_file, char* buffer_ptr, long long int buffer_size) noexcept
 	{
-		return this->sync_upload_from(remote_file, buffer_ptr, buffer_size, remote_root, nullptr);
+		return this->sync_upload_from(remote_file, buffer_ptr, buffer_size, nullptr);
 	}
 
 	void
-	Client::async_upload_from(std::string remote_file, char* buffer, size_t buffer_size, std::string remote_root, std::function<void(bool)> callback) noexcept
+	Client::async_upload_from(std::string remote_file, char* buffer, long long int buffer_size, std::function<void(bool)> callback) noexcept
 	{
-		std::thread uploading([=](){ this->sync_upload_from(remote_file, buffer, buffer_size, remote_root, callback); });
+		std::thread uploading([=](){ this->sync_upload_from(remote_file, buffer, buffer_size, callback); });
 		uploading.detach();
 	}
 
 	bool
-	Client::clean(std::string remote_resource, std::string remote_root) noexcept
+	Client::clean(std::string remote_resource) noexcept
 	{
-		bool is_existed = this->check(remote_resource, remote_root);
+		bool is_existed = this->check(remote_resource);
 		if (!is_existed) return true;
 
-		auto root_urn = Urn(remote_root);
+		auto root_urn = Urn(this->webdav_root);
 		auto resource_urn = root_urn + remote_resource;
 
 		Header header = {
