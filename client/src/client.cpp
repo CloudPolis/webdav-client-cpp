@@ -284,8 +284,8 @@ namespace WebDAV
 	void
 	Client::async_download(std::string remote_file, std::string local_file, std::function<void(bool)> callback) noexcept
 	{
-		std::thread downloading([=](){ this->sync_download(remote_file, local_file, callback); });
-		downloading.detach();
+		std::thread downloading([&](){ this->sync_download(remote_file, local_file, callback); });
+		downloading.join();
 	}
 
 	bool
@@ -327,9 +327,9 @@ namespace WebDAV
 	}
 
 	void
-	Client::async_download_to(std::string remote_file, char * & buffer, long long int & buffer_size, std::function<void(bool)> callback) noexcept
+	Client::async_download_to(std::string remote_file, char * & buffer_ptr, long long int & buffer_size, std::function<void(bool)> callback) noexcept
 	{
-		std::thread downloading([=](){ this->sync_download_to(remote_file, buffer, buffer_size, callback); });
+		std::thread downloading([&](){ this->sync_download_to(remote_file, buffer_ptr, buffer_size, callback); });
 		downloading.join();
 	}
 
@@ -453,7 +453,7 @@ namespace WebDAV
 	void
 	Client::async_upload(std::string remote_file, std::string local_file, std::function<void(bool)> callback) noexcept
 	{
-		std::thread uploading([=](){ this->sync_upload(remote_file, local_file, callback); });
+		std::thread uploading([&](){ this->sync_upload(remote_file, local_file, callback); });
 		uploading.join();
 	}
 
@@ -489,10 +489,10 @@ namespace WebDAV
 	}
 
 	void
-	Client::async_upload_from(std::string remote_file, char* buffer, long long int buffer_size, std::function<void(bool)> callback) noexcept
+	Client::async_upload_from(std::string remote_file, char* buffer_ptr, long long int buffer_size, std::function<void(bool)> callback) noexcept
 	{
-		std::thread uploading([=](){ this->sync_upload_from(remote_file, buffer, buffer_size, callback); });
-		uploading.detach();
+		std::thread uploading([&](){ this->sync_upload_from(remote_file, buffer_ptr, buffer_size, callback); });
+		uploading.join();
 	}
 
 	bool

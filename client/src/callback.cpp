@@ -1,17 +1,12 @@
 #include "stdafx.h"
 #include "callback.hpp"
 
+#define MIN(a,b) ((a) > (b)) ? (b) : (a)
+
 namespace Callback
 {
 	namespace Read
 	{
-		/*size_t file(char * ptr, size_t item_size, size_t item_count, void * file_stream)
-		{
-			auto file = (FILE *)file_stream;
-			size_t read_bytes = fread(ptr, item_size, item_count, file);
-			return read_bytes;
-		}*/
-
 		size_t file(char * ptr, size_t item_size, size_t item_count, void * file_stream)
 		{
 			auto in_stream = (std::ifstream *)file_stream;
@@ -24,7 +19,7 @@ namespace Callback
 		{
 			auto data = (Data*)buffer;
 			auto size = item_size * item_count;
-			auto copied_bytes = std::min(size, data->size - data->position);
+			auto copied_bytes = MIN(size, data->size - data->position);
 			memcpy(ptr, data->buffer, copied_bytes);
 			data->position += copied_bytes;
 			return copied_bytes;
@@ -45,7 +40,7 @@ namespace Callback
 		{
 			auto data = (Data*)buffer;
 			auto size = item_size * item_count;
-			auto copied_bytes = std::min(size, data->size - data->position);
+			auto copied_bytes = MIN(size, data->size - data->position);
 			memcpy(data->buffer, data->buffer, copied_bytes);
 			data->position += copied_bytes;
 			return copied_bytes;
