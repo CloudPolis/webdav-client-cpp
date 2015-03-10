@@ -4,9 +4,9 @@
 #include <vector>
 #include <client.hpp>
 
-//! [ upload_to_file ]
+//! [ upload_from_file ]
 
-void upload_to_file()
+void upload_from_file()
 {
     std::map<std::string, std::string> options =
             {
@@ -28,11 +28,11 @@ void upload_to_file()
 
 /// dir/file.dat resource is uploaded
 
-//! [ upload_to_file ]
+//! [ upload_from_file ]
 
-//! [ async_upload_to_file ]
+//! [ async_upload_from_file ]
 
-void async_upload_to_file()
+void async_upload_from_file()
 {
     std::map<std::string, std::string> options =
             {
@@ -55,11 +55,11 @@ void async_upload_to_file()
 
 /// dir/file.dat resource is uploaded
 
-//! [ async_upload_to_file ]
+//! [ async_upload_from_file ]
 
-//! [ upload_to_buffer ]
+//! [ upload_from_buffer ]
 
-void upload_to_buffer()
+void upload_from_buffer()
 {
     std::map<std::string, std::string> options =
             {
@@ -82,11 +82,11 @@ void upload_to_buffer()
 
 /// dir/file.dat resource is uploaded
 
-//! [ upload_to_buffer ]
+//! [ upload_from_buffer ]
 
-//! [ async_upload_to_buffer ]
+//! [ async_upload_from_buffer ]
 
-void async_upload_to_buffer()
+void async_upload_from_buffer()
 {
     std::map<std::string, std::string> options =
             {
@@ -110,4 +110,4 @@ void async_upload_to_buffer()
 
 /// dir/file.dat resource is uploaded
 
-//! [ async_upload_to_buffer ]
+//! [ async_upload_from_buffer ]
