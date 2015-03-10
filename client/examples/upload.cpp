@@ -4,7 +4,7 @@
 #include <vector>
 #include <client.hpp>
 
-//! [ upload_from_file ]
+//! [upload_from_file]
 
 void upload_from_file()
 {
@@ -28,9 +28,9 @@ void upload_from_file()
 
 /// dir/file.dat resource is uploaded
 
-//! [ upload_from_file ]
+//! [upload_from_file]
 
-//! [ async_upload_from_file ]
+//! [async_upload_from_file]
 
 void async_upload_from_file()
 {
@@ -55,9 +55,9 @@ void async_upload_from_file()
 
 /// dir/file.dat resource is uploaded
 
-//! [ async_upload_from_file ]
+//! [async_upload_from_file]
 
-//! [ upload_from_buffer ]
+//! [upload_from_buffer]
 
 void upload_from_buffer()
 {
@@ -82,9 +82,9 @@ void upload_from_buffer()
 
 /// dir/file.dat resource is uploaded
 
-//! [ upload_from_buffer ]
+//! [upload_from_buffer]
 
-//! [ async_upload_from_buffer ]
+//! [async_upload_from_buffer]
 
 void async_upload_from_buffer()
 {
@@ -110,4 +110,4 @@ void async_upload_from_buffer()
 
 /// dir/file.dat resource is uploaded
 
-//! [ async_upload_from_buffer ]
+//! [async_upload_from_buffer]

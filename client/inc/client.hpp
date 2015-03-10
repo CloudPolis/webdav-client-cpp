@@ -47,7 +47,7 @@ namespace WebDAV
 		/// \param[in] proxy_password
 		/// \param[in] cert_path
 		/// \param[in] key_path
-		/// \example init.cpp
+		/// \include init.cpp
 		///
 		Client(std::map<std::string, std::string> & options) noexcept;
 
@@ -56,28 +56,28 @@ namespace WebDAV
 		///
 		/// Get free size of the WebDAV server
 		/// \return size in bytes
-		/// \example size.cpp
+		/// \include size.cpp
 		///
 		long long free_size() noexcept;
 
 		///
 		/// Check for existence of a remote resource
 		/// \param[in] remote_resource
-		/// \example check.cpp
+		/// \include check.cpp
 		///
 		bool check(std::string remote_resource = "/") noexcept;
 
 		///
 		/// Get information of a remote resource
 		/// \param[in] remote_resource
-		/// \example info.cpp
+		/// \include info.cpp
 		///
 		std::map<std::string, std::string> info(std::string remote_resource) noexcept;
 
 		///
 		/// Clean an remote resource
 		/// \param[in] remote_resource
-		/// \example clean.cpp
+		/// \include clean.cpp
 		///
 		bool clean(std::string remote_resource) noexcept;
 
@@ -90,7 +90,7 @@ namespace WebDAV
 		///
 		/// List a remote directory
 		/// \param[in] remote_directory
-		/// \example list.cpp
+		/// \include list.cpp
 		///
 		std::vector<std::string> list(std::string remote_directory = "") noexcept;
 
@@ -98,7 +98,7 @@ namespace WebDAV
 		/// Create a remote directory
 		/// \param[in] remote_directory
 		/// \param[in] recursive
-		/// \example mkdir.cpp
+		/// \include mkdir.cpp
 		///
 		bool create_directory(std::string remote_directory, bool recursive = false) noexcept;
 
@@ -106,7 +106,7 @@ namespace WebDAV
 		/// Move a remote resource
 		/// \param[in] remote_source_resource
 		/// \param[in] remote_destination_resource
-		/// \example move.cpp
+		/// \include move.cpp
 		///
 		bool move(std::string remote_source_resource, std::string remote_destination_resource) noexcept;
 
@@ -114,7 +114,7 @@ namespace WebDAV
 		/// Copy a remote resource
 		/// \param[in] remote_source_resource
 		/// \param[in] remote_destination_resource
-		/// \example copy.cpp
+		/// \include copy.cpp
 		///
 		bool copy(std::string remote_source_resource, std::string remote_destination_resource) noexcept;
 
@@ -139,6 +139,7 @@ namespace WebDAV
 		/// Asynchronously download a remote file to a local file
 		/// \param[in] remote_file
 		/// \param[in] local_file
+		/// \param[in] callback
 		/// \snippet download.cpp async_download_to_file
 		///
 		void async_download(std::string remote_file, std::string local_file, std::function<void(bool)> callback = nullptr) noexcept;

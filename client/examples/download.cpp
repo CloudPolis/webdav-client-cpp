@@ -4,7 +4,7 @@
 #include <vector>
 #include <client.hpp>
 
-//! [ download_to_file ]
+//! [download_to_file]
 
 void download_to_file()
 {
@@ -28,9 +28,9 @@ void download_to_file()
 
 /// dir/file.dat resource is downloaded
 
-//! [ download_to_file ]
+//! [download_to_file]
 
-//! [ async_download_to_file ]
+//! [async_download_to_file]
 
 void async_download_to_file()
 {
@@ -55,9 +55,9 @@ void async_download_to_file()
 
 /// dir/file.dat resource is downloaded
 
-//! [ async_download_to_file ]
+//! [async_download_to_file]
 
-//! [ download_to_buffer ]
+//! [download_to_buffer]
 
 void download_to_buffer()
 {
@@ -82,9 +82,9 @@ void download_to_buffer()
 
 /// dir/file.dat resource is downloaded
 
-//! [ download_to_buffer ]
+//! [download_to_buffer]
 
-//! [ async_download_to_buffer ]
+//! [async_download_to_buffer]
 
 void async_download_to_buffer()
 {
@@ -110,4 +110,4 @@ void async_download_to_buffer()
 
 /// dir/file.dat resource is downloaded
 
-//! [ async_download_to_buffer ]
+//! [async_download_to_buffer]
