@@ -122,7 +122,7 @@ namespace WebDAV
 		/// Download a remote file to a local file
 		/// \param[in] remote_file
 		/// \param[in] local_file
-		/// \snippet download.cpp download_from_file
+		/// \snippet download.cpp download_to_file
 		///
 		bool download(std::string remote_file, std::string local_file) noexcept;
 
@@ -131,7 +131,7 @@ namespace WebDAV
 		/// \param[in] remote_file
 		/// \param[out] buffer_ptr
 		/// \param[out] buffer_size
-		/// \snippet download.cpp download_from_buffer
+		/// \snippet download.cpp download_to_buffer
 		///
 		bool download_to(std::string remote_file, char* & buffer_ptr, long long int & buffer_size) noexcept;
 
@@ -139,7 +139,7 @@ namespace WebDAV
 		/// Asynchronously download a remote file to a local file
 		/// \param[in] remote_file
 		/// \param[in] local_file
-		/// \snippet download.cpp async_download_from_file
+		/// \snippet download.cpp async_download_to_file
 		///
 		void async_download(std::string remote_file, std::string local_file, std::function<void(bool)> callback = nullptr) noexcept;
 
@@ -149,7 +149,7 @@ namespace WebDAV
 		/// \param[out] buffer_ptr
 		/// \param[out] buffer_size
 		/// \param[in] callback
-		/// \snippet download.cpp async_download_from_buffer
+		/// \snippet download.cpp async_download_to_buffer
 		///
 		void async_download_to(std::string remote_file, char* & buffer_ptr, long long int & buffer_size, std::function<void(bool)> callback = nullptr) noexcept;
 
