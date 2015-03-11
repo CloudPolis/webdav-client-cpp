@@ -6,5 +6,5 @@
 #include <string>
 #include <vector>
 
-#include "client.hpp"
+#include <webdav/client.hpp>
 #include "config.hpp"
