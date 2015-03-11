@@ -21,8 +21,6 @@ find_library(CURL_LIBRARY
     NAMES curl curllib libcurl_imp curllib_static
     HINTS "${CMAKE_PREFIX_PATH}/curl/lib"
 )
-FIND_PATH(CURL_INCLUDE_DIR NAMES curl/curl.h curl/include/curl/curl.h)
-include_directories(${CURL_INCLUDE_DIR})
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 
