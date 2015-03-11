@@ -12,31 +12,18 @@ set(${PROJECT_NAME}_headers ${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h
                             ${CMAKE_CURRENT_SOURCE_DIR}/config.hpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/catch.hpp)
 
-find_package(webdavclient)
-if (WEBDAVCLIENT_FOUND)
-else ()
-    message (STATUS "No Webdavclient found")
-    return()
-endif()
 
-find_package(pugixml)
-if (PUGIXML_FOUND)
-else ()
-    message (STATUS "No PugiXML found")
-    return()
-endif()
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake;${CMAKE_MODULE_PATH}")
 
-find_package(curl)
-if (CURL_FOUND)
-else ()
-    message (STATUS "No curl found")
-    return()
-endif()
-
-include_directories(${WEBDAVCLIENT_INCLUDE_DIR})
-include_directories(${PUGIXML_INCLUDE_DIR})
+find_package(webdavclient CONFIG REQUIRED)
+find_package(pugixml CONFIG REQUIRED)
+find_library(CURL_LIBRARY
+    NAMES curl curllib libcurl_imp curllib_static
+    HINTS "${CMAKE_PREFIX_PATH}/curl/lib"
+)
+FIND_PATH(CURL_INCLUDE_DIR NAMES curl/curl.h curl/include/curl/curl.h)
 include_directories(${CURL_INCLUDE_DIR})
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 
-target_link_libraries(${PROJECT_NAME} webdavclient ${WEBDAVCLIENT_LIBRARY} ${PUGIXML_LIBRARY} ${CURL_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} webdavclient pugixml curl)
