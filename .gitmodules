@@ -1,6 +1,0 @@
-[submodule "pugixml"]
-	path = pugixml
-	url = https://github.com/zeux/pugixml.git
-[submodule "curl"]
-	path = curl
-	url = https://github.com/bagder/curl.git

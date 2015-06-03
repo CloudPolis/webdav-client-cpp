@@ -1,5 +1,81 @@
 cmake_minimum_required(VERSION 2.8.4)
+project(Webdavclient)
 
-add_subdirectory(pugixml/scripts)
-add_subdirectory(curl)
-add_subdirectory(client)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
+option(STATIC_RUNTIM_LIBRARY "Static runtime library" ON)
+option(UNICODE "Character set is UNICODE" ON)
+
+if(STATIC_RUNTIM_LIBRARY)
+    set(CompilerFlags
+                CMAKE_CXX_FLAGS
+                CMAKE_CXX_FLAGS_DEBUG
+                CMAKE_CXX_FLAGS_RELEASE
+                CMAKE_C_FLAGS
+                CMAKE_C_FLAGS_DEBUG
+                CMAKE_C_FLAGS_RELEASE)
+    foreach(CompilerFlag ${CompilerFlags})
+        string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+    endforeach()
+endif()
+
+if(UNICODE)
+    add_definitions(-D_UNICODE -DUNICODE)
+endif()
+
+include_directories(./include/)
+
+set(${PROJECT_NAME}_sources ${CMAKE_CURRENT_SOURCE_DIR}/source/stdafx.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/callback.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/client.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/fsinfo.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/header.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/request.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/urn.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/stdafx.h
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/callback.hpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/fsinfo.hpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/header.hpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/request.hpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/urn.hpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/source/pugiext.hpp)
+
+set(${PROJECT_NAME}_headers ${CMAKE_CURRENT_SOURCE_DIR}/include/client.hpp)
+
+find_package(Pugixml REQUIRED)
+include_directories(${Pugixml_INCLUDE_DIRS})
+
+if(WIN32 AND MSVC AND NOT BUILD_SHARED_LIBS)
+    include(cmake/FindStaticOpenSSL.cmake)
+else()
+    find_package(OpenSSL)
+endif()
+include_directories(${OPENSSL_INCLUDE_DIR})
+
+find_package(Curl REQUIRED)
+include_directories(${CURL_INCLUDE_DIR})
+
+if(BUILD_SHARED_LIBS)
+    add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
+else()
+    add_definitions(-DCURL_STATICLIB)
+    add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
+endif()
+
+target_link_libraries(${PROJECT_NAME} Pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+
+install(TARGETS ${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}Config
+    ARCHIVE DESTINATION lib/static
+    LIBRARY DESTINATION lib
+)
+install(FILES ${${PROJECT_NAME}_headers} DESTINATION include)
+
+install(EXPORT ${PROJECT_NAME}Config DESTINATION cmake)
+
+configure_file(${PROJECT_SOURCE_DIR}/cmake/ProjectConfig-include.cmake.in
+               ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake)
+
+install(FILES ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake 
+        DESTINATION cmake)
