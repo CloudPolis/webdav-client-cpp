@@ -44,7 +44,7 @@ include_directories(${OPENSSL_INCLUDE_DIR})
 find_package(Pugixml REQUIRED)
 include_directories(${Pugixml_INCLUDE_DIRS})
 
-find_package(Curl REQUIRED)
+find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIR})
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
