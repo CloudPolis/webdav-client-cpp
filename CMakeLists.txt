@@ -53,7 +53,7 @@ else()
 endif()
 include_directories(${OPENSSL_INCLUDE_DIR})
 
-find_package(Curl REQUIRED)
+find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIR})
 
 if(BUILD_SHARED_LIBS)
