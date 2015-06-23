@@ -1,0 +1,31 @@
+```
+tree/
+  - cmake/
+    - FindStaticOpenSSL.cmake
+    - ProjectConfig-include.cmake.in
+  - deps/
+    - pugixml/
+  - docs/
+    - doxygen.conf
+  - examples/{model}/{method}#{case}
+  - include/
+    - client.hpp
+  - source/
+  - tests/
+    - models/{module}/{model}/{method}#{case}
+    - CMakeLists.txt
+  - CMakeLists.txt
+  - {README}
+
+{README}
+
+  - AUTHORS
+  - BUGS
+  - ChangeLog.md
+  - LICENSE
+  - INSTALL
+  - MANIFEST
+  - NEWS
+  - README.md
+
+```
