@@ -47,7 +47,7 @@ namespace WebDAV
 		/// \param[in] proxy_password
 		/// \param[in] cert_path
 		/// \param[in] key_path
-		/// \include init.cpp
+		/// \include client/init.cpp
 		///
 		Client(std::map<std::string, std::string> & options) noexcept;
 
@@ -56,28 +56,28 @@ namespace WebDAV
 		///
 		/// Get free size of the WebDAV server
 		/// \return size in bytes
-		/// \include size.cpp
+		/// \include client/size.cpp
 		///
 		long long free_size() noexcept;
 
 		///
 		/// Check for existence of a remote resource
 		/// \param[in] remote_resource
-		/// \include check.cpp
+		/// \include client/check.cpp
 		///
 		bool check(std::string remote_resource = "/") noexcept;
 
 		///
 		/// Get information of a remote resource
 		/// \param[in] remote_resource
-		/// \include info.cpp
+		/// \include client/info.cpp
 		///
 		std::map<std::string, std::string> info(std::string remote_resource) noexcept;
 
 		///
 		/// Clean an remote resource
 		/// \param[in] remote_resource
-		/// \include clean.cpp
+		/// \include client/clean.cpp
 		///
 		bool clean(std::string remote_resource) noexcept;
 
@@ -90,7 +90,7 @@ namespace WebDAV
 		///
 		/// List a remote directory
 		/// \param[in] remote_directory
-		/// \include list.cpp
+		/// \include client/list.cpp
 		///
 		std::vector<std::string> list(std::string remote_directory = "") noexcept;
 
@@ -98,7 +98,7 @@ namespace WebDAV
 		/// Create a remote directory
 		/// \param[in] remote_directory
 		/// \param[in] recursive
-		/// \include mkdir.cpp
+		/// \include client/mkdir.cpp
 		///
 		bool create_directory(std::string remote_directory, bool recursive = false) noexcept;
 
@@ -106,7 +106,7 @@ namespace WebDAV
 		/// Move a remote resource
 		/// \param[in] remote_source_resource
 		/// \param[in] remote_destination_resource
-		/// \include move.cpp
+		/// \include client/move.cpp
 		///
 		bool move(std::string remote_source_resource, std::string remote_destination_resource) noexcept;
 
@@ -114,7 +114,7 @@ namespace WebDAV
 		/// Copy a remote resource
 		/// \param[in] remote_source_resource
 		/// \param[in] remote_destination_resource
-		/// \include copy.cpp
+		/// \include client/copy.cpp
 		///
 		bool copy(std::string remote_source_resource, std::string remote_destination_resource) noexcept;
 
@@ -122,7 +122,7 @@ namespace WebDAV
 		/// Download a remote file to a local file
 		/// \param[in] remote_file
 		/// \param[in] local_file
-		/// \snippet download.cpp download_to_file
+		/// \snippet client/download.cpp download_to_file
 		///
 		bool download(std::string remote_file, std::string local_file) noexcept;
 
@@ -131,7 +131,7 @@ namespace WebDAV
 		/// \param[in] remote_file
 		/// \param[out] buffer_ptr
 		/// \param[out] buffer_size
-		/// \snippet download.cpp download_to_buffer
+		/// \snippet client/download.cpp download_to_buffer
 		///
 		bool download_to(std::string remote_file, char* & buffer_ptr, long long int & buffer_size) noexcept;
 
@@ -140,7 +140,7 @@ namespace WebDAV
 		/// \param[in] remote_file
 		/// \param[in] local_file
 		/// \param[in] callback
-		/// \snippet download.cpp async_download_to_file
+		/// \snippet client/download.cpp async_download_to_file
 		///
 		void async_download(std::string remote_file, std::string local_file, std::function<void(bool)> callback = nullptr) noexcept;
 
@@ -150,7 +150,7 @@ namespace WebDAV
 		/// \param[out] buffer_ptr
 		/// \param[out] buffer_size
 		/// \param[in] callback
-		/// \snippet download.cpp async_download_to_buffer
+		/// \snippet client/download.cpp async_download_to_buffer
 		///
 		void async_download_to(std::string remote_file, char* & buffer_ptr, long long int & buffer_size, std::function<void(bool)> callback = nullptr) noexcept;
 
@@ -158,7 +158,7 @@ namespace WebDAV
 		/// Upload a remote file from a local file
 		/// \param[in] remote_file
 		/// \param[in] local_file
-		/// \snippet upload.cpp upload_from_file
+		/// \snippet client/upload.cpp upload_from_file
 		///
 		bool upload(std::string remote_file, std::string local_file) noexcept;
 
@@ -167,7 +167,7 @@ namespace WebDAV
 		/// \param[in] remote_file
 		/// \param[in] buffer_ptr
 		/// \param[in] buffer_size
-		/// \snippet upload.cpp upload_from_buffer
+		/// \snippet client/upload.cpp upload_from_buffer
 		///
 		bool upload_from(std::string remote_file, char* buffer_ptr, long long int buffer_size) noexcept;
 
@@ -176,7 +176,7 @@ namespace WebDAV
 		/// \param[in] remote_file
 		/// \param[in] local_file
 		/// \param[in] callback
-		/// \snippet upload.cpp async_upload_from_file
+		/// \snippet client/upload.cpp async_upload_from_file
 		///
 		void async_upload(std::string remote_file, std::string local_file, std::function<void(bool)> callback = nullptr) noexcept;
 
@@ -186,7 +186,7 @@ namespace WebDAV
 		/// \param[in] buffer_ptr
 		/// \param[in] buffer_size
 		/// \param[in] callback
-		/// \snippet upload.cpp async_upload_from_buffer
+		/// \snippet client/upload.cpp async_upload_from_buffer
 		///
 		void async_upload_from(std::string remote_file, char* buffer_ptr, long long int buffer_size, std::function<void(bool)> callback = nullptr) noexcept;
 	};
