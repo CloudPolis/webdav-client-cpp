@@ -21,9 +21,9 @@ tree/
   - BUGS
   - ChangeLog.md
   - LICENSE
-  - INSTALL
-  - MANIFEST
-  - NEWS
+  - INSTALL.md
+  - MANIFEST.md
+  - NEWS.md
   - README.md
   - TODO.md
 
