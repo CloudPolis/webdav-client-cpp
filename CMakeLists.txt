@@ -6,6 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 option(STATIC_RUNTIM_LIBRARY "Static runtime library" ON)
 option(UNICODE "Character set is UNICODE" ON)
+option(BUILD_TESTS "Build tests" ON)
 
 if(STATIC_RUNTIM_LIBRARY)
     set(CompilerFlags
@@ -81,3 +82,6 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/ProjectConfig-include.cmake.in
 install(FILES ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake 
         DESTINATION cmake)
 
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif()

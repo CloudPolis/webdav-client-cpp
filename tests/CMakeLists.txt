@@ -3,8 +3,7 @@ project(Tests)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-option(STATIC_RUNTIM_LIBRARY "Static runtime library" ON)
-option(UNICODE "Character set is UNICODE" ON)
+option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 
 if(STATIC_RUNTIM_LIBRARY)
     set(CompilerFlags
@@ -19,10 +18,6 @@ if(STATIC_RUNTIM_LIBRARY)
     endforeach()
 endif()
 
-if(UNICODE)
-    add_definitions(-D_UNICODE -DUNICODE)
-endif()
-
 set(${PROJECT_NAME}_sources ${CMAKE_CURRENT_SOURCE_DIR}/source/main.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/source/check.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/source/clean.cpp
@@ -34,21 +29,6 @@ set(${PROJECT_NAME}_sources ${CMAKE_CURRENT_SOURCE_DIR}/source/main.cpp
 find_package(Webdavclient REQUIRED)
 include_directories(${Webdavclient_INCLUDE_DIRS})
 
-if(WIN32 AND MSVC AND NOT BUILD_SHARED_LIBS)
-    SET(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules")
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-    include(FindStaticOpenSSL)
-else()
-    find_package(OpenSSL)
-endif()
-include_directories(${OPENSSL_INCLUDE_DIR})
-
-find_package(Pugixml REQUIRED)
-include_directories(${Pugixml_INCLUDE_DIRS})
-
-find_package(CURL REQUIRED)
-include_directories(${CURL_INCLUDE_DIR})
-
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 
-target_link_libraries(${PROJECT_NAME} Pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY} Webdavclient)
+target_link_libraries(${PROJECT_NAME} Webdavclient)
