@@ -24,6 +24,8 @@ if(UNICODE)
     add_definitions(-D_UNICODE -DUNICODE)
 endif()
 
+add_subdirectory(deps)
+
 include_directories(./include/)
 
 set(${PROJECT_NAME}_sources ${CMAKE_CURRENT_SOURCE_DIR}/source/stdafx.cpp
@@ -42,9 +44,6 @@ set(${PROJECT_NAME}_sources ${CMAKE_CURRENT_SOURCE_DIR}/source/stdafx.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/source/pugiext.hpp)
 
 set(${PROJECT_NAME}_headers ${CMAKE_CURRENT_SOURCE_DIR}/include/client.hpp)
-
-find_package(Pugixml REQUIRED)
-include_directories(${Pugixml_INCLUDE_DIRS})
 
 if(WIN32 AND MSVC AND NOT BUILD_SHARED_LIBS)
     SET(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules")
@@ -81,3 +80,4 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/ProjectConfig-include.cmake.in
 
 install(FILES ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake 
         DESTINATION cmake)
+
