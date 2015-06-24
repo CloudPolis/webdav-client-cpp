@@ -18,7 +18,7 @@ tree/
 {README}
 
   - AUTHORS
-  - BUGS
+  - BUGS.md
   - ChangeLog.md
   - LICENSE
   - INSTALL.md
