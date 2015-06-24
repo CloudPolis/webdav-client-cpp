@@ -4,7 +4,7 @@
 ```
 > git clone https://github.com/designerror/webdavclient-cpp.git
 > cd webdavclient-cpp
-> git submodules init
-> git submodules update
+> git submodule init
+> git submodule update
 > clion .
 ```
