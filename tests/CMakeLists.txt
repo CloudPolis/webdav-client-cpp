@@ -18,13 +18,13 @@ if(STATIC_RUNTIM_LIBRARY)
     endforeach()
 endif()
 
-set(${PROJECT_NAME}_sources ${CMAKE_CURRENT_SOURCE_DIR}/source/main.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/check.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/clean.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/list.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/source/stdafx.h
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/config.hpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/catch.hpp)
+set(${PROJECT_NAME}_sources ${CMAKE_CURRENT_SOURCE_DIR}/client/main.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/client/check.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/client/clean.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/client/list.cpp
+							${CMAKE_CURRENT_SOURCE_DIR}/client/stdafx.h
+                            ${CMAKE_CURRENT_SOURCE_DIR}/client/config.hpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/client/catch.hpp)
 
 find_package(Webdavclient REQUIRED)
 include_directories(${Webdavclient_INCLUDE_DIRS})

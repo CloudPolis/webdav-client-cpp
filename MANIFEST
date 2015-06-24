@@ -1,8 +1,6 @@
 ```
 tree/
   - cmake/
-    - FindStaticOpenSSL.cmake
-    - ProjectConfig-include.cmake.in
   - deps/
     - pugixml/
   - docs/
@@ -12,7 +10,7 @@ tree/
     - client.hpp
   - source/
   - tests/
-    - models/{module}/{model}/{method}#{case}
+    - {model}/{method}#{case}
     - CMakeLists.txt
   - CMakeLists.txt
   - {README}
