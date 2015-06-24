@@ -88,3 +88,9 @@ int main()
   client.async_download("/path/to/remote/file", "/path/to/local/file");
 }
 ```
+
+Acknowledgments
+===
+Thanks to the `JetBrains` company for
+
+  [![Clion](http://s16.postimg.org/941c7ix9d/clion.png)](https://www.jetbrains.com/clion/)
