@@ -31,7 +31,6 @@ Usage examples
 ===
 
 ```
-...
 #include <client.hpp>
 
 int main()
@@ -86,8 +85,5 @@ int main()
   {
     std::cout << "/path/to/remote/file" << " resource is " << is_downloaded ? "" : "not " << "downloaded" << std::endl;
   });
-  
-  
 }
-
 ```
