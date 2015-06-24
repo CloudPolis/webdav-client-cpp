@@ -85,7 +85,6 @@ int main()
   client.move("/path/to/remote/file1", "/path/to/remote/file3");
   
   client.async_upload("/path/to/remote/file", "/path/to/local/file");
-  
   client.async_download("/path/to/remote/file", "/path/to/local/file");
 }
 ```
