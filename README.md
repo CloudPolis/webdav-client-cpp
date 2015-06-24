@@ -1,6 +1,8 @@
 Webdavclient
 ===
+
 Package Webdavclient provides easy and convenient to work with WebDAV-servers:
+
  - Yandex.Disk
  - Dropbox
  - Google Drive
@@ -8,20 +10,20 @@ Package Webdavclient provides easy and convenient to work with WebDAV-servers:
  - 4shared
  - ...
 
-Installation instruction
+Install
 ===
 
-```
+```bash
 > git clone https://github.com/designerror/webdavclient-cpp.git
 > cd webdavclient-cpp
 > git submodule init
 > git submodule update
 ```
 
-Instructions of generation documentation 
+Documentation
 ===
 
-```
+```bash
 > cd docs
 > doxygen doxygen.conf
 > firefox html/index.html
@@ -30,7 +32,7 @@ Instructions of generation documentation
 Usage examples
 ===
 
-```
+```c++
 #include <client.hpp>
 
 int main()
