@@ -2,7 +2,7 @@
 tree/
   - cmake/
   - deps/
-    - pugixml/
+    - @pugixml/
   - docs/
     - doxygen.conf
   - examples/{model}/{method}#{case}
