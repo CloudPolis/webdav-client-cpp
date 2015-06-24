@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 option(STATIC_RUNTIM_LIBRARY "Static runtime library" ON)
 option(UNICODE "Character set is UNICODE" ON)
-option(BUILD_TESTS "Build tests" ON)
+option(BUILD_TESTS_FOR_${PROJECT_NAME} "Build tests" ON)
 
 if(STATIC_RUNTIM_LIBRARY)
     set(CompilerFlags
@@ -65,7 +65,11 @@ else()
     add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 endif()
 
-target_link_libraries(${PROJECT_NAME} pthread pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+if(UNIX)
+    target_link_libraries(${PROJECT_NAME} pthread pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+else()
+    target_link_libraries(${PROJECT_NAME} pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+endif()
 
 install(TARGETS ${PROJECT_NAME}
     EXPORT ${PROJECT_NAME}Config
@@ -82,6 +86,6 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/ProjectConfig-include.cmake.in
 install(FILES ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake 
         DESTINATION cmake)
 
-if(BUILD_TESTS)
+if(BUILD_TESTS_FOR_${PROJECT_NAME})
     add_subdirectory(tests)
 endif()
