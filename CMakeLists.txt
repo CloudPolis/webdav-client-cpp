@@ -65,7 +65,7 @@ else()
     add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 endif()
 
-target_link_libraries(${PROJECT_NAME} Pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+target_link_libraries(${PROJECT_NAME} pthread pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
 
 install(TARGETS ${PROJECT_NAME}
     EXPORT ${PROJECT_NAME}Config
@@ -81,6 +81,8 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/ProjectConfig-include.cmake.in
 
 install(FILES ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake 
         DESTINATION cmake)
+
+add_subdirectory(tests)
 
 if(BUILD_TESTS)
     add_subdirectory(tests)
