@@ -32,3 +32,5 @@ include_directories(${Webdavclient_INCLUDE_DIRS})
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 
 target_link_libraries(${PROJECT_NAME} Webdavclient)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${PROJECT_NAME} -s -r compact WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/..)
