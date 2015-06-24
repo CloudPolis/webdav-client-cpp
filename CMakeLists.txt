@@ -82,8 +82,6 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/ProjectConfig-include.cmake.in
 install(FILES ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake 
         DESTINATION cmake)
 
-add_subdirectory(tests)
-
 if(BUILD_TESTS)
     add_subdirectory(tests)
 endif()
