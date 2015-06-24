@@ -1,3 +1,3 @@
 
-  - [ ] Writing test
-  - [ ] Editing INSTALL file
+  - [ ] *Writing test*
+  - [ ] *Editing `INSTALL` file*
