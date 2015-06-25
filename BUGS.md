@@ -1,0 +1,3 @@
+```
+In cout appears "Hardlink"
+```
