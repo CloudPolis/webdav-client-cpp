@@ -2,19 +2,19 @@
 
 static std::map<std::string, std::string> options_with_proxy = 
 { 
-	{ "webdav_hostname", "https://webdav.yandex.ru" },
-	{ "webdav_login", "designerror" },
-	{ "webdav_password", "{webdav_password}" },
-	{ "proxy_hostname", "https://10.0.0.1:8080" },
-	{ "proxy_login", "designerror" },
-	{ "proxy_password", "{proxy_password}" }
+	{ "webdav_hostname", 	"https://webdav.yandex.ru" },
+	{ "webdav_login", 		"webdav.test.login" },
+	{ "webdav_password", 	"webdav.test.password" },
+	{ "proxy_hostname", 	"{proxy_hostname}" },
+	{ "proxy_login", 		"{proxy_login}" },
+	{ "proxy_password", 	"{proxy_password}" }
 };
 
 static std::map<std::string, std::string> options_without_proxy =
 {
-	{ "webdav_hostname", "https://webdav.yandex.ru" },
-	{ "webdav_login", "daniil.testov" },
-	{ "webdav_password", "_daniil.testov" }
+	{ "webdav_hostname", 	"https://webdav.yandex.ru" },
+	{ "webdav_login", 		"webdav.test.login" },
+	{ "webdav_password", 	"webdav.test.password" }
 };
 
 #ifdef WITH_PROXY

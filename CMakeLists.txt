@@ -6,11 +6,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 #include(cmake/FindCPM.cmake)
 
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
-option(STATIC_RUNTIM_LIBRARY "Static runtime library" ON)
+option(STATIC_RUNTIME_LIBRARY "Static runtime library" ON)
 option(UNICODE "Character set is UNICODE" ON)
 option(BUILD_TESTS_FOR_${PROJECT_NAME} "Build tests" ON)
 
-if(STATIC_RUNTIM_LIBRARY)
+if(STATIC_RUNTIME_LIBRARY)
     set(CompilerFlags
                 CMAKE_CXX_FLAGS
                 CMAKE_CXX_FLAGS_DEBUG
