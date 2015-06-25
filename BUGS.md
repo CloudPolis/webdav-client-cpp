@@ -1,3 +1,3 @@
 ```
-In cout appears "Hardlink"
+In standart output appears word "Hardlink".
 ```
