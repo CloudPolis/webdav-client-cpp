@@ -3,7 +3,11 @@ project(Webdavclient)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-#include(cmake/FindCPM.cmake)
+include(cmake/FindCPM.cmake)
+CPM_AddModule("cpm-pugixml"
+  GIT_REPOSITORY "https://github.com/designerror/cpm-pugixml")
+CPM_Finish()
+
 
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 option(STATIC_RUNTIME_LIBRARY "Static runtime library" ON)
@@ -26,8 +30,6 @@ endif()
 if(UNICODE)
     add_definitions(-D_UNICODE -DUNICODE)
 endif()
-
-add_subdirectory(deps)
 
 include_directories(./include/)
 
