@@ -1,8 +1,6 @@
 ```
 tree/
   - cmake/
-  - deps/
-    - @pugixml
   - docs/
     - doxygen.conf
   - examples/{model}/{method}#{case}
