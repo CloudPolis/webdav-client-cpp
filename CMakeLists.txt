@@ -3,6 +3,8 @@ project(Webdavclient)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+#include(cmake/FindCPM.cmake)
+
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 option(STATIC_RUNTIM_LIBRARY "Static runtime library" ON)
 option(UNICODE "Character set is UNICODE" ON)
@@ -69,6 +71,7 @@ if(UNIX)
     target_link_libraries(${PROJECT_NAME} pthread pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
 else()
     target_link_libraries(${PROJECT_NAME} pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+    # ws2_32
 endif()
 
 install(TARGETS ${PROJECT_NAME}

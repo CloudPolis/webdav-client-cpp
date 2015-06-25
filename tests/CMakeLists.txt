@@ -5,6 +5,18 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 
+include(cmake/FindCPM.cmake)
+
+set(CATCH_DIR ${CMAKE_CURRENT_BINARY_DIR}/catch)
+CPM_EnsureRepoIsCurrent(
+  TARGET_DIR ${CATCH_DIR}
+  GIT_REPOSITORY "https://github.com/philsquared/Catch.git"
+  GIT_TAG origin/master
+  USE_CACHING TRUE
+  )
+
+CPM_ExportAdditionalIncludeDir("${CATCH_DIR}/single_include")
+
 if(STATIC_RUNTIM_LIBRARY)
     set(CompilerFlags
                 CMAKE_CXX_FLAGS
@@ -23,8 +35,7 @@ set(${PROJECT_NAME}_sources ${CMAKE_CURRENT_SOURCE_DIR}/client/main.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/client/clean.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/client/list.cpp
 							${CMAKE_CURRENT_SOURCE_DIR}/client/stdafx.h
-                            ${CMAKE_CURRENT_SOURCE_DIR}/client/config.hpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/client/catch.hpp)
+                            ${CMAKE_CURRENT_SOURCE_DIR}/client/config.hpp)
 
 find_package(Webdavclient REQUIRED)
 include_directories(${Webdavclient_INCLUDE_DIRS})

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "catch.hpp"
+#include <catch.hpp>
 
 SCENARIO("Client must list a remote files and a remote directories", "[list]") {
 

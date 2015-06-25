@@ -6,8 +6,6 @@
 #include <string>
 #include <vector>
 
-#pragma comment(lib, "ws2_32.lib")
-
 #ifndef _MSC_VER
 #define noexcept noexcept
 #else
