@@ -1,3 +1,3 @@
 ```
-In standart output appears word "Hardlink".
+In standard output appears word "Hardlink".
 ```
