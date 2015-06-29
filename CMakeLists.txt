@@ -10,7 +10,7 @@ CPM_AddModule("cpm-pugixml"
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 option(STATIC_RUNTIME_LIBRARY "Static runtime library" ON)
 option(UNICODE "Character set is UNICODE" ON)
-option(BUILD_TESTS_FOR_${PROJECT_NAME} "Build tests" ON)
+option(BUILD_TESTS_FOR_${PROJECT_NAME} "Build tests" OFF)
 
 if(STATIC_RUNTIME_LIBRARY)
     set(CompilerFlags
