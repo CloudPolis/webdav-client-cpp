@@ -1,4 +1,9 @@
-﻿#pragma once
+#pragma once
+
+#include <functional>
+#include <string>
+#include <map>
+#include <vector>
 
 namespace WebDAV
 {
