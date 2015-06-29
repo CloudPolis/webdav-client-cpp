@@ -4,7 +4,7 @@ project(Webdavclient)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 include(cmake/FindCPM.cmake)
-CPM_AddModule("cpm-pugixml"
+CPM_AddModule("pugixml"
   GIT_REPOSITORY "https://github.com/designerror/cpm-pugixml")
 
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
