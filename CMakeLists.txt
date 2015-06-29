@@ -31,20 +31,7 @@ endif()
 
 include_directories(./include/)
 
-set(${PROJECT_NAME}_sources ${CMAKE_CURRENT_SOURCE_DIR}/source/stdafx.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/callback.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/client.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/fsinfo.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/header.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/request.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/urn.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/stdafx.h
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/callback.hpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/fsinfo.hpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/header.hpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/request.hpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/urn.hpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/source/pugiext.hpp)
+file(glob ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
 
 set(${PROJECT_NAME}_headers ${CMAKE_CURRENT_SOURCE_DIR}/include/client.hpp)
 
