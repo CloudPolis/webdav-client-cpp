@@ -9,7 +9,6 @@ option(STATIC_RUNTIME_LIBRARY "Static runtime library" ON)
 include(cmake/FindCPM.cmake)
 CPM_AddModule("cpm-catch"
   GIT_REPOSITORY "https://github.com/bcachet/cpm-catch")
-CPM_Finish()
 
 if(STATIC_RUNTIME_LIBRARY)
     set(CompilerFlags
