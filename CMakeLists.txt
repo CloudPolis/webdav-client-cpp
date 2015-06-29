@@ -31,7 +31,7 @@ endif()
 
 include_directories(./include/)
 
-file(glob ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/source/ *.cpp")
+file(GLOB ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/source/ *.cpp")
 
 set(${PROJECT_NAME}_headers ${CMAKE_CURRENT_SOURCE_DIR}/include/client.hpp)
 
