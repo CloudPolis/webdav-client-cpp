@@ -32,6 +32,7 @@ Usage examples
 ===
 
 ```c++
+#include <iostream>
 #include <client.hpp>
 
 int main()
@@ -73,7 +74,7 @@ int main()
   client.clean("/path/to/remote/file");
   client.upload("/path/to/remote/file", "/path/to/local/file");
   
-  auto meta_info = client.info();
+  auto meta_info = client.info("/path/to/remote/resource");
   for(auto field : meta_info)
   {
     std::cout << field.first << ":" << "\t" << field.second;
