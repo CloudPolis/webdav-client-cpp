@@ -34,7 +34,7 @@ include_directories(./include/)
 
 file(GLOB ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
 
-set(${PROJECT_NAME}_headers ${CMAKE_CURRENT_SOURCE_DIR}/include/client.hpp)
+set(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
 if(WIN32 AND MSVC AND NOT BUILD_SHARED_LIBS)
     SET(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules")
@@ -67,7 +67,7 @@ install(TARGETS ${PROJECT_NAME}
     ARCHIVE DESTINATION lib/static
     LIBRARY DESTINATION lib
 )
-install(FILES ${${PROJECT_NAME}_headers} DESTINATION include)
+install(DIRECTORY ${PROJECT_NAME}_INCLUDE_DIRS DESTINATION include)
 
 install(EXPORT ${PROJECT_NAME}Config DESTINATION cmake)
 
