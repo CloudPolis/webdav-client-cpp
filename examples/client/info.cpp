@@ -1,8 +1,4 @@
-#include <iostream>
-#include <map>
-#include <string>
-#include <vector>
-#include <client.hpp>
+#include <webdav/client.hpp>
 
 std::ostream info_to_string(std::map<std::string, std::string> & info)
 {
