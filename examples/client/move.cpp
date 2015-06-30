@@ -1,8 +1,4 @@
-#include <iostream>
-#include <map>
-#include <string>
-#include <vector>
-#include <client.hpp>
+#include <webdav/client.hpp>
 
 std::ostream resources_to_string(std::vector<std::string> & resources)
 {
