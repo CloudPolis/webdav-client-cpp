@@ -1,8 +1,4 @@
-#include <iostream>
-#include <map>
-#include <string>
-#include <vector>
-#include <client.hpp>
+#include <webdav/client.hpp>
 
 //! [upload_from_file]
 
