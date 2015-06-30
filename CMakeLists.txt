@@ -56,9 +56,9 @@ else()
 endif()
 
 if(UNIX)
-    target_link_libraries(${PROJECT_NAME} pthread pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} pthread ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
 else()
-    target_link_libraries(${PROJECT_NAME} pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
     # ws2_32
 endif()
 
