@@ -30,7 +30,8 @@ if(UNICODE)
     add_definitions(-D_UNICODE -DUNICODE)
 endif()
 
-include_directories(./include/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/webdav)
 
 file(GLOB ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
 
