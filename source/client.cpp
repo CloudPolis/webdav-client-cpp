@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <webdav/client.hpp>
+#include <client.hpp>
 #include "pugiext.hpp"
 #include "header.hpp"
 #include "request.hpp"
