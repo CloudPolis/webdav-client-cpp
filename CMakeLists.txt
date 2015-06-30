@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 include(cmake/FindCPM.cmake)
 CPM_AddModule("pugixml"
   GIT_REPOSITORY "https://github.com/designerror/cpm-pugixml")
-include_directories({CPM_INCLUDE_DIRS})
+include_directories(${CPM_INCLUDE_DIRS})
 
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 option(STATIC_RUNTIME_LIBRARY "Static runtime library" ON)
