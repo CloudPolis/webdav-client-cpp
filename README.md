@@ -1,7 +1,7 @@
 WebDAV Client
 ===
 
-Package Webdavclient provides easy and convenient to work with WebDAV-servers:
+Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-servers:
 
  - Yandex.Disk
  - Dropbox
