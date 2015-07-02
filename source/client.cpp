@@ -98,7 +98,7 @@ namespace WebDAV
 		pugi::xml_node quota_available_bytes = prop.select_single_node("d:quota-available-bytes").node();
 		std::string free_size_text = quota_available_bytes.first_child().value();
 
-		auto free_size = atoi(free_size_text.c_str());
+		auto free_size = atol(free_size_text.c_str());
 		return free_size;
 	}
 
