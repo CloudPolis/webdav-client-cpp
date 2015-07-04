@@ -10,6 +10,12 @@ Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-ser
  - 4shared
  - ...
 
+Requirements
+===
+
+ - [OpenSSL](https://github.com/openssl/openssl)
+ - [CURL](https://github.com/bagder/curl)
+
 Install
 ===
 
