@@ -2,7 +2,7 @@
 **Clion**
 
 ```bash
-> git clone https://github.com/designerror/webdavclient-cpp.git
-> cd webdavclient-cpp
+> git clone https://github.com/designerror/webdav-client-cpp.git
+> cd webdav-client-cpp
 > clion .
 ```
