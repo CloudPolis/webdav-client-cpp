@@ -132,7 +132,7 @@ namespace WebDAV
 	Client::info(std::string remote_resource) noexcept
 	{
 		auto root_urn = Urn(this->webdav_root);
-		auto resource_urn = root_urn + remote_resource;
+		auto target_urn = root_urn + remote_resource;
 
 		Header header = {
 				"Accept: */*",
@@ -143,7 +143,7 @@ namespace WebDAV
 
 		Request request(this->options());
 
-		auto url = this->webdav_hostname + resource_urn.quote(request.handle);
+		auto url = this->webdav_hostname + target_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
@@ -164,7 +164,10 @@ namespace WebDAV
 			pugi::xml_node href = response.node().select_single_node("d:href").node();
 			std::string encode_file_name = href.first_child().value();
 			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
-			if (resource_path.compare(resource_urn.path()) == 0) {
+			auto target_path = target_urn.path();
+			auto target_path_without_sep = std::string(target_path, 0, target_path.find_last_not_of("/")+1);
+			auto resource_path_without_sep = std::string(resource_path, 0, resource_path.find_last_not_of("/")+1);
+			if (resource_path_without_sep.compare(target_path_without_sep) == 0) {
 				auto propstat = response.node().select_single_node("d:propstat").node();
 				auto prop = propstat.select_single_node("d:prop").node();
 				auto creation_date = prop.select_single_node("d:creationdate").node();
@@ -206,7 +209,7 @@ namespace WebDAV
 		bool is_directory = this->is_dir(remote_directory);
 		if (!is_directory) return std::vector<std::string>();
 
-		auto directory_urn = Urn(this->webdav_root) + remote_directory;
+		auto target_urn = Urn(this->webdav_root) + remote_directory;
 
 		Header header = {
 				"Accept: */*",
@@ -217,7 +220,7 @@ namespace WebDAV
 
 		Request request(this->options());
 
-		auto url = this->webdav_hostname + directory_urn.quote(request.handle);
+		auto url = this->webdav_hostname + target_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
@@ -241,7 +244,10 @@ namespace WebDAV
 			pugi::xml_node href = response.node().select_single_node("d:href").node();
 			std::string encode_file_name = href.first_child().value();
 			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int) encode_file_name.length());
-			if (resource_path.compare(directory_urn.path()) == 0) continue;
+			auto target_path = target_urn.path();
+			auto target_path_without_sep = std::string(target_path, 0, target_path.find_last_not_of("/")+1);
+			auto resource_path_without_sep = std::string(resource_path, 0, resource_path.find_last_not_of("/")+1);
+			if (resource_path_without_sep.compare(target_path_without_sep) == 0) continue;
 			Urn resource_urn(resource_path);
 			resources.push_back(resource_urn.name());
 		}
