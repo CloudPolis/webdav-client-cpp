@@ -475,13 +475,17 @@ namespace WebDAV
 
 		auto url = this->webdav_hostname + file_urn.quote(request.handle);
 
+		Data data2 = { 0, 0, 0 };
+
 		request.set(CURLOPT_UPLOAD, 1L);
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_READDATA, (size_t)&data);
 		request.set(CURLOPT_READFUNCTION, (size_t)Callback::Read::buffer);
 		request.set(CURLOPT_INFILESIZE_LARGE, (curl_off_t)buffer_size);
 		request.set(CURLOPT_BUFFERSIZE, (long)buffer_size);
-
+		request.set(CURLOPT_WRITEDATA, (size_t)&data2);
+		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+	
 		bool is_performed = request.perform();
 
 		if (callback != nullptr) callback(is_performed);

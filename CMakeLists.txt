@@ -3,6 +3,24 @@ project(Webdavclient)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
+option(STATIC_RUNTIME_LIBRARY "Static runtime library" ON)
+option(UNICODE "Character set is UNICODE" ON)
+option(BUILD_TESTS_FOR_${PROJECT_NAME} "Build tests" OFF)
+
+if(STATIC_RUNTIME_LIBRARY)
+    set(CompilerFlags
+                CMAKE_CXX_FLAGS
+                CMAKE_CXX_FLAGS_DEBUG
+                CMAKE_CXX_FLAGS_RELEASE
+                CMAKE_C_FLAGS
+                CMAKE_C_FLAGS_DEBUG
+                CMAKE_C_FLAGS_RELEASE)
+    foreach(CompilerFlag ${CompilerFlags})
+        string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+    endforeach()
+endif()
+
 include(cmake/FindCPM.cmake)
 CPM_AddModule("pugixml"
   GIT_REPOSITORY "https://github.com/designerror/cpm-pugixml")
@@ -59,7 +77,7 @@ endif()
 if(UNIX)
     target_link_libraries(${PROJECT_NAME} pthread ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
 else()
-    target_link_libraries(${PROJECT_NAME} ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} ws2_32 ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
     # ws2_32
 endif()
 

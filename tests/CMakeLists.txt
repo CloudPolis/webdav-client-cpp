@@ -6,10 +6,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 option(STATIC_RUNTIME_LIBRARY "Static runtime library" ON)
 
-include(cmake/FindCPM.cmake)
-CPM_AddModule("cpm-catch"
-  GIT_REPOSITORY "https://github.com/bcachet/cpm-catch")
-
 if(STATIC_RUNTIME_LIBRARY)
     set(CompilerFlags
                 CMAKE_CXX_FLAGS
@@ -22,6 +18,11 @@ if(STATIC_RUNTIME_LIBRARY)
         string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
     endforeach()
 endif()
+
+include(cmake/FindCPM.cmake)
+CPM_AddModule("cpm-catch"
+  GIT_REPOSITORY "https://github.com/bcachet/cpm-catch")
+include_directories(${CPM_INCLUDE_DIRS})
 
 file(GLOB ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/client/*.cpp")
 
