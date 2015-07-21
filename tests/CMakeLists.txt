@@ -21,7 +21,7 @@ endif()
 
 include(cmake/FindCPM.cmake)
 CPM_AddModule("cpm-catch"
-  GIT_REPOSITORY "https://github.com/bcachet/cpm-catch")
+  GIT_REPOSITORY "https://github.com/designerror/cpm-catch")
 include_directories(${CPM_INCLUDE_DIRS})
 
 file(GLOB ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/client/*.cpp")
