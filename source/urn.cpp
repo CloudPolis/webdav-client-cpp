@@ -36,10 +36,19 @@ namespace WebDAV {
 		auto is_root = Urn::separate.compare(path) == 0;
 		if (is_root) return std::string{""};
 
-		auto last_separate_position = path.find_last_of(Urn::separate);
-
-		auto name = path.substr(last_separate_position + 1);
-		return name;
+		if (this->is_dir())
+		{
+			auto path_without_slash = path.substr(0, path.length() - 1);
+			auto pre_last_separate_position = path_without_slash.find_last_of(Urn::separate);
+			auto name = path.substr(pre_last_separate_position + 1);
+			return name;
+		}
+		else
+		{
+			auto last_separate_position = path.find_last_of(Urn::separate);
+			auto name = path.substr(last_separate_position + 1);
+			return name;
+		}
 	}
 
 	std::string Urn::parent() {
