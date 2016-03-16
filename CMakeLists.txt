@@ -21,6 +21,15 @@ if(STATIC_RUNTIME_LIBRARY)
     endforeach()
 endif()
 
+<<<<<<< HEAD
+#include(cmake/FindCPM.cmake)
+#CPM_AddModule("Pugixml"
+#  GIT_REPOSITORY "https://github.com/designerror/cpm-pugixml")
+#include_directories(${CPM_INCLUDE_DIRS})
+
+find_package(pugixml REQUIRED)
+include_directories(${pugixml_INCLUDE_DIRS})
+=======
 include(cmake/FindCPM.cmake)
 CPM_AddModule("pugixml"
   GIT_REPOSITORY "https://github.com/designerror/cpm-pugixml")
@@ -43,13 +52,17 @@ if(STATIC_RUNTIME_LIBRARY)
         string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
     endforeach()
 endif()
+>>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
 
 if(UNICODE)
     add_definitions(-D_UNICODE -DUNICODE)
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
+<<<<<<< HEAD
+=======
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/webdav)
+>>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
 
 file(GLOB ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
 
@@ -74,11 +87,24 @@ else()
     add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 endif()
 
+<<<<<<< HEAD
+#if(UNIX)
+#    target_link_libraries(${PROJECT_NAME} pthread ${CPM_LIBRARIES} #${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+#else()
+#    target_link_libraries(${PROJECT_NAME} ws2_32 ${CPM_LIBRARIES} #${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+#endif()
+
+if(UNIX)
+    target_link_libraries(${PROJECT_NAME} pthread pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+else()
+    target_link_libraries(${PROJECT_NAME} ws2_32 pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+=======
 if(UNIX)
     target_link_libraries(${PROJECT_NAME} pthread ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
 else()
     target_link_libraries(${PROJECT_NAME} ws2_32 ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
     # ws2_32
+>>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
 endif()
 
 install(TARGETS ${PROJECT_NAME}

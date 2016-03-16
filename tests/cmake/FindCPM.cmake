@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+  set(CPM_DIR "${CMAKE_CURRENT_BINARY_DIR}/cpm-packages" CACHE TYPE STRING)
+=======
 set(CPM_DIR "${CMAKE_CURRENT_BINARY_DIR}/cpm_packages" CACHE TYPE STRING)
+>>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
   find_package(Git)
   if(NOT GIT_FOUND)
     message(FATAL_ERROR "CPM requires Git.")

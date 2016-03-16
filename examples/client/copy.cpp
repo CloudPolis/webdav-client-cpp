@@ -20,7 +20,11 @@ int main() {
             };
 
 
+<<<<<<< HEAD
+	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+=======
     WebDAV::Client client(options);
+>>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
 
     auto remote_file = "file.dat";
     auto remote_directory = "dir/";
@@ -32,10 +36,17 @@ int main() {
     std::cout << "\"/\" resource contain:" << std::endl;
     std::cout << resources_to_string(resources) << std::endl;
 
+<<<<<<< HEAD
+    client->copy(remote_file, copy_remote_file);
+    client->copy(remote_directory, copy_remote_directory);
+
+    resources = client->list();
+=======
     client.copy(remote_file, copy_remote_file);
     client.copy(remote_directory, copy_remote_directory);
 
     resources = client.list();
+>>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
 
     std::cout << "\"/\" resource contain:" << std::endl;
     std::cout << resources_to_string(resources) << std::endl;

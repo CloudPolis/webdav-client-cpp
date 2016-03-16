@@ -1,7 +1,10 @@
 #pragma once
 
+<<<<<<< HEAD
+=======
 #include "client.hpp"
 
+>>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
 #include <curl/curl.h>
 
 namespace WebDAV

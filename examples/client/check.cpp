@@ -10,7 +10,11 @@ int main() {
             };
 
 
+<<<<<<< HEAD
+	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+=======
     WebDAV::Client client(options);
+>>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
 
     auto remote_resources = {
             "existing_file.dat",
@@ -22,7 +26,11 @@ int main() {
     };
 
     for (auto remote_resource : remote_resources) {
+<<<<<<< HEAD
+        bool is_existed = client->check(remote_resource);
+=======
         bool is_existed = client.check(remote_resource);
+>>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
         std::cout << "Resource: " << remote_resource << " is " << is_existed ? "" : "not " << "existed" << std::endl;
     }
 }

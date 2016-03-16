@@ -45,8 +45,13 @@ int main() {
     };
 
     for (auto options : various_options) {
+<<<<<<< HEAD
+		std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+        bool is_connected = client->check();
+=======
         WebDAV::Client client(options);
         bool is_connected = client.check();
+>>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
         std::cout << "Client with options: " << std::endl;
         std::cout << options_to_string(options);
         std::cout << " is " << is_connected ? " " : "not " << "connected" << std::endl;
