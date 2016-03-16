@@ -36,7 +36,7 @@ endif()
 
 file(GLOB ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
 
-find_package(${TESTS_FOR_PROJECT} REQUIRED)
+#find_package(${TESTS_FOR_PROJECT} REQUIRED)
 include_directories(${${TESTS_FOR_PROJECT}_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
