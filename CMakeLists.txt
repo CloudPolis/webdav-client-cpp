@@ -7,6 +7,7 @@ option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 option(STATIC_RUNTIME_LIBRARY "Static runtime library" ON)
 option(UNICODE "Character set is UNICODE" ON)
 option(BUILD_TESTS_FOR_${PROJECT_NAME} "Build tests" OFF)
+option(USE_CPM "Use CPM" ON)
 
 if(STATIC_RUNTIME_LIBRARY)
     set(CompilerFlags
@@ -21,13 +22,15 @@ if(STATIC_RUNTIME_LIBRARY)
     endforeach()
 endif()
 
+if(USE_CPM)
 include(cmake/FindCPM.cmake)
 CPM_AddModule("Pugixml"
   GIT_REPOSITORY "https://github.com/designerror/cpm-pugixml")
 include_directories(${CPM_INCLUDE_DIRS})
-
+else()
 find_package(pugixml REQUIRED)
 include_directories(${pugixml_INCLUDE_DIRS})
+endif()
 
 if(UNICODE)
     add_definitions(-D_UNICODE -DUNICODE)
