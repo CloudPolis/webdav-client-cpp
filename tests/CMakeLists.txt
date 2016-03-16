@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 set(TESTS_FOR_PROJECT Webdavclient)
 project(Tests_${TESTS_FOR_PROJECT})
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 option(STATIC_RUNTIME_LIBRARY "Static runtime library" ON)
