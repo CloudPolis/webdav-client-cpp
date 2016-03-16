@@ -6,7 +6,10 @@ compiler:
   - clang
   - gcc
 script:
-  - mkdir build
-  - cd build
-  - cmake -DUSE_CPM:BOOL=ON -DBUILD_TESTS_FOR_Webdavclient:BOOL=ON .. 
+  - mkdir build && cd build
+  - cmake -DUSE_CPM:BOOL=ON .. 
+  - make
+  - make install
+  - cd .. && rm -rf build && mkdir build && cd build
+  - cmake -DUSE_CPM:BOOL=ON -DBUILD_TESTS_FOR_Webdavclient:BOOL=ON ..
   - make
