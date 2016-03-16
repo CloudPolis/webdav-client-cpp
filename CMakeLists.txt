@@ -53,7 +53,7 @@ include_directories(${OPENSSL_INCLUDE_DIR})
 find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIR})
 
-if(BUILD_SHARED_LIBS`)
+if(BUILD_SHARED_LIBS)
     add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 else()
     add_definitions(-DCURL_STATICLIB)
