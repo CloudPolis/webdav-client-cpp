@@ -8,4 +8,5 @@ compiler:
 script:
   - mkdir build
   - cd build
-  - cmake .. && make
+  - cmake -DUSE_CPM:BOOL=ON -DBUILD_TESTS_FOR_Webdavclient:BOOL=ON .. 
+  - make
