@@ -60,10 +60,18 @@ else()
     add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 endif()
 
+if(USE_CPM)
 if(UNIX)
     target_link_libraries(${PROJECT_NAME} pthread ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
 else()
     target_link_libraries(${PROJECT_NAME} ws2_32 ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+endif()
+else()
+if(UNIX)
+    target_link_libraries(${PROJECT_NAME} pthread pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+else()
+    target_link_libraries(${PROJECT_NAME} ws2_32 pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+endif()
 endif()
 
 install(TARGETS ${PROJECT_NAME}
