@@ -12,9 +12,3 @@
 #include <thread>
 
 #include "string.h"
-
-#ifndef _MSC_VER
-#define noexcept noexcept
-#else
-#define noexcept
-#endif

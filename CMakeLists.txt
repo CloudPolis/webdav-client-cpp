@@ -21,49 +21,19 @@ if(STATIC_RUNTIME_LIBRARY)
     endforeach()
 endif()
 
-<<<<<<< HEAD
-#include(cmake/FindCPM.cmake)
-#CPM_AddModule("Pugixml"
-#  GIT_REPOSITORY "https://github.com/designerror/cpm-pugixml")
-#include_directories(${CPM_INCLUDE_DIRS})
-
-find_package(pugixml REQUIRED)
-include_directories(${pugixml_INCLUDE_DIRS})
-=======
 include(cmake/FindCPM.cmake)
-CPM_AddModule("pugixml"
+CPM_AddModule("Pugixml"
   GIT_REPOSITORY "https://github.com/designerror/cpm-pugixml")
 include_directories(${CPM_INCLUDE_DIRS})
 
-option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
-option(STATIC_RUNTIME_LIBRARY "Static runtime library" ON)
-option(UNICODE "Character set is UNICODE" ON)
-option(BUILD_TESTS_FOR_${PROJECT_NAME} "Build tests" OFF)
-
-if(STATIC_RUNTIME_LIBRARY)
-    set(CompilerFlags
-                CMAKE_CXX_FLAGS
-                CMAKE_CXX_FLAGS_DEBUG
-                CMAKE_CXX_FLAGS_RELEASE
-                CMAKE_C_FLAGS
-                CMAKE_C_FLAGS_DEBUG
-                CMAKE_C_FLAGS_RELEASE)
-    foreach(CompilerFlag ${CompilerFlags})
-        string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
-    endforeach()
-endif()
->>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
+find_package(pugixml REQUIRED)
+include_directories(${pugixml_INCLUDE_DIRS})
 
 if(UNICODE)
     add_definitions(-D_UNICODE -DUNICODE)
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
-<<<<<<< HEAD
-=======
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/webdav)
->>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
-
 file(GLOB ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
 
 set(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
@@ -87,24 +57,10 @@ else()
     add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 endif()
 
-<<<<<<< HEAD
-#if(UNIX)
-#    target_link_libraries(${PROJECT_NAME} pthread ${CPM_LIBRARIES} #${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
-#else()
-#    target_link_libraries(${PROJECT_NAME} ws2_32 ${CPM_LIBRARIES} #${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
-#endif()
-
 if(UNIX)
-    target_link_libraries(${PROJECT_NAME} pthread pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} pthread ${CPM_LIBRARIES} #${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
 else()
-    target_link_libraries(${PROJECT_NAME} ws2_32 pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
-=======
-if(UNIX)
-    target_link_libraries(${PROJECT_NAME} pthread ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
-else()
-    target_link_libraries(${PROJECT_NAME} ws2_32 ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
-    # ws2_32
->>>>>>> 90cc2f2fe27b0ad5d2cc3b1b79a9a2f33f30d57f
+    target_link_libraries(${PROJECT_NAME} ws2_32 ${CPM_LIBRARIES} #${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
 endif()
 
 install(TARGETS ${PROJECT_NAME}
