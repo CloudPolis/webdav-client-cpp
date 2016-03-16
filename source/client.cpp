@@ -119,7 +119,7 @@ namespace WebDAV
 		bool is_existed = this->check(remote_file);
 		if (!is_existed) return false;
 
-		auto root_urn = Urn(this->webdav_root);
+		auto root_urn = Urn(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
 
 		std::ofstream file_stream(local_file, std::ios::binary);
@@ -158,7 +158,7 @@ namespace WebDAV
 		bool is_existed = this->check(remote_file);
 		if (!is_existed) return false;
 
-		auto root_urn = Urn(this->webdav_root);
+		auto root_urn = Urn(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
 
 		Data data = { 0, 0, 0 };
@@ -197,7 +197,7 @@ namespace WebDAV
 		bool is_existed = FileInfo::exists(local_file);
 		if (!is_existed) return false;
 
-		auto root_urn = Urn(this->webdav_root);
+		auto root_urn = Urn(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
 
 		std::ifstream file_stream(local_file, std::ios::binary);
@@ -237,7 +237,7 @@ namespace WebDAV
 		progress_t progress
 	) noexcept
 	{
-		auto root_urn = Urn(this->webdav_root);
+		auto root_urn = Urn(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
 
 		Data data = { buffer, 0, buffer_size };
@@ -268,7 +268,7 @@ namespace WebDAV
 	}
 
 
-	Client * Client::Init(std::map<std::string, std::string> & options)
+	Client * Client::Init(std::map<std::string, std::string> & options) noexcept
 	{
 		return new ClientImpl(options);
 	}
@@ -330,7 +330,7 @@ namespace WebDAV
 	Client::check(std::string remote_resource) noexcept
 	{
 		auto clientImpl = GetImpl(this);
-		auto root_urn = Urn(clientImpl->webdav_root);
+		auto root_urn = Urn(clientImpl->webdav_root, true);
 		auto resource_urn = root_urn + remote_resource;
 
 		Header header = {
@@ -357,7 +357,7 @@ namespace WebDAV
 	Client::info(std::string remote_resource) noexcept
 	{
 		auto clientImpl = GetImpl(this);
-		auto root_urn = Urn(clientImpl->webdav_root);
+		auto root_urn = Urn(clientImpl->webdav_root, true);
 		auto target_urn = root_urn + remote_resource;
 
 		Header header = {
@@ -435,7 +435,8 @@ namespace WebDAV
 
 		bool is_directory = this->is_dir(remote_directory);
 		if (!is_directory) return std::vector<std::string>();
-		auto target_urn = Urn(clientImpl->webdav_root) + remote_directory;
+		auto target_urn = Urn(clientImpl->webdav_root, true) + remote_directory;
+		target_urn = Urn(target_urn.path(), true);
 
 		Header header = {
 				"Accept: */*",
@@ -471,10 +472,7 @@ namespace WebDAV
 			std::string encode_file_name = href.first_child().value();
 			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int) encode_file_name.length());
 			auto target_path = target_urn.path();
-			auto target_path_without_sep = std::string(target_path, 0, target_path.rfind("/")+1);
-			auto resource_path_without_sep = std::string(resource_path, 0, resource_path.rfind("/")+1);
-
-			if (resource_path_without_sep.compare(target_path_without_sep) == 0) continue;
+			if (resource_path == target_path) continue;
 			Urn resource_urn(resource_path);
 			resources.push_back(resource_urn.name());
 		}
@@ -570,7 +568,7 @@ namespace WebDAV
 		bool is_existed = this->check(remote_source_resource);
 		if (!is_existed) return false;
 
-		Urn root_urn(clientImpl->webdav_root);
+		Urn root_urn(clientImpl->webdav_root, true);
 
 		auto source_resource_urn = root_urn + remote_source_resource;
 		auto destination_resource_urn = root_urn + remote_destination_resource;
@@ -598,7 +596,7 @@ namespace WebDAV
 		bool is_existed = this->check(remote_source_resource);
 		if (!is_existed) return false;
 
-		Urn root_urn(clientImpl->webdav_root);
+		Urn root_urn(clientImpl->webdav_root, true);
 
 		auto source_resource_urn = root_urn + remote_source_resource;
 		auto destination_resource_urn = root_urn + remote_destination_resource;
@@ -676,7 +674,7 @@ namespace WebDAV
 		bool is_existed = this->check(remote_resource);
 		if (!is_existed) return true;
 
-		auto root_urn = Urn(clientImpl->webdav_root);
+		auto root_urn = Urn(clientImpl->webdav_root, true);
 		auto resource_urn = root_urn + remote_resource;
 
 		Header header = {

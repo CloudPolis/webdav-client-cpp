@@ -50,7 +50,7 @@ include_directories(${OPENSSL_INCLUDE_DIR})
 find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIR})
 
-if(BUILD_SHARED_LIBS)
+if(BUILD_SHARED_LIBS`)
     add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 else()
     add_definitions(-DCURL_STATICLIB)
@@ -58,9 +58,9 @@ else()
 endif()
 
 if(UNIX)
-    target_link_libraries(${PROJECT_NAME} pthread ${CPM_LIBRARIES} #${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} pthread ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
 else()
-    target_link_libraries(${PROJECT_NAME} ws2_32 ${CPM_LIBRARIES} #${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} ws2_32 ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
 endif()
 
 install(TARGETS ${PROJECT_NAME}

@@ -7,8 +7,6 @@
 
 namespace WebDAV
 {
-<<<<<<< HEAD
-
 	typedef std::function<int(void *context, size_t dltotal, size_t dlnow, size_t ultotal, size_t ulnow)> progress_t;
 
 	typedef std::function<void(bool)> callback_t;

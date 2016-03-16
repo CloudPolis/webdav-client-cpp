@@ -25,11 +25,14 @@ if(UNICODE)
     add_definitions(-D_UNICODE -DUNICODE)
 endif()
 
+if(USE_CPM)
 include(cmake/FindCPM.cmake)
 CPM_AddModule("cpm-catch"
   GIT_REPOSITORY "https://github.com/designerror/cpm-catch")
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/source/)
 include_directories(${CPM_INCLUDE_DIRS})
+else()
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
+endif()
 
 file(GLOB ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
 
