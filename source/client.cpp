@@ -153,8 +153,6 @@ namespace WebDAV
 		progress_t progress
 	) noexcept
 	{
-		if (buffer_size == 0) return false;
-
 		bool is_existed = this->check(remote_file);
 		if (!is_existed) return false;
 
