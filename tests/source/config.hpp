@@ -14,7 +14,8 @@ static std::map<std::string, std::string> options_with_proxy =
 
 static std::map<std::string, std::string> options_without_proxy =
 {
-	{ "webdav_hostname", 	"https://webdav.yandex.ru" },
+	{ "webdav_hostname", 	"webdav.yandex.ru:443" },
+	{ "webdav_root", 		"/" },
 	{ "webdav_login", 		"webdav.test.login" },
 	{ "webdav_password", 	"webdav.test.password" }
 };

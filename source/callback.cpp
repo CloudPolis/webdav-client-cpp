@@ -1,25 +1,30 @@
 #include "stdafx.h"
 #include "callback.hpp"
 
-#define MIN(a,b) ((a) > (b)) ? (b) : (a)
+#include <algorithm>
 
 namespace Callback
 {
 	namespace Read
 	{
-		size_t file(char * ptr, size_t item_size, size_t item_count, void * file_stream)
+		size_t stream(char * ptr, size_t item_size, size_t item_count, void * stream)
 		{
-			auto in_stream = (std::ifstream *)file_stream;
-			size_t write_bytes = item_size * item_count;
-			in_stream->read(ptr, write_bytes);
-			return write_bytes;
+			auto in_stream = (std::istream *)stream;
+			size_t read_bytes = item_size * item_count;
+			auto position = in_stream->tellg();
+			in_stream->seekg(0, std::ios::end);
+			size_t size = in_stream->tellg();
+			in_stream->seekg(position, std::ios::beg);
+			read_bytes = std::min(read_bytes, size - position);
+			in_stream->read(ptr, read_bytes);
+			return read_bytes;
 		}
 
 		size_t buffer(char * ptr, size_t item_size, size_t item_count, void * buffer)
 		{
 			auto data = (Data*)buffer;
-			auto size = item_size * item_count;
-			auto copied_bytes = MIN(size, data->size - data->position);
+			size_t size = item_size * item_count;
+			auto copied_bytes = std::min(size, (size_t)(data->size - data->position));
 			memcpy(ptr, data->buffer, copied_bytes);
 			data->position += copied_bytes;
 			return copied_bytes;
@@ -28,9 +33,9 @@ namespace Callback
 
 	namespace Write
 	{
-		size_t file(char * ptr, size_t item_size, size_t item_count, void * file_stream)
+		size_t stream(char * ptr, size_t item_size, size_t item_count, void * stream)
 		{
-			auto out_stream = (std::ofstream *)file_stream;
+			auto out_stream = (std::ostream *)stream;
 			size_t write_bytes = item_size * item_count;
 			out_stream->write(ptr, write_bytes);
 			return write_bytes;
@@ -40,7 +45,7 @@ namespace Callback
 		{
 			auto data = (Data*)buffer;
 			auto size = item_size * item_count;
-			auto copied_bytes = MIN(size, data->size - data->position);
+			auto copied_bytes = std::min(size, (size_t)(data->size - data->position));
 			memcpy(data->buffer, data->buffer, copied_bytes);
 			data->position += copied_bytes;
 			return copied_bytes;
@@ -61,6 +66,15 @@ namespace Callback
 			data->buffer = new_buffer;
 			data->size = new_buffer_size;
 			return append_size;
+		}
+
+		size_t stream(char * ptr, size_t item_size, size_t item_count, void * stream)
+		{
+			auto out_stream = (std::ostream *)stream;
+			size_t write_bytes = item_size * item_count;
+			out_stream->seekp(0, std::ios::end);
+			out_stream->write(ptr, write_bytes);
+			return write_bytes;
 		}
 	}
 }

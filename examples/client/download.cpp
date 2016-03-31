@@ -102,3 +102,28 @@ void async_download_to_buffer()
 /// dir/file.dat resource is downloaded
 
 //! [async_download_to_buffer]
+
+//! [download_from_stream]
+
+void download_from_stream()
+{
+    std::map<std::string, std::string> options =
+            {
+                    {"webdav_hostname", "https://webdav.yandex.ru"},
+                    {"webdav_login", "{webdav_login}"},
+                    {"webdav_password", "{webdav_password}"}
+            };
+
+    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+
+    auto remote_file = "dir/file.dat";
+    std::ofstream stream("/home/user/Downloads/file.dat");
+
+    bool is_downloaded = client->download_to(remote_file, stream);
+
+    std::cout << remote_file << " resource is" << is_downloaded ? "" : "not" << "downloaded" << std::endl;
+}
+
+/// dir/file.dat resource is downloaded
+
+//! [download_from_stream]

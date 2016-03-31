@@ -104,3 +104,28 @@ void async_upload_from_buffer()
 /// dir/file.dat resource is uploaded
 
 //! [async_upload_from_buffer]
+
+//! [upload_from_stream]
+
+void upload_from_stream()
+{
+    std::map<std::string, std::string> options =
+            {
+                    {"webdav_hostname", "https://webdav.yandex.ru"},
+                    {"webdav_login", "{webdav_login}"},
+                    {"webdav_password", "{webdav_password}"}
+            };
+
+    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+
+    auto remote_file = "dir/file.dat";
+    std::ifstream stream("/home/user/Downloads/file.dat");
+
+    bool is_uploaded = client->upload_from(remote_file, stream);
+
+    std::cout << remote_file << " resource is" << is_uploaded ? "" : "not" << "uploaded" << std::endl;
+}
+
+/// dir/file.dat resource is uploaded
+
+//! [upload_from_stream]
