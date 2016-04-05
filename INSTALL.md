@@ -1,7 +1,16 @@
 **Ubuntu**
 
 ```bash
-# Install OpenSSL
+# Install g++4.9
+
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+sudo apt-get install gcc-4.9 g++-4.9
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
+```
+
+```bash
+# Install OpenSSL 1.0.2g
 
 wget https://github.com/openssl/openssl/archive/OpenSSL_1_0_2g.tar.gz -O OpenSSL_1_0_2g.tar.gz
 tar -xf OpenSSL_1_0_2g.tar.gz && cd OpenSSL_1_0_2g
@@ -11,7 +20,7 @@ tar -xf OpenSSL_1_0_2g.tar.gz && cd OpenSSL_1_0_2g
  ```
 
 ```bash
-# Install libcurl
+# Install libcurl 7.48.0
 
 wget https://github.com/curl/curl/archive/curl-7_48_0.tar.gz -O curl-7_48_0.tar.gz
 tar -xf curl-7_48_0.tar.gz && cd curl-curl-7_48_0
@@ -21,7 +30,7 @@ cd ../.. rm -rf curl*
 ```
 
 ```bash
-# Install pugixml
+# Install pugixml 1.7
 
 wget https://github.com/zeux/pugixml/releases/download/v1.7/pugixml-1.7.tar.gz -O pugixml-1.7.tar.gz
 tar -xf pugixml-1.7.tar.gz && cd pugixml-1.7
@@ -30,8 +39,8 @@ make && sudo make install
 cd ../.. rm -rf pugixml*
 ```
 
-```
-# Install webdavclient
+```bash
+# Install webdavclient 0.9.3
 
 wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.3.tar.gz -O webdavclient-0.9.3.tar.gz
 tar -xf webdavclient-0.9.3.tar.gz && cd webdav-client-cpp-0.9.3
