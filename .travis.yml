@@ -23,11 +23,8 @@ matrix:
           sources: &sources
             - llvm-toolchain-precise
             - ubuntu-toolchain-r-test
-#compiler:
-#  - clang
-#  - gcc
 
-before_script:
+install:
   - echo "Install OpenSSL 1.0.2g"
   - wget https://github.com/openssl/openssl/archive/OpenSSL_1_0_2g.tar.gz -O OpenSSL_1_0_2g.tar.gz
   - tar -xf OpenSSL_1_0_2g.tar.gz && cd openssl-OpenSSL_1_0_2g
@@ -59,4 +56,6 @@ script:
   - mkdir build && cd build && cmake ..
   - make
   - ./Tests_webdavclient -s -r compact 
+  
+after_script:
   - cd ../../.. && rm -rf webdav-client-cpp-0.9.3 && rm -f webdavclient-0.9.3.tar.gz
