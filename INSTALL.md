@@ -1,4 +1,4 @@
-**Ubuntu**
+Installing from source codes
 
 ```bash
 # Install g++4.9
