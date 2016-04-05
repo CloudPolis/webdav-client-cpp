@@ -1,6 +1,8 @@
 WebDAV Client
 ===
 
+[![Join the chat at https://gitter.im/designerror/webdav-client-cpp](https://badges.gitter.im/designerror/webdav-client-cpp.svg)](https://gitter.im/designerror/webdav-client-cpp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-servers:
 
  - Yandex.Disk
