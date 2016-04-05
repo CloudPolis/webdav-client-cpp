@@ -33,7 +33,7 @@ cd ../.. rm -rf pugixml*
 ```
 # Install webdavclient
 
-wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.3.tar.gz -0 webdavclient-0.9.3.tar.gz
+wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.3.tar.gz -O webdavclient-0.9.3.tar.gz
 tar -xf webdavclient-0.9.3.tar.gz && cd webdavclient-0.9.3
 mkdir build && cd build && cmake ..
 make && sudo make install
