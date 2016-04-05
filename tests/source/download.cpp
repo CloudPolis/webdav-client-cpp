@@ -11,7 +11,7 @@ SCENARIO("Client must download into buffer", "[download][buffer]") {
 		std::string remote_resource = "file.dat";
 
 		auto buffer_pointer = const_cast<char *>(source_buffer.c_str());
-		auto buffer_size = (source_buffer.length() + 1)* sizeof(source_buffer.c_str()[0]);
+		unsigned long long buffer_size = (source_buffer.length() + 1)* sizeof(source_buffer.c_str()[0]);
 
 		auto is_success = client->upload_from(remote_resource, buffer_pointer, buffer_size);
 		REQUIRE(is_success);
