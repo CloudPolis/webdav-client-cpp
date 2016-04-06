@@ -14,7 +14,7 @@ namespace WebDAV
 			{
 				auto in_stream = (std::istream *)stream;
 				auto read_bytes = static_cast<unsigned long long>(item_size * item_count);
-				auto position = static_cast<unsigned long long>in_stream->tellg();
+				auto position = static_cast<unsigned long long>(in_stream->tellg());
 				in_stream->seekg(0, std::ios::end);
 				auto size = static_cast<unsigned long long>(in_stream->tellg());
 				in_stream->seekg(position, std::ios::beg);
