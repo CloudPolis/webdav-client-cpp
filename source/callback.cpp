@@ -15,7 +15,7 @@ namespace Callback
 			in_stream->seekg(0, std::ios::end);
 			size_t size = in_stream->tellg();
 			in_stream->seekg(position, std::ios::beg);
-			read_bytes = std::min(read_bytes, size - position);
+			read_bytes = std::min<size_t>(read_bytes, size - position);
 			in_stream->read(ptr, read_bytes);
 			return read_bytes;
 		}
@@ -24,7 +24,7 @@ namespace Callback
 		{
 			auto data = (Data*)buffer;
 			size_t size = item_size * item_count;
-			auto copied_bytes = std::min(size, (size_t)(data->size - data->position));
+			auto copied_bytes = std::min<size_t>(size, (size_t)(data->size - data->position));
 			memcpy(ptr, data->buffer, copied_bytes);
 			data->position += copied_bytes;
 			return copied_bytes;
@@ -45,7 +45,7 @@ namespace Callback
 		{
 			auto data = (Data*)buffer;
 			auto size = item_size * item_count;
-			auto copied_bytes = std::min(size, (size_t)(data->size - data->position));
+			auto copied_bytes = std::min<size_t>(size, (size_t)(data->size - data->position));
 			memcpy(data->buffer, data->buffer, copied_bytes);
 			data->position += copied_bytes;
 			return copied_bytes;
