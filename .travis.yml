@@ -46,19 +46,19 @@ install:
   - mkdir build && cd build && cmake ../scripts/ -DBUILD_SHARED_LIBS:BOOL=TRUE
   - make && sudo make install
   - cd ../.. && rm -rf pugixml-1.7 && rm -f pugixml-1.7.tar.gz
-  - echo "Install webdavclient 0.9.4"
-  - wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.4.tar.gz -O webdavclient-0.9.4.tar.gz
-  - tar -xf webdavclient-0.9.4.tar.gz && cd webdav-client-cpp-0.9.4
+  - echo "Install webdavclient 0.9.5"
+  - wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.5.tar.gz -O webdavclient-0.9.5.tar.gz
+  - tar -xf webdavclient-0.9.5.tar.gz && cd webdav-client-cpp-0.9.5
   - mkdir build && cd build && cmake ..
   - make && sudo make install
-  - cd ../.. && rm -rf webdav-client-cpp-0.9.4 && rm -f webdavclient-0.9.4.tar.gz
+  - cd ../.. && rm -rf webdav-client-cpp-0.9.5 && rm -f webdavclient-0.9.5.tar.gz
 
 script:
-  - wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.4.tar.gz -O webdavclient-0.9.4.tar.gz
-  - tar -xf webdavclient-0.9.4.tar.gz && cd webdav-client-cpp-0.9.4 && cd tests
+  - wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.5.tar.gz -O webdavclient-0.9.5.tar.gz
+  - tar -xf webdavclient-0.9.5.tar.gz && cd webdav-client-cpp-0.9.5 && cd tests
   - mkdir build && cd build && cmake ..
   - make
   - ./Tests_webdavclient -s -r compact 
   
 after_script:
-  - cd ../../.. && rm -rf webdav-client-cpp-0.9.4 && rm -f webdavclient-0.9.4.tar.gz
+  - cd ../../.. && rm -rf webdav-client-cpp-0.9.5 && rm -f webdavclient-0.9.5.tar.gz
