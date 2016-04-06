@@ -15,7 +15,8 @@ namespace Callback
 			in_stream->seekg(0, std::ios::end);
 			auto size = static_cast<unsigned long long>(in_stream->tellg());
 			in_stream->seekg(position, std::ios::beg);
-			read_bytes = std::min<unsigned long long>(read_bytes, size - position);
+			auto rest_bytes = size - position;
+			read_bytes = std::min<unsigned long long>(read_bytes, rest_bytes);
 			in_stream->read(ptr, read_bytes);
 			return read_bytes;
 		}
@@ -24,7 +25,8 @@ namespace Callback
 		{
 			auto data = (Data*)buffer;
 			auto size = static_cast<unsigned long long>(item_size * item_count);
-			auto copied_bytes = std::min<unsigned long long>(size, data->size - data->position);
+			auto rest_bytes = data->size - data->position;
+			auto copied_bytes = std::min<unsigned long long>(size, rest_bytes);
 			memcpy(ptr, data->buffer, copied_bytes);
 			data->position += copied_bytes;
 			return copied_bytes;
@@ -45,7 +47,8 @@ namespace Callback
 		{
 			auto data = (Data*)buffer;
 			auto size = static_cast<unsigned long long>(item_size * item_count);
-			auto copied_bytes = std::min<unsigned long long>(size, data->size - data->position);
+			auto rest_bytes = data->size - data->position;
+			auto copied_bytes = std::min<unsigned long long>(size, rest_bytes);
 			memcpy(data->buffer, data->buffer, copied_bytes);
 			data->position += copied_bytes;
 			return copied_bytes;
