@@ -631,10 +631,13 @@ namespace WebDAV
 				"Accept: */*",
 				"Connection: Keep-Alive"
 		};
+		
+		auto target_urn = Urn(clientImpl->webdav_root, true) + remote_directory;
+		target_urn = Urn(target_urn.path(), true);
 
 		Request request(clientImpl->options());
 
-		auto url = clientImpl->webdav_hostname + directory_urn.quote(request.handle);
+		auto url = clientImpl->webdav_hostname + target_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "MKCOL");
 		request.set(CURLOPT_URL, url.c_str());
