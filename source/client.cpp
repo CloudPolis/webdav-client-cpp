@@ -29,7 +29,7 @@ namespace WebDAV
 		std::string cert_path;
 		std::string key_path;
 
-		dict_t options() const  noexcept;
+		dict_t options() const noexcept;
 
 		bool sync_download(
 			const std::string& remote_file, 

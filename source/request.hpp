@@ -1,36 +1,40 @@
 #pragma once
 
 #include <curl/curl.h>
+#include <string>
+#include <map>
 
 namespace WebDAV
 {
+	bool inline check_code(CURLcode code)
+	{
+		return code == CURLE_OK;
+	}
+
+	using dict_t = std::map<std::string, std::string>; 
+	
 	class Request
 	{
-		std::map<std::string, std::string> options;
+		const dict_t options;
 
-		bool proxy_enabled() noexcept;
+		bool proxy_enabled() const noexcept;
 
-		bool cert_required() noexcept;
+		bool cert_required() const noexcept;
 
 	public:
 
-		Request(std::map<std::string, std::string> options) noexcept;
+		Request(dict_t&& options);
 
 		~Request() noexcept;
 
-		bool set(CURLoption option, size_t value) noexcept;
-
-		bool set(CURLoption option, long value) noexcept;
-
-		bool set(CURLoption option, struct curl_slist * value) noexcept;
-
-		bool set(CURLoption option, int value) noexcept;
-
-		bool set(CURLoption option, const char * value) noexcept;
-
-		bool set(CURLoption option, curl_off_t value) noexcept;
-
-		bool perform() noexcept;
+		template <typename T>
+		auto set(CURLoption option, T value) const noexcept -> bool
+		{
+			if (this->handle == nullptr) return false;
+			return check_code(curl_easy_setopt(this->handle, option, value));
+		}
+		
+		bool perform() const noexcept;
 
 		void * handle;
 	};

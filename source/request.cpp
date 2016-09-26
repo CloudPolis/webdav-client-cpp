@@ -1,29 +1,29 @@
-
 #include "stdafx.h"
 #include "request.hpp"
 #include "fsinfo.hpp"
 
-bool inline check_code(CURLcode code)
-{
-	return code == CURLE_OK;
-}
-
 namespace WebDAV
 {
-	Request::Request(std::map<std::string, std::string> options) noexcept
+	
+	auto inline get(const dict_t& options, const std::string&& name) -> std::string
 	{
-		this->options = options;
+		auto it = options.find(name);
+		if (it == options.end()) return "";
+		else return it->second;
+	}
 
-		auto webdav_hostname = options["webdav_hostname"];
-		auto webdav_login = options["webdav_login"];
-		auto webdav_password = options["webdav_password"];
+	Request::Request(dict_t&& options_) : options(options_)
+	{
+		auto webdav_hostname = get(options, "webdav_hostname");
+		auto webdav_login = get(options, "webdav_login");
+		auto webdav_password = get(options, "webdav_password");
 
-		auto proxy_hostname = options["proxy_hostname"];
-		auto proxy_login = options["proxy_login"];
-		auto proxy_password = options["proxy_password"];
+		auto proxy_hostname = get(options, "proxy_hostname");
+		auto proxy_login = get(options, "proxy_login");
+		auto proxy_password = get(options, "proxy_password");
 
-		auto cert_path = options["cert_path"];
-		auto key_path = options["key_path"];
+		auto cert_path = get(options, "cert_path");
+		auto key_path = get(options, "key_path");
 
 		this->handle = curl_easy_init();
 
@@ -32,7 +32,7 @@ namespace WebDAV
 		this->set(CURLOPT_SSL_VERIFYPEER, 0);
 
 #ifdef _DEBUG
-		this->set(CURLOPT_VERBOSE, 0);
+		this->set(CURLOPT_VERBOSE, 1);
 #else
 		this->set(CURLOPT_VERBOSE, 0);
 #endif
@@ -73,49 +73,8 @@ namespace WebDAV
 		if (this->handle != nullptr) curl_easy_cleanup(this->handle);
 	}
 
-	bool
-	Request::set(CURLoption option, size_t value) noexcept
-	{
-		if (this->handle == nullptr) return false;
-		return check_code(curl_easy_setopt(this->handle, option, value));
-	}
 
-	bool
-	Request::set(CURLoption option, long value) noexcept
-	{
-		if (this->handle == nullptr) return false;
-		return check_code(curl_easy_setopt(this->handle, option, value));
-	}
-
-	bool
-	Request::set(CURLoption option, int value) noexcept
-	{
-		if (this->handle == nullptr) return false;
-		return check_code(curl_easy_setopt(this->handle, option, value));
-	}
-
-	bool
-	Request::set(CURLoption option, struct curl_slist * value) noexcept
-	{
-		if (this->handle == nullptr) return false;
-		return check_code(curl_easy_setopt(this->handle, option, value));
-	}
-
-	bool
-	Request::set(CURLoption option, curl_off_t value) noexcept
-	{
-		if (this->handle == nullptr) return false;
-		return check_code(curl_easy_setopt(this->handle, option, value));
-	}
-
-	bool
-	Request::set(CURLoption option, const char * value) noexcept
-	{
-		if (this->handle == nullptr) return false;
-		return check_code(curl_easy_setopt(this->handle, option, value));
-	}
-
-	bool Request::perform() noexcept
+	bool Request::perform() const noexcept
 	{
 		if (this->handle == nullptr) return false;
 		auto is_performed = check_code(curl_easy_perform(this->handle));
@@ -126,11 +85,11 @@ namespace WebDAV
 		return true;
 	}
 
-	bool Request::proxy_enabled() noexcept
+	bool Request::proxy_enabled() const noexcept
 	{
-		auto proxy_hostname = options["proxy_hostname"];
-		auto proxy_login = options["proxy_login"];
-		auto proxy_password = options["proxy_password"];
+		auto proxy_hostname = get(options, "proxy_hostname");
+		auto proxy_login = get(options, "proxy_login");
+		auto proxy_password = get(options, "proxy_password");
 		bool proxy_hostname_presented = !proxy_hostname.empty();
 		if (!proxy_hostname_presented) return false;
 		bool proxy_login_presented = !proxy_login.empty();
@@ -139,10 +98,10 @@ namespace WebDAV
 		return true;
 	}
 
-	bool Request::cert_required() noexcept
+	bool Request::cert_required() const noexcept
 	{
-		auto cert_path = options["cert_path"];
-		auto key_path = options["key_path"];
+		const auto cert_path = get(options, "cert_path");
+		const auto key_path = get(options, "key_path");
 		if (cert_path.empty()) return false;
 		bool cert_is_existed = FileInfo::exists(cert_path);
 		if (!cert_is_existed) return false;
