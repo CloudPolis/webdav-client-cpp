@@ -41,9 +41,9 @@ namespace WebDAV
 		/// \param[in] key_path
 		/// \include client/init.cpp
 		///
-		static Client * Init(dict_t& options) noexcept;
+		static Client * Init(const dict_t& options) noexcept;
 
-		~Client() noexcept;
+		virtual ~Client() {};
 
 		///
 		/// Get free size of the WebDAV server

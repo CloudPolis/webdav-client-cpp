@@ -9,7 +9,14 @@
 
 namespace WebDAV
 {
-	using progress_funptr = int(* )(void *context, size_t dltotal, size_t dlnow, size_t ultotal, size_t ulnow);
+	using progress_funptr = int(*)(void *context, size_t dltotal, size_t dlnow, size_t ultotal, size_t ulnow);
+
+	auto inline get(const dict_t& options, const std::string&& name) -> std::string
+	{
+		auto it = options.find(name);
+		if (it == options.end()) return "";
+		else return it->second;
+	}
 
 	class ClientImpl : public Client
 	{
@@ -75,25 +82,27 @@ namespace WebDAV
 			progress_t progress = nullptr
 		) const noexcept;
 
-		ClientImpl(dict_t & options);
+		ClientImpl(const dict_t & options);
+
+		~ClientImpl(); 
 	};
 	
 	inline ClientImpl * GetImpl(Client * ptr) { return (ClientImpl *)ptr; }
 	inline const ClientImpl * GetImpl(const Client * ptr) { return (const ClientImpl *)ptr; }
 
-	ClientImpl::ClientImpl(dict_t & options)
+	ClientImpl::ClientImpl(const dict_t& options)
 	{
-		this->webdav_hostname = options["webdav_hostname"];
-		this->webdav_root = options["webdav_root"];
-		this->webdav_login = options["webdav_login"];
-		this->webdav_password = options["webdav_password"];
+		this->webdav_hostname = get(options, "webdav_hostname");
+		this->webdav_root = get(options, "webdav_root");
+		this->webdav_login = get(options, "webdav_login");
+		this->webdav_password = get(options, "webdav_password");
 
-		this->proxy_hostname = options["proxy_hostname"];
-		this->proxy_login = options["proxy_login"];
-		this->proxy_password = options["proxy_password"];
+		this->proxy_hostname = get(options, "proxy_hostname");
+		this->proxy_login = get(options, "proxy_login");
+		this->proxy_password = get(options, "proxy_password");
 
-		this->cert_path = options["cert_path"];
-		this->key_path = options["key_path"];
+		this->cert_path = get(options, "cert_path");
+		this->key_path = get(options, "key_path");
 
 		this->init();
 	}
@@ -353,12 +362,12 @@ namespace WebDAV
 		return is_performed;
 	}
 
-	Client* Client::Init(dict_t& options) noexcept
+	Client* Client::Init(const dict_t& options) noexcept
 	{
 		return new ClientImpl(options);
 	}
 
-	Client::~Client() noexcept
+	ClientImpl::~ClientImpl()
 	{
 		curl_global_cleanup();
 	}
