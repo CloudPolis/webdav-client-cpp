@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 2.8)
 project(webdavclient)
 
-add_definitions("-std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 option(BUILD_SHARED_LIBS "Build shared instead of static library" ON)
-option(STATIC_RUNTIME_LIBRARY "Static runtime library" OFF)
+option(MSVC_SHARED_RT "Shared runtime library" ON)
 option(UNICODE "Character set is UNICODE" ON)
 option(BUILD_TESTS_FOR_${PROJECT_NAME} "Build tests" OFF)
-option(USE_CPM "Use CPM" OFF)
 
-if(STATIC_RUNTIME_LIBRARY)
+if(MSVC AND (NOT MSVC_SHARED_RT))
     set(CompilerFlags
                 CMAKE_CXX_FLAGS
                 CMAKE_CXX_FLAGS_DEBUG
@@ -22,26 +22,17 @@ if(STATIC_RUNTIME_LIBRARY)
     endforeach()
 endif()
 
-if(USE_CPM)
-include(cmake/FindCPM.cmake)
-CPM_AddModule("Pugixml"
-  GIT_REPOSITORY "https://github.com/designerror/cpm-pugixml")
-include_directories(${CPM_INCLUDE_DIRS})
-else()
-find_package(pugixml REQUIRED)
-include_directories(${pugixml_INCLUDE_DIRS})
-endif()
-
 if(UNICODE)
     add_definitions(-D_UNICODE -DUNICODE)
 endif()
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
+set(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
+include_directories(${${PROJECT_NAME}_INCLUDE_DIRS})
 file(GLOB ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
 
 set(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
-if(WIN32 AND MSVC AND NOT BUILD_SHARED_LIBS)
+if(MSVC AND NOT MSVC_SHARED_RT)
     SET(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules")
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
     include(FindStaticOpenSSL)
@@ -53,6 +44,9 @@ include_directories(${OPENSSL_INCLUDE_DIR})
 find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIR})
 
+find_package(pugixml REQUIRED)
+include_directories(${pugixml_INCLUDE_DIRS})
+
 if(BUILD_SHARED_LIBS)
     add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 else()
@@ -60,23 +54,18 @@ else()
     add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
 endif()
 
-if(USE_CPM)
 if(UNIX)
-    target_link_libraries(${PROJECT_NAME} pthread ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
-else()
-    target_link_libraries(${PROJECT_NAME} ws2_32 ${CPM_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
+set(DEPENDS_LIBRARIES ${pugixml_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY} pthread)
+elseif(MSVC)
+set(DEPENDS_LIBRARIES ${pugixml_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY} ws2_32)
 endif()
-else()
-if(UNIX)
-    target_link_libraries(${PROJECT_NAME} pthread pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
-else()
-    target_link_libraries(${PROJECT_NAME} ws2_32 pugixml ${OPENSSL_LIBRARIES} ${CURL_LIBRARY})
-endif()
-endif()
+
+target_link_libraries(${PROJECT_NAME} ${DEPENDS_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME}
     EXPORT ${PROJECT_NAME}Config
-    ARCHIVE DESTINATION lib/static
+    RUNTIME DESTINATION bin
+    ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
 )
 install(DIRECTORY ${${PROJECT_NAME}_INCLUDE_DIRS} DESTINATION include)
@@ -84,7 +73,7 @@ install(DIRECTORY ${${PROJECT_NAME}_INCLUDE_DIRS} DESTINATION include)
 install(EXPORT ${PROJECT_NAME}Config DESTINATION cmake)
 
 configure_file(${PROJECT_SOURCE_DIR}/cmake/ProjectConfig-include.cmake.in
-               ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake)
+               ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake @ONLY)
 
 install(FILES ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake 
         DESTINATION cmake)

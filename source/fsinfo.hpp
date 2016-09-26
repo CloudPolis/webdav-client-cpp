@@ -4,10 +4,10 @@ namespace WebDAV
 {
 	namespace FileInfo
 	{
-		bool exists(std::string & path);
+		bool exists(const std::string& path);
 	
-		std::string name(std::string & path);
+		std::string name(const std::string& path);
 	
-		unsigned long long size(std::string & path_file);
+		unsigned long long size(const std::string& path_file);
 	}
 }
