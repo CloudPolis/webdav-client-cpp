@@ -54,9 +54,11 @@ install:
   - cd ../.. && rm -rf webdav-client-cpp-0.9.5 && rm -f webdavclient-0.9.5.tar.gz
 
 script:
+  - wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.5.tar.gz -O webdavclient-0.9.5.tar.gz
+  - tar -xf webdavclient-0.9.5.tar.gz && cd webdav-client-cpp-0.9.5 && cd tests
   - mkdir build && cd build && cmake ..
   - make
-  - ./tests/Tests_webdavclient -s -r compact 
+  - ./Tests_webdavclient -s -r compact 
   
 after_script:
   - cd ../../.. && rm -rf webdav-client-cpp-0.9.5 && rm -f webdavclient-0.9.5.tar.gz
