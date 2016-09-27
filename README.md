@@ -91,9 +91,3 @@ int main()
   client->async_download("/path/to/remote/file", "/path/to/local/file");
 }
 ```
-
-Acknowledgments
-===
-Thanks to the `JetBrains` company for
-
-<a href="https://www.jetbrains.com/clion/"><img src="https://confluence.jetbrains.com/download/attachments/54342479/CLION?version=3&modificationDate=1449748289000&api=v2" width="100"></a>
