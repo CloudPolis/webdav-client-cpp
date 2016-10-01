@@ -40,11 +40,11 @@ cd ../.. && rm -rf pugixml-1.7 && rm -f pugixml-1.7.tar.gz
 ```
 
 ```bash
-# Install webdavclient 0.9.8
+# Install webdavclient 0.9.5
 
-wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.8.tar.gz -O webdavclient-0.9.8.tar.gz
-tar -xf webdavclient-0.9.8.tar.gz && cd webdav-client-cpp-0.9.8
+wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.5.tar.gz -O webdavclient-0.9.5.tar.gz
+tar -xf webdavclient-0.9.5.tar.gz && cd webdav-client-cpp-0.9.5
 mkdir build && cd build && cmake ..
 make && sudo make install
-cd ../.. && rm -rf webdav-client-cpp-0.9.8 && rm -f webdavclient-0.9.8.tar.gz
+cd ../.. && rm -rf webdav-client-cpp-0.9.5 && rm -f webdavclient-0.9.5.tar.gz
 ```
