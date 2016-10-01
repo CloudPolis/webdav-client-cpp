@@ -1,4 +1,4 @@
-Installing from sources `[*nix]`
+## Installing from sources for *nix
 
 ```bash
 # Install g++4.9
