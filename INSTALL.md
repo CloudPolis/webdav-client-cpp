@@ -46,5 +46,5 @@ wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.8.tar.gz -O w
 tar -xf webdavclient-0.9.8.tar.gz && cd webdav-client-cpp-0.9.8
 mkdir build && cd build && cmake ..
 make && sudo make install
-cd ../.. && rm -rf webdav-client-cpp-0.9.3 && rm -f webdavclient-0.9.8.tar.gz
+cd ../.. && rm -rf webdav-client-cpp-0.9.8 && rm -f webdavclient-0.9.8.tar.gz
 ```
