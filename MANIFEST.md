@@ -6,7 +6,7 @@ tree/
   - examples/{model}/{method}#{case}
   - include/
     - client.hpp
-  - source/
+  - sources/
   - tests/
     - {model}/{method}#{case}
     - CMakeLists.txt
