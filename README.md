@@ -1,6 +1,6 @@
 WebDAV Client
 ===
-[![Gitter](https://badges.gitter.im/designerror/webdav-client-cpp.svg)](https://gitter.im/designerror/webdav-client-cpp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![slack](https://img.shields.io/badge/slack-online-E32475.svg)](http://webdav.slack.com)
 [![Build Status](https://travis-ci.org/designerror/webdav-client-cpp.svg?branch=v0.9.5)](https://travis-ci.org/designerror/webdav-client-cpp)
 
 Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-servers:
