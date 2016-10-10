@@ -67,7 +67,7 @@ int main()
             << std::endl;
   
   std::cout << "remote_directory_name";
-  for(auto resource_name : client->list("/path/to/remote/directory/"))
+  for(auto& resource_name : client->list("/path/to/remote/directory/"))
   {
     std::cout << "\t" << "-" << resource_name;
   }
@@ -78,7 +78,7 @@ int main()
   client->upload("/path/to/remote/file", "/path/to/local/file");
   
   auto meta_info = client->info("/path/to/remote/resource");
-  for(auto field : meta_info)
+  for(auto& field : meta_info)
   {
     std::cout << field.first << ":" << "\t" << field.second;
   }
