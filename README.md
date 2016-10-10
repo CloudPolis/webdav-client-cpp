@@ -12,6 +12,13 @@ Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-ser
  - 4shared
  - ...
 
+Requirements
+===
+
+ - curl
+ - openssl
+ - pugixml
+
 Install
 ===
 
@@ -43,7 +50,7 @@ int main()
   std::map<std::string, std::string> options =
   {
     {"webdav_hostname", "https://webdav.yandex.ru"},
-    {"webdav_login", "webdav_login"},
+    {"webdav_login",    "webdav_login"},
     {"webdav_password", "webdav_password"}
   };
             
