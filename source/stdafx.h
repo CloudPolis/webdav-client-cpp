@@ -10,5 +10,3 @@
 #include <string>
 #include <vector>
 #include <thread>
-
-#include "string.h"
