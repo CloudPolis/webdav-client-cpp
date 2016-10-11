@@ -3,30 +3,23 @@
  - [ ] 3. Add nasm in environment variable `PATH`
  - [ ] 4. Run `VS Cross Tools Command Prompt`
 
- - [ ] 5. Set the build options
+ - [ ] 5. Download repositoty with requirements
+```bash
+> git clone https://github.com/designerror/webdav-client-cpp
+> cd webdav-client-cpp
+> git submodule update --init
+```
+
+ - [ ] 6. Set the build options
 ```bash
 > set BUILD_TYPE=Release # Release | Debug
 > set BUILD_SHARED_LIBS=FALSE # FALSE | TRUE
 > set OPENSSL_BUILD_PLATFORM=VC-WIN64A # VC-WIN32 | VC-WIN64A | VC-WIN64I | VC-CE
-
+> set INSTALL_PREFIX=%cd$\build
 > set CMAKE_COMMON_FLAGS=-DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DMSVC_SHRED_RT:BOOL=%BUILD_SHARED_LIBS%
 ```
 
- - [ ] 6. Download repository
-```bash
-> git clone https://designerror/webdav-client-cpp.git
-> cd webdav-client-cpp
-```
-
- - [ ] 7. Download requirements
-
-```bash
-> mkdir build
-> set INSTALL_PREFIX=%cd%\build
-> git submodule update --init
-```
-
- - [ ] 8. Build and local install `openssl`
+ - [ ] 7. Build and local install `openssl`
 
 ```bash
 > cd vendor\openssl/
@@ -37,7 +30,7 @@
 > cd ../..
 ```
 
- - [ ] 9. Build and local install `curl`
+ - [ ] 8. Build and local install `curl`
 
 ```bash
 > cd curl
@@ -48,7 +41,7 @@
 > cd ../..
 ```
 
- - [ ] 10. Build and local install `pugixml`
+ - [ ] 9. Build and local install `pugixml`
 
 ```bash
 > cd pugixml
@@ -59,7 +52,7 @@
 > cd ../..
 ```
 
- - [ ] 11. Build and local install `webdavclient`
+ - [ ] 10. Build and local install `webdavclient`
 
 ```bash
 > cd %INSTALL_PREFIX%
