@@ -23,10 +23,32 @@ Requirements
 Install
 ===
 
+For `Windows` see `INSTALL.WIN.md` file.
+
+**Build requirements**
+
+For `*-nix` or `macOS` you can build the requirements with package manager or from sources.
+
+If you want build the requirements from sources then see `INSTALL.UNIX.md` and `INSTALL.macOS.md` respectively.
+
+If you want use package manager then input:
+
 ```bash
-> git clone https://github.com/designerror/webdav-client-cpp.git
-> cd webdav-client-cpp
-> clion .
+# *-nix
+$ apt-get install openssl-dev curl-dev pugixml-dev
+
+# macOS
+$ brew install openssl-dev curl-dev pugixml-dev
+```
+
+**Build Webdav Client**
+
+```bash
+$ git clone https://github.com/designerror/webdav-client-cpp
+$ cd webdav-client-cpp
+$ mkdir build && cd build
+$ cmake .. && make
+$ make install
 ```
 
 Documentation
