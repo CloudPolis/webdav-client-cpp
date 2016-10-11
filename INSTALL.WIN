@@ -3,6 +3,9 @@
 # 3. adding to path: C:\Users\dev\AppData\Local\NASM
 # 4. run vcvarsall.bat
 
+> set BUILD_TYPE=Release
+> set CMAKE_COMMON_FLAGS=-DCMAKE_BUILD_TYPE=%Release% -DMSVC_SHRED_RT:BOOL=TRUE
+
 # 5. download repo
 > git clone https://designerror/webdav-client-cpp.git
 > cd webdav-client-cpp
@@ -26,7 +29,7 @@
 
 > cd curl
 > mkdir build && cd build
-> cmake .. -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -DCURL_STATICLIB:BOOL=ON -DBUILD_TESTING:BOOL=OFF -DBUILD_CURL_TESTS:BOOL=OFF -DBUILD_CURL_EXE:BOOL=OFF -DCURL_DISABLE_LDAP:BOOL=ON -DCURL_DISABLE_LDAPS=ON
+> cmake .. -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -DCURL_STATICLIB:BOOL=ON -DBUILD_TESTING:BOOL=OFF -DBUILD_CURL_TESTS:BOOL=OFF -DBUILD_CURL_EXE:BOOL=OFF -DCURL_DISABLE_LDAP:BOOL=ON -DCURL_DISABLE_LDAPS=ON %CMAKE_COMMON_FLAGS%
 > nmake
 > nmake install
 > cd ../..
@@ -35,17 +38,18 @@
 
 > cd pugixml
 > mkdir build && cd build
-> cmake .. -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% 
+> cmake .. -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% %CMAKE_COMMON_FLAGS% 
 > nmake
 > nmake install
 > cd ../..
 
 # 10. build and local install webdav-client-cpp
 
+> cd %INSTALL_PREFIX%
 > set CURL_INCLUDE_DIR=%INSTALL_PREFIX%\include
 > set CURL_LIBRARY=%INSTALL_PREFIX%\lib\libcurl.lib
-> cd %INSTALL_PREFIX%
 > set CMAKE_PUGIXML_FLAGS=-Dpugixml_LIBRARIES=%INSTALL_PREFIX%\lib\pugixml.lib -Dpugixml_INCLUDE_DIRS=%INSTALL_PREFIX%\include
 > set CMAKE_CURL_FLAGS=-DCURL_STATICLIB:BOOL=TRUE -DCURL_INCLUDE_DIR:STRING=%CURL_INCLUDE_DIR% -DCURL_LIBRARY=%CURL_LIBRARY%
-> cmake .. %CMAKE_PUGIXML_FLAGS% %CMAKE_CURL_FLAGS% 
+> set CMAKE_OPENSSL_FLAGS=-DOPENSSL_LIBRARIES=%INSTALL_PREFIX%\lib\libcrypto.lib;%INSTALL_PREFIX%\lib\libssl.lib 
+> cmake .. %CMAKE_PUGIXML_FLAGS% %CMAKE_CURL_FLAGS% %CMAKE_OPENSSL_FLAGS% %CMAKE_COMMON_FLAGS%
 
