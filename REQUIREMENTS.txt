@@ -1,0 +1,7 @@
+
+Requirements
+===
+
+ - curl
+ - openssl
+ - pugixml
