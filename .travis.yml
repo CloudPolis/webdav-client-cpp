@@ -27,7 +27,7 @@ matrix:
           env: BUILD_FROM_SOURCES="yes"
 
 script:
-- if [ -z "$BUILD_FROM_SOURCES" ]; then      
+- if [ "$BUILD_FROM_SOURCES" == "yes" ]; then      
     wget https://github.com/curl/curl/archive/curl-7_48_0.tar.gz -O curl-7_48_0.tar.gz;
     tar -xf curl-7_48_0.tar.gz && cd curl-curl-7_48_0 || exit;
     mkdir build && cd build && cmake ..;
