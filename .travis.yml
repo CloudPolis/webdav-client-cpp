@@ -40,6 +40,7 @@ script:
     cd ../.. && rm -rf pugixml-1.7 && rm -f pugixml-1.7.tar.gz;
   else
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      sudo apt-get update;
       sudo apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev;
     else
       brew install curl pugixml;
