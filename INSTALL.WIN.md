@@ -1,7 +1,7 @@
  - [ ] 1. Install [perl](https://www.perl.org/)
  - [ ] 2. Install [nasm](http://www.nasm.us/)
- - [ ] 3. Add nasm in PATH
- - [ ] 4. Run VS Cross Tools Command Prompt
+ - [ ] 3. Add nasm in environment variable `PATH`
+ - [ ] 4. Run `VS Cross Tools Command Prompt`
 
  - [ ] 5. Set the build options
 ```bash
