@@ -44,6 +44,6 @@ script:
     else
       brew install curl pugixml
     fi;
-  fi
+  fi;
 - mkdir build && cd build
 - cmake .. && make
