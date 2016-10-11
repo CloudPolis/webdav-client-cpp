@@ -43,7 +43,7 @@ script:
       sudo apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev
     else
       brew install curl pugixml
-    fi
+    fi;
   fi
 - mkdir build && cd build
 - cmake .. && make
