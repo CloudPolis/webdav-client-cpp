@@ -27,7 +27,13 @@ matrix:
       compiler: clang-3.8
       env: COMPILER=clang++ -std=c++11
 
+install:
+- wget https://github.com/curl/curl/archive/curl-7_48_0.tar.gz -O curl-7_48_0.tar.gz
+- tar -xf curl-7_48_0.tar.gz && cd curl-curl-7_48_0
+- mkdir build && cd build && cmake ..
+- make && sudo make install
+- cd ../.. && rm -rf curl-curl-7_48_0 && rm -f curl-7_48_0.tar.gz
 
 script:
-  - mkdir build && cd build
-  - cmake .. && make
+- mkdir build && cd build
+- cmake .. && make
