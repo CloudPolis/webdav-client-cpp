@@ -1,9 +1,9 @@
- - [ ] 1. install perl (https://www.perl.org/)
- - [ ] 2. install nasm (http://www.nasm.us/)
- - [ ] 3. add nasm in PATH (C:\Users\dev\AppData\Local\NASM)
- - [ ] 4. run Command Promt (vcvarsall.bat)
+ - [ ] 1. Install [perl](https://www.perl.org/)
+ - [ ] 2. Install [nasm](http://www.nasm.us/)
+ - [ ] 3. Add nasm in PATH
+ - [ ] 4. Run VS Cross Tools Command Prompt
 
- - [ ] 5. set the build options
+ - [ ] 5. Set the build options
 ```bash
 > set BUILD_TYPE=Release # Release | Debug
 > set BUILD_SHARED_LIBS=FALSE # FALSE | TRUE
@@ -12,13 +12,13 @@
 > set CMAKE_COMMON_FLAGS=-DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DMSVC_SHRED_RT:BOOL=%BUILD_SHARED_LIBS%
 ```
 
- - [ ] 6. download repo
+ - [ ] 6. Download repository
 ```bash
 > git clone https://designerror/webdav-client-cpp.git
 > cd webdav-client-cpp
 ```
 
- - [ ] 7. download requirements
+ - [ ] 7. Download requirements
 
 ```bash
 > mkdir build
@@ -26,7 +26,7 @@
 > git submodule update --init
 ```
 
- - [ ] 8. build and local install openssl
+ - [ ] 8. Build and local install `openssl`
 
 ```bash
 > cd vendor\openssl/
@@ -37,7 +37,7 @@
 > cd ../..
 ```
 
- - [ ] 9. build and local install curl
+ - [ ] 9. Build and local install `curl`
 
 ```bash
 > cd curl
@@ -48,7 +48,7 @@
 > cd ../..
 ```
 
- - [ ] 10. build and local install pugixml
+ - [ ] 10. Build and local install `pugixml`
 
 ```bash
 > cd pugixml
@@ -59,7 +59,7 @@
 > cd ../..
 ```
 
- - [ ] 11. build and local install webdav-client-cpp
+ - [ ] 11. Build and local install `webdavclient`
 
 ```bash
 > cd %INSTALL_PREFIX%
