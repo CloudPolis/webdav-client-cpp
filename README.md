@@ -35,10 +35,10 @@ If you want use package manager then input:
 
 ```bash
 # *-nix
-$ apt-get install openssl-dev curl-dev pugixml-dev
+$ apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev
 
 # macOS
-$ brew install openssl-dev curl-dev pugixml-dev
+$ brew install curl pugixml
 ```
 
 **Build Webdav Client**
