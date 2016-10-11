@@ -24,7 +24,7 @@
 
 > cd vendor\openssl/
 > mkdir build && cd build
-> perl ../Configure --prefix=%INSTmALL_PREFIX% --openssldir=%INSTALL_PREFIX%\ssl %OPENSSL_BUILD_PLATFORM% no-shared no-idea
+> perl ../Configure --prefix=%INSTALL_PREFIX% --openssldir=%INSTALL_PREFIX%\ssl %OPENSSL_BUILD_PLATFORM% no-shared no-idea no-unit-test
 > nmake
 > nmake install
 > cd ../..
