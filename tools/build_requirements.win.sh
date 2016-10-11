@@ -16,7 +16,6 @@ set INSTALL_PREFIX=%cd$\build
 set CMAKE_COMMON_FLAGS=-DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DMSVC_SHRED_RT:BOOL=%BUILD_SHARED_LIBS%
 
 rem 7. Build and local install openssl
-
 cd vendor\openssl/
 mkdir build && cd build
 perl ../Configure --prefix=%INSTALL_PREFIX% --openssldir=%INSTALL_PREFIX%\ssl %OPENSSL_BUILD_PLATFORM% no-shared no-idea no-unit-test
