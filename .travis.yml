@@ -1,5 +1,6 @@
 language: generic
 cache: ccache
+dist: trusty
 
 addons:
     apt:
