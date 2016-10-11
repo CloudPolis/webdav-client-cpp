@@ -1,11 +1,14 @@
-# 1. install perl
-# 2. install nasm
-# 3. adding to path: C:\Users\dev\AppData\Local\NASM
-# 4. run vcvarsall.bat
+# 1. install perl (https://www.perl.org/)
+# 2. install nasm (http://www.nasm.us/)
+# 3. add nasm in PATH (C:\Users\dev\AppData\Local\NASM)
+# 4. run Command Promt (vcvarsall.bat)
 
-> set BUILD_TYPE=Release
+# 5. set the build options
+> set BUILD_TYPE=Release # Release | Debug
+> set BUILD_SHARED_LIBS=FALSE # FALSE | TRUE
 > set OPENSSL_BUILD_PLATFORM=VC-WIN64A # VC-WIN32 | VC-WIN64A | VC-WIN64I | VC-CE
-> set CMAKE_COMMON_FLAGS=-DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DMSVC_SHRED_RT:BOOL=TRUE
+
+> set CMAKE_COMMON_FLAGS=-DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DMSVC_SHRED_RT:BOOL=%BUILD_SHARED_LIBS%
 
 # 5. download repo
 > git clone https://designerror/webdav-client-cpp.git
