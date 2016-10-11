@@ -4,7 +4,8 @@
 # 4. run vcvarsall.bat
 
 > set BUILD_TYPE=Release
-> set CMAKE_COMMON_FLAGS=-DCMAKE_BUILD_TYPE=%Release% -DMSVC_SHRED_RT:BOOL=TRUE
+> set OPENSSL_BUILD_PLATFORM=VC-WIN64A # VC-WIN32 | VC-WIN64A | VC-WIN64I | VC-CE
+> set CMAKE_COMMON_FLAGS=-DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DMSVC_SHRED_RT:BOOL=TRUE
 
 # 5. download repo
 > git clone https://designerror/webdav-client-cpp.git
@@ -18,9 +19,9 @@
 
 # 7. build and local install openssl
 
-> cd vendor\openssl
+> cd vendor\openssl/
 > mkdir build && cd build
-> perl ../Configure --prefix=%INSTALL_PREFIX% --openssldir=%INSTALL_PREFIX%\ssl VC-WIN64A no-shared no-idea
+> perl ../Configure --prefix=%INSTALL_PREFIX% --openssldir=%INSTALL_PREFIX%\ssl %OPENSSL_BUILD_PLATFORM% no-shared no-idea
 > nmake
 > nmake install
 > cd ../..
@@ -52,4 +53,5 @@
 > set CMAKE_CURL_FLAGS=-DCURL_STATICLIB:BOOL=TRUE -DCURL_INCLUDE_DIR:STRING=%CURL_INCLUDE_DIR% -DCURL_LIBRARY=%CURL_LIBRARY%
 > set CMAKE_OPENSSL_FLAGS=-DOPENSSL_LIBRARIES=%INSTALL_PREFIX%\lib\libcrypto.lib;%INSTALL_PREFIX%\lib\libssl.lib 
 > cmake .. %CMAKE_PUGIXML_FLAGS% %CMAKE_CURL_FLAGS% %CMAKE_OPENSSL_FLAGS% %CMAKE_COMMON_FLAGS%
-
+> nmake
+> nmake install
