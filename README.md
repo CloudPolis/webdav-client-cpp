@@ -16,9 +16,9 @@ Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-ser
 Requirements
 ===
 
- - `curl >= 7.48`
- - `openssl >= 1.0.2g`
- - `pugixml >= 1.0.7`
+ - [curl](https://github.com/curl/curl) `>= 7.48`
+ - [openssl](https://github.com/openssl/openssl) `>= 1.0.2g`
+ - [pugixml](https://github.com/zeux/pugixml) `>= 1.0.7`
 
 Install
 ===
