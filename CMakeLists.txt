@@ -4,7 +4,7 @@ project(webdavclient)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
-option(BUILD_SHARED_LIBS "Build shared instead of static library" ON)
+option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 option(MSVC_SHARED_RT "Shared runtime library" ON)
 option(UNICODE "Character set is UNICODE" ON)
 option(BUILD_TESTS_FOR_${PROJECT_NAME} "Build tests" OFF)
