@@ -1,44 +1,49 @@
 language: generic
-matrix:
-  include:
-    - os: linux
-      sudo: required
-      env: COMPILER_NAME=gcc CXX=g++-5 CC=gcc-5
-      addons:
-        apt:
-          packages:
-            - g++-5
-            - cmake
-          sources: &sources
-            - llvm-toolchain-precise
-            - ubuntu-toolchain-r-test
-    - os: linux
-      sudo: required
-      env: COMPILER_NAME=gcc CXX=g++-4.9 CC=gcc-4.9
-      addons:
-        apt:
-          packages:
-            - g++-4.9
-            - cmake
-          sources: &sources
-            - llvm-toolchain-precise
-            - ubuntu-toolchain-r-test
-    - os: osx
-      compiler: clang-3.8
-      env: COMPILER=clang++ -std=c++11
+cache: ccache
 
-install:
-- wget https://github.com/curl/curl/archive/curl-7_48_0.tar.gz -O curl-7_48_0.tar.gz
-- tar -xf curl-7_48_0.tar.gz && cd curl-curl-7_48_0
-- mkdir build && cd build && cmake ..
-- make && sudo make install
-- cd ../.. && rm -rf curl-curl-7_48_0 && rm -f curl-7_48_0.tar.gz
-- wget https://github.com/zeux/pugixml/releases/download/v1.7/pugixml-1.7.tar.gz -O pugixml-1.7.tar.gz
-- tar -xf pugixml-1.7.tar.gz && cd pugixml-1.7
-- mkdir build && cd build && cmake ../scripts/ -DBUILD_SHARED_LIBS:BOOL=TRUE
-- make && sudo make install
-- cd ../.. && rm -rf pugixml-1.7 && rm -f pugixml-1.7.tar.gz
+addons:
+    apt:
+        packages:
+            - ccache
+            - clang-3.6
+            - gcc-5
+        sources:
+            - llvm-toolchain-precise-3.6
+            - ubuntu-toolchain-r-test
+
+matrix:
+    include:
+        - os: linux
+          compiler: gcc-5
+          env: BUILD_FROM_SOURCES="no"
+        - os: linux
+          compiler: gcc-5
+          env: BUILD_FROM_SOURCES="yes"
+        - os: linux
+          compiler: clang-3.6
+          env: BUILD_FROM_SOURCES="no"
+        - os: linux
+          compiler: clang-3.6
+          env: BUILD_FROM_SOURCES="yes"
 
 script:
+- if [ -z "$BUILD_FROM_SOURCES" ]; then      
+    wget https://github.com/curl/curl/archive/curl-7_48_0.tar.gz -O curl-7_48_0.tar.gz;
+    tar -xf curl-7_48_0.tar.gz && cd curl-curl-7_48_0;
+    mkdir build && cd build && cmake ..;
+    make && sudo make install;
+    cd ../.. && rm -rf curl-curl-7_48_0 && rm -f curl-7_48_0.tar.gz;
+    wget https://github.com/zeux/pugixml/releases/download/v1.7/pugixml-1.7.tar.gz -O pugixml-1.7.tar.gz;
+    tar -xf pugixml-1.7.tar.gz && cd pugixml-1.7;
+    mkdir build && cd build && cmake ../scripts/ -DBUILD_SHARED_LIBS:BOOL=TRUE;
+    make && sudo make install;
+    cd ../.. && rm -rf pugixml-1.7 && rm -f pugixml-1.7.tar.gz;
+  else
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      sudo apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev
+    else
+      brew install curl pugixml
+    fi
+  fi
 - mkdir build && cd build
 - cmake .. && make
