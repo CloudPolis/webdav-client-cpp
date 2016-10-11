@@ -1,1 +1,1 @@
-
+ - [ ] add the building with package manager
