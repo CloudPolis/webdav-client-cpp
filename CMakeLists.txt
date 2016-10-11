@@ -7,7 +7,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 option(BUILD_SHARED_LIBS "Build shared instead of static library" ON)
 option(MSVC_SHARED_RT "Shared runtime library" ON)
 option(UNICODE "Character set is UNICODE" ON)
-option(BUILD_TESTS_FOR_${PROJECT_NAME} "Build tests" ON)
+option(BUILD_TESTS_FOR_${PROJECT_NAME} "Build tests" OFF)
 
 if(MSVC AND (NOT MSVC_SHARED_RT))
     set(CompilerFlags
@@ -44,14 +44,14 @@ include_directories(${OPENSSL_INCLUDE_DIR})
 find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIR})
 
-find_package(pugixml REQUIRED)
+find_package(pugixml)
 include_directories(${pugixml_INCLUDE_DIRS})
 
 if(BUILD_SHARED_LIBS)
-    add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
+    add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 else()
     add_definitions(-DCURL_STATICLIB)
-    add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources} ${${PROJECT_NAME}_headers})
+    add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources})
 endif()
 
 if(UNIX)
