@@ -61,7 +61,7 @@ script:
       sudo apt-get update;
       sudo apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev;
     else
-      brew install curl pugixml;
+      brew install openssl curl pugixml;
     fi;
   fi;
 - mkdir build && cd build
