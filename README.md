@@ -25,7 +25,7 @@ Install
 
 For `Windows` see `INSTALL.WIN.md` file.
 
-**Build requirements**
+**Building requirements**
 
 For `*-nix` or `macOS` you can build the requirements with package manager or from sources.
 
@@ -41,7 +41,7 @@ $ apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev
 $ brew install curl pugixml
 ```
 
-**Build WebDAV Client**
+**Building WebDAV Client**
 
 ```bash
 $ git clone https://github.com/designerror/webdav-client-cpp
@@ -55,9 +55,9 @@ Documentation
 ===
 
 ```bash
-> cd docs
-> doxygen doxygen.conf
-> firefox html/index.html
+$ cd docs
+$ doxygen doxygen.conf
+$ firefox html/index.html
 ```
 
 Usage examples
