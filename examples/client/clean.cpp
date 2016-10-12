@@ -9,7 +9,7 @@ int main() {
                     { "webdav_password", "{webdav_password}" }
             };
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
     bool is_connected = client->check();
 
     auto remote_resources = {
