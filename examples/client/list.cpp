@@ -29,7 +29,7 @@ int main() {
     };
 
     for (auto remote_resource : remote_resources) {
-        auto resources = client->check(remote_resource);
+        auto resources = client->list(remote_resource);
         std::cout << remote_resource << " resource contain:" << std::endl;
         std::cout << resources_to_string(resources);
         std::cout << std::endl;
