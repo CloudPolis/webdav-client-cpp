@@ -22,7 +22,7 @@ namespace WebDAV
 	///
 	/// \brief WebDAV Client
 	/// \author designerror
-	/// \version 0.9.6
+	/// \version 0.9.7
 	/// \date 05/04/2016
 	///
 	class Client
