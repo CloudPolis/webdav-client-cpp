@@ -40,7 +40,7 @@ void async_download_to_file()
     auto remote_file = "dir/file.dat";
     auto local_file = "/home/user/Downloads/file.dat";
 
-    client->async_download(remote_file, local_file, [&remote_file](bool is_downloaded)
+    client->async_download(remote_file, local_file, [remote_file](bool is_downloaded)
     {
         std::cout << remote_file << " resource is" << is_downloaded ? "" : "not" << "downloaded" << std::endl;
     });
@@ -93,7 +93,7 @@ void async_download_to_buffer()
     char * buffer_ptr = nullptr;
     long long int buffer_size = 0;
 
-    client->async_download(remote_file, buffer_ptr, buffer_size, [&remote_file](bool is_downloaded)
+    client->async_download(remote_file, buffer_ptr, buffer_size, [remote_file](bool is_downloaded)
     {
         std::cout << remote_file << " resource is" << is_downloaded ? "" : "not" << "downloaded" << std::endl;
     });
