@@ -68,4 +68,4 @@ script:
     export OPENSSL_ROOT_DIR="/usr/local/ssl";
   fi;
 - mkdir build && cd build
-- cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make
+- cmake .. && make
