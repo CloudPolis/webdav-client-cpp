@@ -6,9 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
+option(BUILD_TESTS "Build tests for webdavclient" OFF)
 option(MSVC_SHARED_RT "Shared runtime library" ON)
-option(UNICODE "Character set is UNICODE" ON)
-option(BUILD_TESTS_FOR_${PROJECT_NAME} "Build tests" OFF)
 
 if(MSVC AND (NOT MSVC_SHARED_RT))
     set(CompilerFlags
@@ -25,7 +24,7 @@ endif()
 
 set(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 include_directories(${${PROJECT_NAME}_INCLUDE_DIRS})
-file(GLOB ${PROJECT_NAME}_sources "${CMAKE_CURRENT_SOURCE_DIR}/sources/*.cpp")
+file(GLOB ${PROJECT_NAME}_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/sources/*.cpp")
 
 set(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
@@ -33,7 +32,7 @@ if(MSVC AND NOT MSVC_SHARED_RT)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
     include(FindStaticOpenSSL)
 else()
-    find_package(OpenSSL)
+    find_package(OpenSSL REQUIRED)
 endif()
 
 find_package(CURL REQUIRED)
@@ -43,10 +42,10 @@ find_package(pugixml)
 include_directories(${pugixml_INCLUDE_DIRS})
 
 if(BUILD_SHARED_LIBS)
-    add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
+    add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SOURCES})
 else()
     add_definitions(-DCURL_STATICLIB)
-    add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources})
+    add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES})
 endif()
 
 if(UNIX)
@@ -73,6 +72,10 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/ProjectConfig-include.cmake.in
 install(FILES ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake 
         DESTINATION cmake)
 
-if(BUILD_TESTS_FOR_${PROJECT_NAME})
-    add_subdirectory(tests)
+if(BUILD_TESTS)
+	enable_testing()
+	file(GLOB ${PROJECT_NAME}_TEST_SOURCES tests/*.cpp)
+	add_executable(check ${${PROJECT_NAME}_TEST_SOURCES})
+	target_link_libraries(check ${PROJECT_NAME} ${DEPENDS_LIBRARIES})
+	add_test(tests check -s -r compact) 
 endif()

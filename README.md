@@ -1,8 +1,8 @@
 WebDAV Client
 ===
-[![version](https://img.shields.io/badge/version-0.9.7-brightgreen.svg)](https://github.com/designerror/webdav-client-cpp/releases/tag/v0.9.7)
+[![version](https://img.shields.io/badge/version-0.9.8-brightgreen.svg)](https://github.com/designerror/webdav-client-cpp/releases/tag/v0.9.8)
 [![slack](https://img.shields.io/badge/slack-online-E32475.svg)](http://webdav.slack.com)
-[![Build Status](https://travis-ci.org/designerror/webdav-client-cpp.svg?branch=v0.9.7)](https://travis-ci.org/designerror/webdav-client-cpp)
+[![Build Status](https://travis-ci.org/designerror/webdav-client-cpp.svg?branch=v0.9.8)](https://travis-ci.org/designerror/webdav-client-cpp)
 
 Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-servers:
 
