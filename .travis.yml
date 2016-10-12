@@ -16,28 +16,28 @@ matrix:
     include:
         - os: linux
           compiler: gcc-5
-          env: BUILD_FROM_SOURCES="yes" COMPILER="g++-5"
+          env: BUILD_FROM_SOURCES="yes" COMPILER="g++-5" BUILD_TESTS="TRUE"
         - os: linux
           compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="yes" COMPILER="clang++-3.6"
+          env: BUILD_FROM_SOURCES="yes" COMPILER="clang++-3.6" BUILD_TESTS="TRUE"
         - os: osx
           compiler: gcc-5
-          env: BUILD_FROM_SOURCES="yes" COMPILER="g++-5"
+          env: BUILD_FROM_SOURCES="yes" COMPILER="g++-5" BUILD_TESTS="TRUE"
         - os: osx
           compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="yes" COMPILER="clang++-3.6"
+          env: BUILD_FROM_SOURCES="yes" COMPILER="clang++-3.6" BUILD_TESTS="TRUE"
         - os: linux
           compiler: gcc-5
-          env: BUILD_FROM_SOURCES="no" COMPILER="g++-5"
+          env: BUILD_FROM_SOURCES="no" COMPILER="g++-5" BUILD_TESTS="TRUE"
         - os: linux
           compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6"
+          env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6" BUILD_TESTS="TRUE"
         - os: osx
           compiler: gcc-5
-          env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6"
+          env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6" BUILD_TESTS="TRUE"
         - os: osx
           compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="no" COMPILER="g++-5"
+          env: BUILD_FROM_SOURCES="no" COMPILER="g++-5" BUILD_TESTS="TRUE"
 
 script:
 - if [ "$BUILD_FROM_SOURCES" == "yes" ]; then  
@@ -68,4 +68,4 @@ script:
     export OPENSSL_ROOT_DIR="/usr/local/ssl";
   fi;
 - mkdir build && cd build
-- cmake .. && make
+- cmake .. -DBUILD_TESTS:BOOL=$BUILD_TESTS -DHOME_PUGIXML="/usr/local"  && make
