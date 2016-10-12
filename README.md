@@ -17,8 +17,8 @@ Requirements
 ===
 
  - [curl](https://github.com/curl/curl) `>= 7.38.0`
- - [openssl](https://github.com/openssl/openssl) `>= 1.0.2`
- - [pugixml](https://github.com/zeux/pugixml) `>= 1.0.7`
+ - [openssl](https://github.com/openssl/openssl) `>= 1.0.1f`
+ - [pugixml](https://github.com/zeux/pugixml) `>= 1.0.0`
 
 Install
 ===
