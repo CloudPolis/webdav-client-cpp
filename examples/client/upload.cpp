@@ -42,7 +42,7 @@ void async_upload_from_file()
     auto remote_file = "dir/file.dat";
     auto local_file = "/home/user/Downloads/file.dat";
 
-    client->async_upload(remote_file, local_file, [&remote_file](bool is_uploaded)
+    client->async_upload(remote_file, local_file, [remote_file](bool is_uploaded)
     {
         std::cout << remote_file << " resource is" << is_uploaded ? "" : "not" << "uploaded" << std::endl;
     });
@@ -95,7 +95,7 @@ void async_upload_from_buffer()
     char * buffer_ptr = nullptr;
     long long int buffer_size = 0;
 
-    client->async_upload(remote_file, buffer_ptr, buffer_size, [&remote_file](bool is_uploaded)
+    client->async_upload(remote_file, buffer_ptr, buffer_size, [remote_file](bool is_uploaded)
     {
         std::cout << remote_file << " resource is" << is_uploaded ? "" : "not" << "uploaded" << std::endl;
     });
