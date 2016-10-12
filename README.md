@@ -1,8 +1,8 @@
 WebDAV Client
 ===
-[![version](https://img.shields.io/badge/version-0.9.6-brightgreen.svg)](https://github.com/designerror/webdav-client-cpp/releases/tag/v0.9.6)
+[![version](https://img.shields.io/badge/version-0.9.7-brightgreen.svg)](https://github.com/designerror/webdav-client-cpp/releases/tag/v0.9.7)
 [![slack](https://img.shields.io/badge/slack-online-E32475.svg)](http://webdav.slack.com)
-[![Build Status](https://travis-ci.org/designerror/webdav-client-cpp.svg?branch=v0.9.6)](https://travis-ci.org/designerror/webdav-client-cpp)
+[![Build Status](https://travis-ci.org/designerror/webdav-client-cpp.svg?branch=v0.9.7)](https://travis-ci.org/designerror/webdav-client-cpp)
 
 Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-servers:
 
@@ -16,8 +16,8 @@ Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-ser
 Requirements
 ===
 
- - [curl](https://github.com/curl/curl) `>= 7.45.0`
- - [openssl](https://github.com/openssl/openssl) `>= 1.0.2g`
+ - [curl](https://github.com/curl/curl) `>= 7.38.0`
+ - [openssl](https://github.com/openssl/openssl) `>= 1.0.2`
  - [pugixml](https://github.com/zeux/pugixml) `>= 1.0.7`
 
 Install
