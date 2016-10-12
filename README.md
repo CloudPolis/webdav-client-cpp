@@ -41,7 +41,7 @@ $ apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev
 $ brew install curl pugixml
 ```
 
-**Build Webdav Client**
+**Build WebDAV Client**
 
 ```bash
 $ git clone https://github.com/designerror/webdav-client-cpp
