@@ -16,28 +16,28 @@ matrix:
     include:
         - os: linux
           compiler: gcc-5
-          env: BUILD_FROM_SOURCES="yes"
+          env: BUILD_FROM_SOURCES="yes" COMPILER="g++-5"
         - os: linux
           compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="yes"
+          env: BUILD_FROM_SOURCES="yes" COMPILER="clang++-3.6"
         - os: osx
           compiler: gcc-5
-          env: BUILD_FROM_SOURCES="yes"
+          env: BUILD_FROM_SOURCES="yes" COMPILER="g++-5"
         - os: osx
           compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="yes"
+          env: BUILD_FROM_SOURCES="yes" COMPILER="clang++-3.6"
         - os: linux
           compiler: gcc-5
-          env: BUILD_FROM_SOURCES="no"
+          env: BUILD_FROM_SOURCES="no" COMPILER="g++-5"
         - os: linux
           compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="no"
+          env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6"
         - os: osx
           compiler: gcc-5
-          env: BUILD_FROM_SOURCES="no"
+          env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6"
         - os: osx
           compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="no"
+          env: BUILD_FROM_SOURCES="no" COMPILER="g++-5"
 
 script:
 - if [ "$BUILD_FROM_SOURCES" == "yes" ]; then  
@@ -64,5 +64,8 @@ script:
       brew install openssl curl pugixml;
     fi;
   fi;
+- if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    export OPENSSL_ROOT_DIR="/usr/local/ssl";
+  fi;
 - mkdir build && cd build
-- cmake .. && make
+- cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make
