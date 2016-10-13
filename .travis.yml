@@ -34,10 +34,10 @@ matrix:
           env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6" BUILD_TESTS="TRUE"
         - os: osx
           compiler: gcc-5
-          env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6" BUILD_TESTS="TRUE"
+          env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6" BUILD_TESTS="TRUE" OPENSSL_ROOT_DIR="/usr/local/opt/openssl"
         - os: osx
           compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="no" COMPILER="g++-5" BUILD_TESTS="TRUE"
+          env: BUILD_FROM_SOURCES="no" COMPILER="g++-5" BUILD_TESTS="TRUE" OPENSSL_ROOT_DIR="/usr/local/opt/openssl"
 
 script:
 - if [ "$BUILD_FROM_SOURCES" == "yes" ]; then  
@@ -63,9 +63,6 @@ script:
     else
       brew install openssl curl pugixml;
     fi;
-  fi;
-- if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-    export OPENSSL_ROOT_DIR="/usr/local/ssl";
   fi;
 - mkdir build && cd build
 - cmake .. -DBUILD_TESTS:BOOL=$BUILD_TESTS -DHOME_PUGIXML="/usr/local"  && make
