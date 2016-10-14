@@ -9,7 +9,7 @@ addons:
             - clang-3.6
             - gcc-5
         sources:
-            - llvm-toolchain-precise-3.6
+            - llvm-toolchain-trusty-3.6
             - ubuntu-toolchain-r-test
 
 matrix:
