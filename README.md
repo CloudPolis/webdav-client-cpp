@@ -47,6 +47,8 @@ $ brew install curl pugixml
 $ git clone https://github.com/designerror/webdav-client-cpp
 $ cd webdav-client-cpp
 $ mkdir build && cd build
+# The next line is needed for building on macOS
+$ export OPENSSL_ROOT_DIR=/usr/local/opt/openssl/
 $ cmake .. && make
 $ make install
 ```
