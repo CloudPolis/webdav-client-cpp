@@ -1,6 +1,6 @@
 WebDAV Client
 ===
-[![version](https://img.shields.io/badge/version-0.9.8-brightgreen.svg)](https://github.com/designerror/webdav-client-cpp/releases/tag/v0.9.8)
+[![version](https://img.shields.io/badge/version-0.9.9-brightgreen.svg)](https://github.com/designerror/webdav-client-cpp/releases/tag/v0.9.9)
 [![slack](https://img.shields.io/badge/slack-online-E32475.svg)](http://webdav.slack.com)
 [![Build Status](https://travis-ci.org/designerror/webdav-client-cpp.svg?branch=v0.9.8)](https://travis-ci.org/designerror/webdav-client-cpp)
 
@@ -120,4 +120,14 @@ int main()
   client->async_upload("/path/to/remote/file", "/path/to/local/file");
   client->async_download("/path/to/remote/file", "/path/to/local/file");
 }
+```
+
+Soon
+===
+```bash
+# *-nix
+$ apt-get install libwdc-dev
+
+# macOS
+$ brew install wdc
 ```

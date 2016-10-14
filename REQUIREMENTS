@@ -1,0 +1,3 @@
+curl(>=7.38.0)
+openssl(>=1.0.1f)
+pugixml(>=1.0.0)

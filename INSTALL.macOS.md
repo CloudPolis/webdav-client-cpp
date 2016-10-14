@@ -27,21 +27,21 @@ $ mkdir build && cd build && cmake ../scripts/ -DBUILD_SHARED_LIBS:BOOL=TRUE
 $ make && sudo make install
 $ cd ../.. && rm -rf pugixml-1.7 && rm -f pugixml-1.7.tar.gz
 ```
- - [ ] 4. Install `webdavclient@0.9.8`
+ - [ ] 4. Install `webdavclient@0.9.9`
 ```bash
-$ echo "Install webdavclient@0.9.8"
-$ wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.8.tar.gz -O webdavclient-0.9.8.tar.gz
-$ tar -xf webdavclient-0.9.8.tar.gz && cd webdav-client-cpp-0.9.8
+$ echo "Install webdavclient@0.9.9"
+$ wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.9.tar.gz -O webdavclient-0.9.9.tar.gz
+$ tar -xf webdavclient-0.9.9.tar.gz && cd webdav-client-cpp-0.9.9
 $ mkdir build && cd build && cmake ..
 $ make && sudo make install
-$ cd ../.. && rm -rf webdav-client-cpp-0.9.8 && rm -f webdavclient-0.9.8.tar.gz
+$ cd ../.. && rm -rf webdav-client-cpp-0.9.9 && rm -f webdavclient-0.9.9.tar.gz
 ```
 
- - [ ] 5. Building tests for `webdavclient@0.9.8`
+ - [ ] 5. Building tests for `webdavclient@0.9.9`
 ```bash
-$ echo "Building tests for webdavclient@0.9.8"
-$ wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.8.tar.gz -O webdavclient-0.9.8.tar.gz
-$ tar -xf webdavclient-0.9.8.tar.gz && cd webdav-client-cpp-0.9.8 && cd tests
+$ echo "Building tests for webdavclient@0.9.9"
+$ wget https://github.com/designerror/webdav-client-cpp/archive/v0.9.9.tar.gz -O webdavclient-0.9.9.tar.gz
+$ tar -xf webdavclient-0.9.9.tar.gz && cd webdav-client-cpp-0.9.9 && cd tests
 $ mkdir build && cd build
 $ cmake .. && make
 ```
