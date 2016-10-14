@@ -29,9 +29,9 @@ For `Windows` see `INSTALL.WIN.md` file.
 
 For `*-nix` or `macOS` you can build the requirements with package manager or from sources.
 
-If you want build the requirements from sources then see `INSTALL.UNIX.md` and `INSTALL.macOS.md` respectively.
+If you want to build the requirements from sources then see `INSTALL.UNIX.md` and `INSTALL.macOS.md` respectively.
 
-If you want use package manager then input:
+If you want to use package manager then input:
 
 ```bash
 # *-nix
