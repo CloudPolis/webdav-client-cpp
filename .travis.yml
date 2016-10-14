@@ -40,22 +40,9 @@ matrix:
           env: BUILD_FROM_SOURCES="no" COMPILER="g++-5" BUILD_TESTS="TRUE" OPENSSL_ROOT_DIR="/usr/local/opt/openssl"
 
 script:
-- if [ "$BUILD_FROM_SOURCES" == "yes" ]; then  
-    wget https://github.com/openssl/openssl/archive/OpenSSL_1_0_2g.tar.gz -O OpenSSL_1_0_2g.tar.gz;
-    tar -xf OpenSSL_1_0_2g.tar.gz && cd openssl-OpenSSL_1_0_2g;
-    ./config;
-    make && sudo make install;
-    cd .. && rm -rf openssl-OpenSSL_1_0_2g && rm -f OpenSSL_1_0_2g.tar.gz;
-    wget https://github.com/curl/curl/archive/curl-7_48_0.tar.gz -O curl-7_48_0.tar.gz;
-    tar -xf curl-7_48_0.tar.gz && cd curl-curl-7_48_0 || exit;
-    mkdir build && cd build && cmake ..;
-    make && sudo make install;
-    cd ../.. && rm -rf curl-curl-7_48_0 && rm -f curl-7_48_0.tar.gz;
-    wget https://github.com/zeux/pugixml/releases/download/v1.7/pugixml-1.7.tar.gz -O pugixml-1.7.tar.gz;
-    tar -xf pugixml-1.7.tar.gz && cd pugixml-1.7 || exit;
-    mkdir build && cd build && cmake ../scripts/ -DBUILD_SHARED_LIBS:BOOL=TRUE;
-    make && sudo make install;
-    cd ../.. && rm -rf pugixml-1.7 && rm -f pugixml-1.7.tar.gz;
+- mkdir build && cd build
+- if [ "$BUILD_FROM_SOURCES" == "yes" ]; then
+        ../tools/build_requirements.unix.sh;
   else
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       sudo apt-get update;
@@ -64,5 +51,4 @@ script:
       brew install openssl curl pugixml;
     fi;
   fi;
-- mkdir build && cd build
 - cmake .. -DBUILD_TESTS:BOOL=$BUILD_TESTS -DHOME_PUGIXML="/usr/local" && make
