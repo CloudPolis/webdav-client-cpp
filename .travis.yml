@@ -52,3 +52,18 @@ script:
     fi;
   fi;
 - cmake .. -DBUILD_TESTS:BOOL=$BUILD_TESTS -DHOME_PUGIXML="/usr/local" && make
+
+
+after_success:
+- ../tools/build_package.deb.sh
+
+deploy:
+  provider: releases
+  api_key:
+    secure: Nw+EWdOlFeDc8vt4gdzXgoHh17oUeh8IpzGUyR4WukIHeKIsdJUrxTlSXvQ58rwwZXR$
+  file:
+    - libwdc-$CONFFIGURATION_$TRAVIS_TAG-$1_$ARCHITECTURE$.deb
+
+
+
+
