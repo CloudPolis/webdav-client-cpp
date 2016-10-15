@@ -23,7 +23,7 @@ $ cd ../.. && rm -rf curl-curl-7_48_0 && rm -f curl-7_48_0.tar.gz
 $ echo "Install pugixml@1.7.0"
 $ wget https://github.com/zeux/pugixml/releases/download/v1.7/pugixml-1.7.tar.gz -O pugixml-1.7.tar.gz
 $ tar -xf pugixml-1.7.tar.gz && cd pugixml-1.7
-$ mkdir build && cd build && cmake ../scripts/ -DBUILD_SHARED_LIBS:BOOL=TRUE
+$ mkdir build && cd build && cmake ../scripts/
 $ make && sudo make install
 $ cd ../.. && rm -rf pugixml-1.7 && rm -f pugixml-1.7.tar.gz
 ```
