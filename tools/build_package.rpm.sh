@@ -1,10 +1,11 @@
-mkdir doc-pak
-cp ../AUTHORS ../LICENSE ./doc-pak
-cp ../README.md ./doc-pak/README
-cp ../DESCRIPTION ./description-pak
+#mkdir doc-pak
+#cp ../AUTHORS ../LICENSE ./doc-pak
+#cp ../README.md ./doc-pak/README
+#cp ../DESCRIPTION ./description-pak
 
 checkinstall -y	--type=rpm \
 		--install=no \
+		--fstrans=yes \
 		--pkgname=libwdc-dev \
 		--pkgversion=$(git describe --abbrev=0 --tags | sed 's,^v,,') \
 		--pkglicense=MIT \
