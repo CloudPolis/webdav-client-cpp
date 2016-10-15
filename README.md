@@ -134,7 +134,7 @@ Soon
 $ sudo apt-get install libwdc-dev
 
 # Fedora
-$ dnf install wdc-devel
+$ sudo dnf install wdc-devel
 
 # macOS
 $ brew install wdc
