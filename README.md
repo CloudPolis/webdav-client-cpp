@@ -34,8 +34,11 @@ If you want to build the requirements from sources then see `INSTALL.UNIX.md` an
 If you want to use package manager then input:
 
 ```bash
-# *-nix
-$ apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev
+# Debian or Ubuntu
+$ sudo apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev
+
+# Fedora
+$ sudo dnf install openssl-devel curl-devel pugixml-devel
 
 # macOS
 $ brew install curl pugixml
