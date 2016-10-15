@@ -63,7 +63,9 @@ deploy:
     secure: Nw+EWdOlFeDc8vt4gdzXgoHh17oUeh8IpzGUyR4WukIHeKIsdJUrxTlSXvQ58rwwZXR$
   file:
     - libwdc-$CONFFIGURATION_$TRAVIS_TAG-$1_$ARCHITECTURE$.deb
-
+  on:
+    tags: true
+    condition: $MY_ENV = super_awesome
 
 
 
