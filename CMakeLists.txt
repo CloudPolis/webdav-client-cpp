@@ -88,4 +88,3 @@ if(BUILD_TESTS)
 endif()
 
 include(CPackConfig.cmake)
-include(CPack)
