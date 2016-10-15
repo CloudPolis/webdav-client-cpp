@@ -65,7 +65,7 @@ deploy:
     - libwdc-$CONFFIGURATION_$TRAVIS_TAG-$1_$ARCHITECTURE$.deb
   on:
     tags: true
-    condition: $MY_ENV = super_awesome
+    condition: $BUILD_TESTS = "FALSE"
 
 
 
