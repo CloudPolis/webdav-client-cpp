@@ -130,8 +130,11 @@ int main()
 Soon
 ===
 ```bash
-# *-nix
-$ apt-get install libwdc-dev
+# Debian or Ubuntu
+$ sudo apt-get install libwdc-dev
+
+# Fedora
+$ dnf install wdc-devel
 
 # macOS
 $ brew install wdc
