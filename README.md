@@ -81,7 +81,7 @@ int main()
       {"webdav_login",    "webdav_login"},
       {"webdav_password", "webdav_password"}
   };
-  // adding keys: 
+  // additional keys: 
   // - webdav_root
   // - cert_path, key_path
   // - proxy_hostname, proxy_login, proxy_password
