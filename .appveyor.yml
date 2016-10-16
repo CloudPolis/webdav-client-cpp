@@ -11,6 +11,7 @@ install:
   - cinst nasm
   - set OPENSSL_BUILD_PLATFORM=VC-WIN64A # VC-WIN32 | VC-WIN64A | VC-WIN64I | VC-CE
   - set INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%\build
+  - echo %APPVEYOR_BUILD_FOLDER%
   - set CMAKE_COMMON_FLAGS=-DCMAKE_BUILD_TYPE=%PLATFORM% -DMSVC_SHRED_RT:BOOL=%BUILD_SHARED_LIBS%
 
 platform: Any CPU
@@ -25,7 +26,7 @@ configuration:
 #  - Release
 
 before_build:
-  - call tools\build_requirements.win.bat
+  - call %APPVEYOR_BUILD_FOLDER%\tools\build_requirements.win.bat
 
 build_script:
   - cd %INSTALL_PREFIX%
