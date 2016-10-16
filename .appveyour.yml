@@ -1,0 +1,40 @@
+version: 1.0.{build}
+
+branches:
+  only:
+    - build_on_windows
+
+image: Visual Studio 2015
+
+# scripts that run after cloning repository
+install:
+  - cinst perl
+  - cinst nasm
+  - set OPENSSL_BUILD_PLATFORM=VC-WIN64A # VC-WIN32 | VC-WIN64A | VC-WIN64I | VC-CE
+  - set INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%\build
+  - set CMAKE_COMMON_FLAGS=-DCMAKE_BUILD_TYPE=%PLATFORM% -DMSVC_SHRED_RT:BOOL=%BUILD_SHARED_LIBS%
+
+platform: Any CPU
+
+environment:
+  matrix:
+    - BUILD_SHARED_LIBS: FALSE
+#    - BUILD_SHARED_LIBS: TRUE
+
+configuration:
+  - Debug
+#  - Release
+
+before_build:
+  - tools\build_requirements.win.bat
+
+build_script:
+  - cd %INSTALL_PREFIX%
+  - set CURL_INCLUDE_DIR=%INSTALL_PREFIX%\include
+  - set CURL_LIBRARY=%INSTALL_PREFIX%\lib\libcurl.lib
+  - set CMAKE_PUGIXML_FLAGS=-Dpugixml_LIBRARIES=%INSTALL_PREFIX%\lib\pugixml.lib -Dpugixml_INCLUDE_DIRS=%INSTALL_PREFIX%\include
+  - set CMAKE_CURL_FLAGS=-DCURL_STATICLIB:BOOL=TRUE -DCURL_INCLUDE_DIR:STRING=%CURL_INCLUDE_DIR% -DCURL_LIBRARY=%CURL_LIBRARY%
+  - set CMAKE_OPENSSL_FLAGS=-DOPENSSL_LIBRARIES=%INSTALL_PREFIX%\lib\libcrypto.lib;%INSTALL_PREFIX%\lib\libssl.lib 
+  - cmake .. %CMAKE_PUGIXML_FLAGS% %CMAKE_CURL_FLAGS% %CMAKE_OPENSSL_FLAGS% %CMAKE_COMMON_FLAGS%
+  - nmake
+  - nmake install
