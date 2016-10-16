@@ -4,7 +4,6 @@
 
 namespace WebDAV
 {
-	
 	auto inline get(const dict_t& options, const std::string&& name) -> std::string
 	{
 		auto it = options.find(name);
