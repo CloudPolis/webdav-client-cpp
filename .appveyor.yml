@@ -25,7 +25,7 @@ configuration:
 #  - Release
 
 before_build:
-  - tools\build_requirements.win.bat
+  - call tools\build_requirements.win.bat
 
 build_script:
   - cd %INSTALL_PREFIX%
