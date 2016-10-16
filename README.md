@@ -77,10 +77,14 @@ int main()
 {
   std::map<std::string, std::string> options =
   {
-    {"webdav_hostname", "https://webdav.yandex.ru"},
-    {"webdav_login",    "webdav_login"},
-    {"webdav_password", "webdav_password"}
+      {"webdav_hostname", "https://webdav.yandex.ru"},
+      {"webdav_login",    "webdav_login"},
+      {"webdav_password", "webdav_password"}
   };
+  // adding keys: 
+  // - webdav_root
+  // - cert_path, key_path
+  // - proxy_hostname, proxy_login, proxy_password
             
   std::shared_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
   
@@ -104,7 +108,7 @@ int main()
   std::cout << "remote_directory_name";
   for(auto& resource_name : client->list("/path/to/remote/directory/"))
   {
-    std::cout << "\t" << "-" << resource_name;
+      std::cout << "\t" << "-" << resource_name;
   }
   std::cout << std::endl;
   
@@ -115,7 +119,7 @@ int main()
   auto meta_info = client->info("/path/to/remote/resource");
   for(auto& field : meta_info)
   {
-    std::cout << field.first << ":" << "\t" << field.second;
+      std::cout << field.first << ":" << "\t" << field.second;
   }
   std::cout << std::endl;
 
