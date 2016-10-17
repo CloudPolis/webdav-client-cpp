@@ -1,3 +1,5 @@
+#ifndef WEBDAV_REQUEST_H
+#define WEBDAV_REQUEST_H
 #pragma once
 
 #include <curl/curl.h>
@@ -39,3 +41,5 @@ namespace WebDAV
 		void * handle;
 	};
 }
+
+#endif

@@ -1,3 +1,5 @@
+#ifndef WEBDAV_URN_H
+#define WEBDAV_URN_H
 #pragma once
 
 namespace WebDAV
@@ -26,3 +28,5 @@ namespace WebDAV
 		Urn operator+(std::string resource_path);
 	};
 }
+
+#endif

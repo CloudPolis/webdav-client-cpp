@@ -13,13 +13,13 @@ namespace WebDAV
         }
     }
 
-    Header::~Header() noexcept
+    Header::~Header()
     {
         curl_slist_free_all((curl_slist*)this->handle);
     }
 
     void
-    Header::append(std::string item) noexcept
+    Header::append(const std::string item) noexcept
     {
         this->handle = curl_slist_append((curl_slist*)this->handle, item.c_str());
     }

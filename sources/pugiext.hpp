@@ -1,4 +1,7 @@
-﻿#include <pugixml.hpp>
+﻿#ifndef WEBDAV_PUGIEXT_H
+#define WEBDAV_PUGIEXT_H
+#pragma once
+#include <pugixml.hpp>
 
 namespace pugi
 {
@@ -21,3 +24,5 @@ namespace pugi
 		return writer.result;
 	}
 }
+
+#endif
