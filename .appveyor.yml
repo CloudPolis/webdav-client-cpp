@@ -25,8 +25,10 @@ before_build:
     - ps: >-
         If ($env:Configuration -Match "shared") {
             $env:SHARED=""
+            $env:BUILD_SHARED="ON"
         } Else {
             $env:SHARED="no-shared"
+            $env:BUILD_SHARED="OFF"
         }
     - ps: $env:VSCOMNTOOLS=(Get-Content ("env:VS" + "$env:VSVER" + "0COMNTOOLS"))
     - call "%VSCOMNTOOLS%\..\..\VC\vcvarsall.bat" %VCVARS_PLATFORM%
@@ -39,13 +41,13 @@ before_build:
     - cd ..\..
     - cd curl
     - if not exist build (mkdir build && cd build) else (rmdir /S/Q build && mkdir build && cd build)
-    - cmake .. -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -DCURL_STATICLIB:BOOL=ON -DBUILD_TESTING:BOOL=OFF -DBUILD_CURL_TESTS:BOOL=OFF -DBUILD_CURL_EXE:BOOL=OFF -DCURL_DISABLE_LDAP:BOOL=ON -DCURL_DISABLE_LDAPS=ON
+    - cmake .. -G "NMake Makefiles" -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -DCURL_STATICLIB:BOOL=%BUILD_SHARED% -DBUILD_TESTING:BOOL=OFF -DBUILD_CURL_EXE:BOOL=OFF -DCURL_DISABLE_LDAP:BOOL=ON -DCURL_DISABLE_LDAPS=ON
     - nmake
     - nmake install
     - cd ..\..
     - cd pugixml
     - if not exist build (mkdir build && cd build) else (rmdir /S/Q build && mkdir build && cd build)
-    - cmake .. -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX%
+    - cmake .. -G "NMake Makefiles" -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -DBUILD_SHARED_LIBS=%BUILD_SHARED%
     - nmake
     - nmake install
     - cd ..\..
@@ -57,6 +59,6 @@ build_script:
   - set CMAKE_PUGIXML_FLAGS=-Dpugixml_LIBRARIES=%INSTALL_PREFIX%\lib\pugixml.lib -Dpugixml_INCLUDE_DIRS=%INSTALL_PREFIX%\include
   - set CMAKE_CURL_FLAGS=-DCURL_STATICLIB:BOOL=TRUE -DCURL_INCLUDE_DIR:STRING=%CURL_INCLUDE_DIR% -DCURL_LIBRARY=%CURL_LIBRARY%
   - set CMAKE_OPENSSL_FLAGS=-DOPENSSL_LIBRARIES=%INSTALL_PREFIX%\lib\libcrypto.lib;%INSTALL_PREFIX%\lib\libssl.lib 
-  - cmake .. %CMAKE_PUGIXML_FLAGS% %CMAKE_CURL_FLAGS% %CMAKE_OPENSSL_FLAGS% %CMAKE_COMMON_FLAGS%
+  - cmake .. -G "NMake Makefiles" %CMAKE_PUGIXML_FLAGS% %CMAKE_CURL_FLAGS% %CMAKE_OPENSSL_FLAGS% -DBUILD_SHARED_LIBS=%BUILD_SHARED%
   - nmake
   - nmake install
