@@ -30,6 +30,7 @@ before_build:
         }
     - ps: $env:VSCOMNTOOLS=(Get-Content ("env:VS" + "$env:VSVER" + "0COMNTOOLS"))
     - call "%VSCOMNTOOLS%\..\..\VC\vcvarsall.bat" %VCVARS_PLATFORM%
+    - git submodule update --init
     - cd vendor\openssl
     - if not exist build (mkdir build && cd build) else (rmdir /S/Q build && mkdir build && cd build)
     - perl ..\Configure %TARGET% no-asm no-idea no-unit-test %SHARED% --prefix=%INSTALL_PREFIX% --openssldir=%INSTALL_PREFIX%\ssl
@@ -50,6 +51,7 @@ before_build:
     - cd ..\..
 
 build_script:
+  - cd %INSTALL_PREFIX%
   - set CURL_INCLUDE_DIR=%INSTALL_PREFIX%\include
   - set CURL_LIBRARY=%INSTALL_PREFIX%\lib\libcurl.lib
   - set CMAKE_PUGIXML_FLAGS=-Dpugixml_LIBRARIES=%INSTALL_PREFIX%\lib\pugixml.lib -Dpugixml_INCLUDE_DIRS=%INSTALL_PREFIX%\include
