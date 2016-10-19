@@ -1,54 +1,34 @@
 language: generic
-cache: ccache
 dist: trusty
 
+os: linux
+compiler: gcc-5
+env: COMPILER="g++-5"
 addons:
-    apt:
-        packages:
-            - ccache
-            - clang-3.6
-            - gcc-5
-        sources:
-            - llvm-toolchain-trusty-3.6
-            - ubuntu-toolchain-r-test
-
-matrix:
-    include:
-        - os: linux
-          compiler: gcc-5
-          env: BUILD_FROM_SOURCES="yes" COMPILER="g++-5" BUILD_TESTS="TRUE"
-        - os: linux
-          compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="yes" COMPILER="clang++-3.6" BUILD_TESTS="TRUE"
-        - os: osx
-          compiler: gcc-5
-          env: BUILD_FROM_SOURCES="yes" COMPILER="g++-5" BUILD_TESTS="TRUE" OPENSSL_ROOT_DIR="/usr/local/ssl"
-        - os: osx
-          compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="yes" COMPILER="clang++-3.6" BUILD_TESTS="TRUE" OPENSSL_ROOT_DIR="/usr/local/ssl"
-        - os: linux
-          compiler: gcc-5
-          env: BUILD_FROM_SOURCES="no" COMPILER="g++-5" BUILD_TESTS="TRUE"
-        - os: linux
-          compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6" BUILD_TESTS="TRUE"
-        - os: osx
-          compiler: gcc-5
-          env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6" BUILD_TESTS="TRUE" OPENSSL_ROOT_DIR="/usr/local/opt/openssl"
-        - os: osx
-          compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="no" COMPILER="g++-5" BUILD_TESTS="TRUE" OPENSSL_ROOT_DIR="/usr/local/opt/openssl"
+  apt:
+    packages:
+      - rpm
+      - gcc-5
+    sources:
+      - ubuntu-toolchain-r-test
 
 script:
 - mkdir build && cd build
-- if [ "$BUILD_FROM_SOURCES" == "yes" ]; then
-        ../tools/build_requirements.unix.sh;
-  else
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      sudo apt-get update;
-      sudo apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev;
-    else
-      brew install openssl curl pugixml;
-    fi;
-  fi;
-- cmake .. -DBUILD_TESTS:BOOL=$BUILD_TESTS -DHOME_PUGIXML="/usr/local" && make
+- sudo apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev
+#- cmake .. -DHOME_PUGIXML="/usr/local" 
+- cmake ..
+- make
+
+before_deploy:
+- cpack -G DEB
+- cpack -G RPM
+
+deploy:
+  provider: releases
+  api_key:
+    secure: Nw+EWdOlFeDc8vt4gdzXgoHh17oUeh8IpzGUyR4WukIHeKIsdJUrxTlSXvQ58rwwZXR$
+  file:
+    - /*.deb/
+    - /*.rpm/
+  on:
+    tags: true
