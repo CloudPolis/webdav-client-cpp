@@ -46,7 +46,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 # YOU MUST SET PUGIXML_HOME
 find_package(PugiXML REQUIRED)
 endif()
-include_directories(${PUGIXML_INCLUDE_DIR})
+include_directories(${PUGIXML_INCLUDE_DIRS})
 
 if(BUILD_SHARED_LIBS)
     add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SOURCES})
