@@ -1,3 +1,5 @@
+#ifndef STDAFX_H
+#define STDAFX_H
 #pragma once
 
 #include <algorithm>
@@ -11,3 +13,5 @@
 #include <vector>
 #include <thread>
 #include <string.h>
+
+#endif

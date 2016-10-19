@@ -1,8 +1,9 @@
 WebDAV Client
 ===
 [![version](https://img.shields.io/badge/version-0.9.9-brightgreen.svg)](https://github.com/designerror/webdav-client-cpp/releases/tag/v0.9.9)
-[![slack](https://img.shields.io/badge/slack-online-E32475.svg)](http://webdav.slack.com)
+[![Gitter](https://badges.gitter.im/designerror/webdav-client-cpp.svg)](https://gitter.im/designerror/webdav-client-cpp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Build Status](https://travis-ci.org/designerror/webdav-client-cpp.svg?branch=v0.9.9)](https://travis-ci.org/designerror/webdav-client-cpp)
+[![Build status](https://ci.appveyor.com/api/projects/status/l0nwebsyxwcc3lcs?svg=true)](https://ci.appveyor.com/project/designerror/webdav-client-cpp)
 
 Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-servers:
 
@@ -34,8 +35,11 @@ If you want to build the requirements from sources then see `INSTALL.UNIX.md` an
 If you want to use package manager then input:
 
 ```bash
-# *-nix
-$ apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev
+# Debian or Ubuntu
+$ sudo apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev
+
+# Fedora
+$ sudo dnf install openssl-devel curl-devel pugixml-devel
 
 # macOS
 $ brew install curl pugixml
@@ -74,10 +78,14 @@ int main()
 {
   std::map<std::string, std::string> options =
   {
-    {"webdav_hostname", "https://webdav.yandex.ru"},
-    {"webdav_login",    "webdav_login"},
-    {"webdav_password", "webdav_password"}
+      {"webdav_hostname", "https://webdav.yandex.ru"},
+      {"webdav_login",    "webdav_login"},
+      {"webdav_password", "webdav_password"}
   };
+  // additional keys: 
+  // - webdav_root
+  // - cert_path, key_path
+  // - proxy_hostname, proxy_login, proxy_password
             
   std::shared_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
   
@@ -101,7 +109,7 @@ int main()
   std::cout << "remote_directory_name";
   for(auto& resource_name : client->list("/path/to/remote/directory/"))
   {
-    std::cout << "\t" << "-" << resource_name;
+      std::cout << "\t" << "-" << resource_name;
   }
   std::cout << std::endl;
   
@@ -112,7 +120,7 @@ int main()
   auto meta_info = client->info("/path/to/remote/resource");
   for(auto& field : meta_info)
   {
-    std::cout << field.first << ":" << "\t" << field.second;
+      std::cout << field.first << ":" << "\t" << field.second;
   }
   std::cout << std::endl;
 
@@ -127,8 +135,11 @@ int main()
 Soon
 ===
 ```bash
-# *-nix
-$ apt-get install libwdc-dev
+# Debian or Ubuntu
+$ sudo apt-get install libwdc-dev
+
+# Fedora
+$ sudo dnf install wdc-devel
 
 # macOS
 $ brew install wdc

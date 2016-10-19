@@ -1,3 +1,5 @@
+#ifndef WEBDAV_FSINFO_H
+#define WEBDAV_FSINFO_H
 #pragma once
 
 namespace WebDAV
@@ -9,3 +11,5 @@ namespace WebDAV
 		auto size(const std::string& path_file) -> unsigned long long;
 	}
 }
+
+#endif

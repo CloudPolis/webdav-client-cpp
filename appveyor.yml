@@ -1,0 +1,67 @@
+platform:
+    - x86
+    - x64
+
+environment:
+    matrix:
+        - VSVER: 14
+
+configuration:
+    - plain
+#    - shared
+
+install:
+  - set INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%\build
+
+before_build:
+    - ps: >-
+        If ($env:Platform -Match "x86") {
+            $env:VCVARS_PLATFORM="x86"
+            $env:TARGET="VC-WIN32"
+        } Else {
+            $env:VCVARS_PLATFORM="amd64"
+            $env:TARGET="VC-WIN64A"
+        }
+    - ps: >-
+        If ($env:Configuration -Match "shared") {
+            $env:SHARED=""
+            $env:BUILD_SHARED="ON"
+        } Else {
+            $env:SHARED="no-shared"
+            $env:BUILD_SHARED="OFF"
+        }
+    - ps: $env:VSCOMNTOOLS=(Get-Content ("env:VS" + "$env:VSVER" + "0COMNTOOLS"))
+    - call "%VSCOMNTOOLS%\..\..\VC\vcvarsall.bat" %VCVARS_PLATFORM%
+    - git submodule update --init
+    - echo "build openssl"
+    - cd vendor\openssl
+    - if not exist build (mkdir build && cd build) else (rmdir /S/Q build && mkdir build && cd build)
+    - perl ..\Configure %TARGET% no-asm no-idea no-unit-test %SHARED% --prefix=%INSTALL_PREFIX% --openssldir=%INSTALL_PREFIX%\ssl
+    - nmake
+    - nmake install
+    - cd ..\..
+    - echo "build curl"
+    - cd curl
+    - if not exist build (mkdir build && cd build) else (rmdir /S/Q build && mkdir build && cd build)
+    - cmake .. -G "NMake Makefiles" -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -DCURL_STATICLIB:BOOL=%BUILD_SHARED% -DBUILD_TESTING:BOOL=OFF -DBUILD_CURL_EXE:BOOL=OFF -DCURL_DISABLE_LDAP:BOOL=ON -DCURL_DISABLE_LDAPS=ON
+    - nmake
+    - nmake install
+    - cd ..\..
+    - echo "build pugixml"
+    - cd pugixml
+    - if not exist build (mkdir build && cd build) else (rmdir /S/Q build && mkdir build && cd build)
+    - cmake .. -G "NMake Makefiles" -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -DBUILD_SHARED_LIBS=%BUILD_SHARED%
+    - nmake
+    - nmake install
+    - cd ..\..
+
+build_script:
+  - cd %INSTALL_PREFIX%
+  - set CURL_INCLUDE_DIR=%INSTALL_PREFIX%\include
+  - set CURL_LIBRARY=%INSTALL_PREFIX%\lib\libcurl.lib
+  - set CMAKE_PUGIXML_FLAGS=-DPUGIXML_LIBRARY=%INSTALL_PREFIX%\lib\pugixml.lib -DPUGIXML_INCLUDE_DIR=%INSTALL_PREFIX%\include
+  - set CMAKE_CURL_FLAGS=-DCURL_STATICLIB:BOOL=%BUILD_SHARED% -DCURL_INCLUDE_DIR:STRING=%CURL_INCLUDE_DIR% -DCURL_LIBRARY=%CURL_LIBRARY%
+  - set CMAKE_OPENSSL_FLAGS=-DOPENSSL_LIBRARIES=%INSTALL_PREFIX%\lib\libcrypto.lib;%INSTALL_PREFIX%\lib\libssl.lib 
+  - cmake .. -G "NMake Makefiles" %CMAKE_PUGIXML_FLAGS% %CMAKE_CURL_FLAGS% %CMAKE_OPENSSL_FLAGS% -DBUILD_SHARED_LIBS=%BUILD_SHARED%
+  - nmake
+  - nmake install

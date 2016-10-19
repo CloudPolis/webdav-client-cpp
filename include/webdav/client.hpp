@@ -1,3 +1,5 @@
+#ifndef WEBDAV_CLIENT_H
+#define WEBDAV_CLIENT_H
 #pragma once
 
 #include <functional>
@@ -238,3 +240,5 @@ namespace WebDAV
 		Client() {}
 	};
 }
+
+#endif
