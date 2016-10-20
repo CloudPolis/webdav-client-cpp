@@ -52,3 +52,6 @@ script:
     fi;
   fi;
 - cmake .. -DBUILD_TESTS:BOOL=$BUILD_TESTS -DHOME_PUGIXML="/usr/local" && make
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
