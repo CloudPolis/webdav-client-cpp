@@ -1,7 +1,7 @@
-#mkdir doc-pak
-#cp ../AUTHORS ../LICENSE ./doc-pak
-#cp ../README.md ./doc-pak/README
-#cp ../DESCRIPTION ./description-pak
+mkdir doc-pak
+cp ../AUTHORS ../LICENSE ./doc-pak
+cp ../README.md ./doc-pak/README
+cp ../DESCRIPTION ./description-pak
 
 checkinstall -y	--type=rpm \
 		--install=no \
