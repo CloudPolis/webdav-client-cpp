@@ -135,12 +135,23 @@ int main()
 Soon
 ===
 ```bash
-# Debian or Ubuntu
-$ sudo apt-get install libwdc-dev
+# via homebrew or linuxbrew
+$ brew install wdc
 
-# Fedora
+# via apt
+$ sudo apt install libwdc-dev
+
+# via dnf
 $ sudo dnf install wdc-devel
 
-# macOS
-$ brew install wdc
+# via yum
+$ yum install wdc
 ```
+
+Until
+===
+```bash
+# via homebrew or linuxbrew
+$ brew install https://raw.githubusercontent.com/designerror/homebrew-core/master/Formula/wdc.rb
+```
+
