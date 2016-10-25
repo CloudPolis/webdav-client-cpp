@@ -2,7 +2,7 @@ echo "Install OpenSSL@1.0.2g"
 wget https://github.com/openssl/openssl/archive/OpenSSL_1_0_2g.tar.gz -O OpenSSL_1_0_2g.tar.gz
 tar -xf OpenSSL_1_0_2g.tar.gz && cd openssl-OpenSSL_1_0_2g
 ./config
-make && sudo make install
+make && sudo make install_sw
 cd .. && rm -rf openssl-OpenSSL_1_0_2g && rm -f OpenSSL_1_0_2g.tar.gz
 
 echo "Install CURL@7.4.8"
