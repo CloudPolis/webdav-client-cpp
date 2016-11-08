@@ -26,9 +26,9 @@
 
 namespace WebDAV
 {
-    Header::Header(std::initializer_list<std::string> init_list) noexcept : handle(nullptr)
+    Header::Header(const std::initializer_list<std::string>& init_list) noexcept : handle(nullptr)
     {
-        for (auto item : init_list)
+        for (auto& item : init_list)
         {
             this->append(item);
         }
@@ -40,7 +40,7 @@ namespace WebDAV
     }
 
     void
-    Header::append(const std::string item) noexcept
+    Header::append(const std::string& item) noexcept
     {
         this->handle = curl_slist_append((curl_slist*)this->handle, item.c_str());
     }
