@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <fstream>
+#include <cstring>
 
 #include "callback.hpp"
 
