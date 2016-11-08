@@ -20,9 +20,11 @@
 #
 ############################################################################*/
 
-#include "stdafx.h"
-#include "urn.hpp"
+#include <algorithm>
+#include <vector>
 #include <curl/curl.h>
+
+#include "urn.hpp"
 
 namespace WebDAV {
 
@@ -55,10 +57,39 @@ namespace WebDAV {
 		return m_path;
 	}
 
-	std::string Urn::quote(void *request) {
-		int length = 0;
-		std::string path = curl_easy_unescape(request, m_path.c_str(), (int) m_path.length(), &length);
+	std::string escape(void *request, std::string& name) {
+		
+		std::string path = curl_easy_escape(request, name.c_str(), (int)name.length());
 		return path;
+	}
+
+	std::vector<std::string> split(const std::string& text, const std::string& delims)
+	{
+		std::vector<std::string> tokens;
+		std::size_t start = text.find_first_not_of(delims), end = 0;
+
+		while ((end = text.find_first_of(delims, start)) != std::string::npos)
+		{
+			tokens.push_back(text.substr(start, end - start));
+			start = text.find_first_not_of(delims, end);
+		}
+		if (start != std::string::npos)
+			tokens.push_back(text.substr(start));
+
+		return tokens;
+	}
+
+	std::string Urn::quote(void *request) {
+		if (this->is_root()) return m_path;
+		auto names = split(m_path, Urn::separate);
+		std::string quote_path;
+		std::for_each(names.begin(), names.end(), [&quote_path, request](std::string& name) {
+			auto escape_name = escape(request, name);
+			quote_path.append(Urn::separate);
+			quote_path.append(escape_name);
+		});
+		if (is_directory()) quote_path.append(Urn::separate);
+		return quote_path;
 	}
 
 	std::string Urn::name() {
@@ -66,7 +97,7 @@ namespace WebDAV {
 		auto is_root = Urn::separate.compare(path) == 0;
 		if (is_root) return std::string{""};
 
-		if (this->is_dir())
+		if (this->is_directory())
 		{
 			auto path_without_slash = path.substr(0, path.length() - 1);
 			auto pre_last_separate_position = path_without_slash.rfind(Urn::separate);
@@ -82,18 +113,16 @@ namespace WebDAV {
 	}
 
 	std::string Urn::parent() {
-		auto path = this->path();
-		auto is_root = Urn::separate.compare(path) == 0;
-		if (is_root) return path;
+		if (this->is_root()) return m_path;
 
-		auto last_separate_position = path.rfind(Urn::separate);
+		auto last_separate_position = m_path.rfind(Urn::separate);
 		if (last_separate_position == 0) return Urn::separate;
 
-		auto parent = path.substr(0, last_separate_position + 1);
+		auto parent = m_path.substr(0, last_separate_position + 1);
 		return parent;
 	}
 
-	bool Urn::is_dir() {
+	bool Urn::is_directory() {
 		auto path = this->path();
 		auto last_symbol_index = path.length() - 1;
 		auto last_symbol = std::string{path[last_symbol_index]};
@@ -101,12 +130,15 @@ namespace WebDAV {
 		return is_equal;
 	}
 
+	bool Urn::is_root() {
+		return Urn::separate.compare(m_path) == 0;
+	}
+
 	Urn Urn::operator+(std::string resource_path) {
-		bool is_directory = this->is_dir();
+		bool is_directory = this->is_directory();
 		if (!is_directory) return *this;
 		auto directory_path = this->path();
 		resource_path = directory_path + resource_path;
 		return Urn(resource_path);
 	}
 }
-

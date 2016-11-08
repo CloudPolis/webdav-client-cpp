@@ -21,14 +21,21 @@
 ############################################################################
 
 cmake_minimum_required(VERSION 3.1)
-project(webdavclient)
+project(wdc)
+
+set(WDC_VERSION_MAJOR 1)
+set(WDC_VERSION_MINOR 0)
+set(WDC_VERSION_PATCH 1)
+set(WDC_VERSION ${WDC_VERSION_MAJOR}.${WDC_VERSION_MINOR}.${WDC_VERSION_PATCH})
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
-option(BUILD_TESTS "Build tests for webdavclient" OFF)
+option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_PKGCONFIG "Build in PKGCONFIG mode" OFF)
+
 option(MSVC_SHARED_RT "Shared runtime library" ON)
 option(USE_EXTERNAL_PUGIXML "Use external pugixml" OFF)
 
@@ -97,6 +104,11 @@ install(EXPORT ${PROJECT_NAME}Config DESTINATION cmake)
 
 configure_file(${PROJECT_SOURCE_DIR}/cmake/ProjectConfig-include.cmake.in
                ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake @ONLY)
+
+if(BUILD_PKGCONFIG)
+	configure_file(scripts/wdc.pc.in ${PROJECT_BINARY_DIR}/wdc.pc @ONLY)
+	install(FILES ${PROJECT_BINARY_DIR}/wdc.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+endif()	       
 
 install(FILES ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake 
         DESTINATION cmake)

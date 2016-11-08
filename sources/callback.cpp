@@ -20,11 +20,11 @@
 #
 ############################################################################*/
 
-#include "stdafx.h"
-#include "callback.hpp"
-
 #include <algorithm>
+#include <fstream>
+#include <cstring>
 
+#include "callback.hpp"
 
 namespace WebDAV
 {

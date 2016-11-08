@@ -24,6 +24,9 @@
 #define WEBDAV_FSINFO_H
 #pragma once
 
+#include <string>
+#include <fstream>
+
 namespace WebDAV
 {
 	namespace FileInfo

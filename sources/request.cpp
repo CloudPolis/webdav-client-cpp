@@ -20,7 +20,6 @@
 #
 ############################################################################*/
 
-#include "stdafx.h"
 #include "request.hpp"
 #include "fsinfo.hpp"
 
@@ -48,7 +47,6 @@ namespace WebDAV
 
 		this->handle = curl_easy_init();
 
-		//this->set(CURLOPT_DEFAULT_PROTOCOL, "https");
 		this->set(CURLOPT_SSL_VERIFYHOST, 0);
 		this->set(CURLOPT_SSL_VERIFYPEER, 0);
 

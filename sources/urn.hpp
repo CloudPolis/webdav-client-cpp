@@ -24,6 +24,8 @@
 #define WEBDAV_URN_H
 #pragma once
 
+#include <string>
+
 namespace WebDAV
 {
 	class Urn {
@@ -45,7 +47,9 @@ namespace WebDAV
 
 		std::string parent();
 
-		bool is_dir();
+		bool is_directory();
+
+		bool is_root();
 
 		Urn operator+(std::string resource_path);
 	};

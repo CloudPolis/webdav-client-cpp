@@ -20,7 +20,7 @@
 #
 ############################################################################*/
 
-#include "stdafx.h"
+
 #include "fsinfo.hpp"
 
 namespace WebDAV
