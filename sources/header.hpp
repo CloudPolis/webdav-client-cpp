@@ -34,10 +34,10 @@ namespace WebDAV
     public:
         void * handle;
 
-        Header(std::initializer_list<std::string> init_list) noexcept;
+        Header(const std::initializer_list<std::string>& init_list) noexcept;
         ~Header();
 
-        void append(const std::string item) noexcept;
+        void append(const std::string& item) noexcept;
     };
 }
 
