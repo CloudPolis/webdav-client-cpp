@@ -24,6 +24,9 @@
 #define WEBDAV_HEADER_H
 #pragma once
 
+#include <string>
+#include <initializer_list>
+
 namespace WebDAV
 {
     class Header final
