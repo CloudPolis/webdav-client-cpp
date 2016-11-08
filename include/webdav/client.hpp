@@ -46,8 +46,8 @@ namespace WebDAV
 	///
 	/// \brief WebDAV Client
 	/// \author designerror
-	/// \version 1.0.0
-	/// \date 19/10/2016
+	/// \version 1.0.1
+	/// \date 08/11/2016
 	///
 	class Client
 	{	
@@ -65,9 +65,10 @@ namespace WebDAV
 		/// \param[in] key_path
 		/// \include client/init.cpp
 		///
-		static Client * Init(const dict_t& options) noexcept;
+		static auto Init(const dict_t& options) noexcept -> Client *;
 
-		virtual ~Client() {};
+		/// This function releases resources acquired by curl_global_init
+		static void Cleanup() noexcept;
 
 		///
 		/// Get free size of the WebDAV server
@@ -254,6 +255,9 @@ namespace WebDAV
 			callback_t callback = nullptr,
 			progress_t progress = nullptr
 		) const noexcept -> void;
+
+
+		virtual ~Client() {};
 
 	protected:
 
