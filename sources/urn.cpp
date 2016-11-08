@@ -20,9 +20,11 @@
 #
 ############################################################################*/
 
-#include "stdafx.h"
-#include "urn.hpp"
+#include <algorithm>
+#include <vector>
 #include <curl/curl.h>
+
+#include "urn.hpp"
 
 namespace WebDAV {
 
@@ -140,4 +142,3 @@ namespace WebDAV {
 		return Urn(resource_path);
 	}
 }
-
