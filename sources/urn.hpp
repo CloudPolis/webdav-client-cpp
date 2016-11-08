@@ -24,6 +24,8 @@
 #define WEBDAV_URN_H
 #pragma once
 
+#include <string>
+
 namespace WebDAV
 {
 	class Urn {
