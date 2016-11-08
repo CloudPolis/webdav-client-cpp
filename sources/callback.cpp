@@ -20,10 +20,10 @@
 #
 ############################################################################*/
 
-#include "callback.hpp"
-
 #include <algorithm>
 #include <fstream>
+
+#include "callback.hpp"
 
 namespace WebDAV
 {
