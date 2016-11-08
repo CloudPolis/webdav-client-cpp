@@ -152,6 +152,6 @@ Until
 ===
 ```bash
 # via homebrew or linuxbrew
-$ brew install https://raw.githubusercontent.com/designerror/homebrew-core/master/Formula/wdc.rb
+$ brew install wdc
 ```
 
