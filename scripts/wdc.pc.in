@@ -5,6 +5,6 @@ includedir=${exec_prefix}/include
 Name: wdc
 Description: Modern and convenient C++ WebDAV Client library
 Version: @WDC_VERSION@
-Libs: -L${libdir} -lwebdavclient
+Libs: -L${libdir} -lwdc
 Libs.private: -lpthread -lpugixml -lm -lcurl -lssl -lcrypto
 Cflags: -I${includedir}
