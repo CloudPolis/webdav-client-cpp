@@ -135,9 +135,6 @@ int main()
 Soon
 ===
 ```bash
-# via homebrew or linuxbrew
-$ brew install wdc
-
 # via apt
 $ sudo apt install libwdc-dev
 
