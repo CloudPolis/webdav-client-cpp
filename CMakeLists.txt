@@ -21,6 +21,13 @@
 ############################################################################
 
 cmake_minimum_required(VERSION 3.1)
+
+include("cmake/HunterGate.cmake")
+HunterGate(
+    URL  "https://github.com/designerror/hunter/archive/v0.18.14.23.tar.gz"
+    SHA1 "4ba5c303245faed28548d4a47f496cf645cf67ed"
+)
+
 project(wdc)
 
 set(WDC_VERSION_MAJOR 1)
@@ -32,86 +39,42 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
-option(BUILD_SHARED_LIBS "Build shared instead of static library" OFF)
 option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_PKGCONFIG "Build in PKGCONFIG mode" OFF)
 
-option(MSVC_SHARED_RT "Shared runtime library" ON)
-option(USE_EXTERNAL_PUGIXML "Use external pugixml" OFF)
+hunter_add_package(OpenSSL)
+hunter_add_package(CURL)
+hunter_add_package(pugixml)
 
-if(MSVC AND (NOT MSVC_SHARED_RT))
-    set(CompilerFlags
-                CMAKE_CXX_FLAGS
-                CMAKE_CXX_FLAGS_DEBUG
-                CMAKE_CXX_FLAGS_RELEASE
-                CMAKE_C_FLAGS
-                CMAKE_C_FLAGS_DEBUG
-                CMAKE_C_FLAGS_RELEASE)
-    foreach(CompilerFlag ${CompilerFlags})
-        string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
-    endforeach()
-endif()
+find_package(OpenSSL REQUIRED)
+find_package(CURL CONFIG REQUIRED)
+find_package(pugixml CONFIG REQUIRED)
 
-set(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
-include_directories(${${PROJECT_NAME}_INCLUDE_DIRS})
 file(GLOB ${PROJECT_NAME}_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/sources/*.cpp")
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
-set(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
+add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
 
-if(MSVC AND NOT MSVC_SHARED_RT)
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-    include(FindStaticOpenSSL)
-else()
-    find_package(OpenSSL REQUIRED)
-endif()
+target_link_libraries(${PROJECT_NAME} OpenSSL::SSL OpenSSL::Crypto CURL::libcurl pugixml)
 
-find_package(CURL REQUIRED)
-include_directories(${CURL_INCLUDE_DIR})
-
-if (USE_EXTERNAL_PUGIXML)
-find_package(PugiXML)
-else()
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-# YOU MUST SET PUGIXML_HOME
-find_package(PugiXML REQUIRED)
-endif()
-include_directories(${PUGIXML_INCLUDE_DIRS})
-
-if(BUILD_SHARED_LIBS)
-    add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SOURCES})
-else()
-    add_definitions(-DCURL_STATICLIB)
-    add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES})
-endif()
-
-if(UNIX)
-set(DEPENDS_LIBRARIES ${PUGIXML_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY} pthread)
-elseif(MSVC)
-set(DEPENDS_LIBRARIES ${PUGIXML_LIBRARIES} ${OPENSSL_LIBRARIES} ${CURL_LIBRARY} ws2_32)
-endif()
-
-target_link_libraries(${PROJECT_NAME} ${DEPENDS_LIBRARIES})
+target_include_directories(${PROJECT_NAME} PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
 
 install(TARGETS ${PROJECT_NAME}
-    EXPORT ${PROJECT_NAME}Config
+    EXPORT ${PROJECT_NAME}-config
     RUNTIME DESTINATION bin
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
 )
 install(DIRECTORY ${${PROJECT_NAME}_INCLUDE_DIRS} DESTINATION include)
-
-install(EXPORT ${PROJECT_NAME}Config DESTINATION cmake)
-
-configure_file(${PROJECT_SOURCE_DIR}/cmake/ProjectConfig-include.cmake.in
-               ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake @ONLY)
+install(EXPORT ${PROJECT_NAME}-config DESTINATION cmake)
 
 if(BUILD_PKGCONFIG)
 	configure_file(scripts/wdc.pc.in ${PROJECT_BINARY_DIR}/wdc.pc @ONLY)
 	install(FILES ${PROJECT_BINARY_DIR}/wdc.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 endif()	       
-
-install(FILES ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config-include.cmake 
-        DESTINATION cmake)
 
 if(BUILD_TESTS)
 	enable_testing()
