@@ -114,7 +114,9 @@ namespace WebDAV {
 
 	std::string Urn::parent() {
 		if (this->is_root()) return m_path;
-
+		
+		if (m_path.at(m_path.length() - 1) == '/') m_path.pop_back();
+		
 		auto last_separate_position = m_path.rfind(Urn::separate);
 		if (last_separate_position == 0) return Urn::separate;
 
