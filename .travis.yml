@@ -16,42 +16,22 @@ matrix:
     include:
         - os: linux
           compiler: gcc-5
-          env: BUILD_FROM_SOURCES="yes" COMPILER="g++-5" BUILD_TESTS="TRUE"
+          env: COMPILER="g++-5"
         - os: linux
           compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="yes" COMPILER="clang++-3.6" BUILD_TESTS="TRUE"
+          env: COMPILER="clang++-3.6"
         - os: osx
           compiler: gcc-5
-          env: BUILD_FROM_SOURCES="yes" COMPILER="g++-5" BUILD_TESTS="TRUE" OPENSSL_ROOT_DIR="/usr/local/ssl"
+          env: COMPILER="g++-5"
         - os: osx
           compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="yes" COMPILER="clang++-3.6" BUILD_TESTS="TRUE" OPENSSL_ROOT_DIR="/usr/local/ssl"
-        - os: linux
-          compiler: gcc-5
-          env: BUILD_FROM_SOURCES="no" COMPILER="g++-5" BUILD_TESTS="TRUE"
-        - os: linux
-          compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6" BUILD_TESTS="TRUE"
-        - os: osx
-          compiler: gcc-5
-          env: BUILD_FROM_SOURCES="no" COMPILER="clang++-3.6" BUILD_TESTS="TRUE" OPENSSL_ROOT_DIR="/usr/local/opt/openssl"
-        - os: osx
-          compiler: clang-3.6
-          env: BUILD_FROM_SOURCES="no" COMPILER="g++-5" BUILD_TESTS="TRUE" OPENSSL_ROOT_DIR="/usr/local/opt/openssl"
+          env: COMPILER="clang++-3.6"
 
 script:
-- mkdir build && cd build
-- if [ "$BUILD_FROM_SOURCES" == "yes" ]; then
-        ../tools/build_requirements.unix.sh;
-  else
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      sudo apt-get update;
-      sudo apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev;
-    else
-      brew install openssl curl pugixml;
-    fi;
-  fi;
-- cmake .. -DBUILD_TESTS:BOOL=$BUILD_TESTS -DHOME_PUGIXML="/usr/local" && make
+- cmake -H. -B_builds -DBUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=install
+- cmake --build _builds
+- cmake --build _builds --target test -- ARGS=--verbose
+- cmake --build _builds --target install
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
