@@ -27,7 +27,7 @@ Build
 
 **Building WebDAV Client from sources**
 
-```bash
+```ShellSession
 $ git clone https://github.com/designerror/webdav-client-cpp
 $ cd webdav-client-cpp
 $ cmake -H. -B_builds # -DCMAKE_INSTALL_PREFIX=install
@@ -38,7 +38,7 @@ $ cmake --build _builds --target install
 Documentation
 ===
 
-```bash
+```ShellSession
 $ cd docs
 $ doxygen doxygen.conf
 $ open html/index.html
@@ -47,65 +47,63 @@ $ open html/index.html
 Usage examples
 ===
 
-```c++
+```C++
 #include <iostream>
 #include <memory>
 #include <webdav/client.hpp>
 
 int main()
 {
-  std::map<std::string, std::string> options =
-  {
-      {"webdav_hostname", "https://webdav.yandex.ru"},
-      {"webdav_login",    "webdav_login"},
-      {"webdav_password", "webdav_password"}
-  };
-  // additional keys: 
-  // - webdav_root
-  // - cert_path, key_path
-  // - proxy_hostname, proxy_login, proxy_password
+	std::map<std::string, std::string> options =
+	{
+		{"webdav_hostname", "https://webdav.yandex.ru"},
+		{"webdav_login",    "webdav_login"},
+		{"webdav_password", "webdav_password"}
+	};
+	// additional keys: 
+	// - webdav_root
+	// - cert_path, key_path
+	// - proxy_hostname, proxy_login, proxy_password
             
-  std::shared_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+	std::shared_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
   
-  auto check_connection = client->check();
-  std::cout << "test connection with WebDAV drive is " 
-            << (check_connection ? "" : "not ")
-            << "successful"<< std::endl;
+	auto check_connection = client->check();
+	std::cout 	<< "test connection with WebDAV drive is " 
+    			<< (check_connection ? "" : "not ")
+            	<< "successful"<< std::endl;
   
-  auto is_directory = client->is_dir("/path/to/remote/resource");
-  std::cout << "remote resource is " 
-            << (is_directory ? "" : "not ") 
-            << "directory" << std::endl;
+	auto is_directory = client->is_dir("/path/to/remote/resource");
+	std::cout	<< "remote resource is " 
+            	<< (is_directory ? "" : "not ") 
+            	<< "directory" << std::endl;
   
-  client->create_directory("/path/to/remote/directory/");
-  client->clean("/path/to/remote/directory/");
+  	client->create_directory("/path/to/remote/directory/");
+  	client->clean("/path/to/remote/directory/");
   
-  std::cout << "On WebDAV-disk available free space: " 
-            << client->free_size() 
-            << std::endl;
+  	std::cout 	<< "On WebDAV-disk available free space: " 
+            	<< client->free_size() 
+            	<< std::endl;
   
-  std::cout << "remote_directory_name";
-  for(auto& resource_name : client->list("/path/to/remote/directory/"))
-  {
-      std::cout << "\t" << "-" << resource_name;
-  }
-  std::cout << std::endl;
+	std::cout << "remote_directory_name";
+	for(auto& resource_name : client->list("/path/to/remote/directory/")) {
+		std::cout << "\t" << "-" << resource_name;
+  	}
+  	std::cout << std::endl;
   
-  client->download("/path/to/remote/file", "/path/to/local/file");
-  client->clean("/path/to/remote/file");
-  client->upload("/path/to/remote/file", "/path/to/local/file");
+  	client->download("/path/to/remote/file", "/path/to/local/file");
+  	client->clean("/path/to/remote/file");
+  	client->upload("/path/to/remote/file", "/path/to/local/file");
   
-  auto meta_info = client->info("/path/to/remote/resource");
-  for(auto& field : meta_info)
-  {
-      std::cout << field.first << ":" << "\t" << field.second;
-  }
-  std::cout << std::endl;
+  	auto meta_info = client->info("/path/to/remote/resource");
+  	for(auto& field : meta_info) {
+		std::cout << field.first << ":" << "\t" << field.second;
+  	}
+  	std::cout << std::endl;
 
-  client->copy("/path/to/remote/file1", "/path/to/remote/file2");
-  client->move("/path/to/remote/file1", "/path/to/remote/file3");
+  	client->copy("/path/to/remote/file1", "/path/to/remote/file2");
+  	client->move("/path/to/remote/file1", "/path/to/remote/file3");
   
-  client->async_upload("/path/to/remote/file", "/path/to/local/file");
-  client->async_download("/path/to/remote/file", "/path/to/local/file");
+  	client->async_upload("/path/to/remote/file", "/path/to/local/file");
+  	client->async_download("/path/to/remote/file", "/path/to/local/file");
 }
 ```
