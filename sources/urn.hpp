@@ -25,34 +25,44 @@
 #pragma once
 
 #include <string>
+using std::string;
 
 namespace WebDAV
 {
-	class Urn {
-		static const std::string separate;
+    namespace Urn {    
 
-		std::string m_path;
+        class Path {
 
-	public:
+            static const string separate;
 
-		Urn(std::string path, bool directory = false);
+            static const string root;
 
-		Urn(std::nullptr_t);
+            string m_path;
 
-		std::string path();
+        public:
 
-		std::string quote(void *request);
+            Path(const string& path, bool force_dir = false);
 
-		std::string name();
+            Path(std::nullptr_t);
 
-		std::string parent();
+            auto path() const -> string;
 
-		bool is_directory();
+            auto quote(void * request) const -> string;
 
-		bool is_root();
+            auto name() const -> string;
 
-		Urn operator+(std::string resource_path);
-	};
+            auto parent() const -> Path;
+
+            auto is_directory() const -> bool;
+
+            auto is_root() const -> bool;
+
+            auto operator+(const std::string& rhs) const -> Path;
+
+            auto operator==(const Path& rhs) const -> bool;
+        };
+
+    }
 }
 
 #endif

@@ -31,6 +31,8 @@
 
 namespace WebDAV
 {
+    using Urn::Path;
+
 	using progress_funptr = int(*)(void *context, size_t dltotal, size_t dlnow, size_t ultotal, size_t ulnow);
 
 	auto inline get(const dict_t& options, const std::string&& name) -> std::string
@@ -164,7 +166,7 @@ namespace WebDAV
 		bool is_existed = this->check(remote_file);
 		if (!is_existed) return false;
 
-		auto root_urn = Urn(this->webdav_root, true);
+		auto root_urn = Path(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
 
 		std::ofstream file_stream(local_file, std::ios::binary);
@@ -201,7 +203,7 @@ namespace WebDAV
 		bool is_existed = this->check(remote_file);
 		if (!is_existed) return false;
 
-		auto root_urn = Urn(this->webdav_root, true);
+		auto root_urn = Path(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
 
 		Data data = { 0, 0, 0 };
@@ -240,7 +242,7 @@ namespace WebDAV
 		bool is_existed = this->check(remote_file);
 		if (!is_existed) return false;
 
-		auto root_urn = Urn(this->webdav_root, true);
+		auto root_urn = Path(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
 
 		Request request(this->options());
@@ -275,7 +277,7 @@ namespace WebDAV
 		bool is_existed = FileInfo::exists(local_file);
 		if (!is_existed) return false;
 
-		auto root_urn = Urn(this->webdav_root, true);
+		auto root_urn = Path(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
 
 		std::ifstream file_stream(local_file, std::ios::binary);
@@ -315,7 +317,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		auto root_urn = Urn(this->webdav_root, true);
+		auto root_urn = Path(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
 
 		Data data = { buffer, 0, buffer_size };
@@ -353,7 +355,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		auto root_urn = Urn(this->webdav_root, true);
+		auto root_urn = Path(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
 
 		Request request(this->options());
@@ -449,7 +451,7 @@ namespace WebDAV
 		Client::check(const std::string& remote_resource) const noexcept
 	{
 		auto clientImpl = GetImpl(this);
-		auto root_urn = Urn(clientImpl->webdav_root, true);
+		auto root_urn = Path(clientImpl->webdav_root, true);
 		auto resource_urn = root_urn + remote_resource;
 
 		Header header = {
@@ -476,7 +478,7 @@ namespace WebDAV
 		Client::info(const std::string& remote_resource) const noexcept
 	{
 		auto clientImpl = GetImpl(this);
-		auto root_urn = Urn(clientImpl->webdav_root, true);
+		auto root_urn = Path(clientImpl->webdav_root, true);
 		auto target_urn = root_urn + remote_resource;
 
 		Header header = {
@@ -554,8 +556,8 @@ namespace WebDAV
 
 		bool is_directory = this->is_dir(remote_directory);
 		if (!is_directory) return strings_t();
-		auto target_urn = Urn(clientImpl->webdav_root, true) + remote_directory;
-		target_urn = Urn(target_urn.path(), true);
+		auto target_urn = Path(clientImpl->webdav_root, true) + remote_directory;
+		target_urn = Path(target_urn.path(), true);
 
 		Header header = {
 			"Accept: */*",
@@ -591,8 +593,8 @@ namespace WebDAV
 			std::string encode_file_name = href.first_child().value();
 			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
 			auto target_path = target_urn.path();
-			if (resource_path == target_path) continue;
-			Urn resource_urn(resource_path);
+			Path resource_urn(resource_path);
+            if (resource_urn == target_urn) continue;
 			resources.push_back(resource_urn.name());
 		}
 
@@ -653,10 +655,10 @@ namespace WebDAV
 		if (is_existed) return true;
 
 		bool resource_is_dir = true;
-		Urn directory_urn(remote_directory, resource_is_dir);
+		Path directory_urn(remote_directory, resource_is_dir);
 
 		if (recursive) {
-			auto remote_parent_directory = directory_urn.parent();
+			auto remote_parent_directory = directory_urn.parent().path();
 			bool is_created = this->create_directory(remote_parent_directory, true);
 			if (!is_created) return false;
 		}
@@ -666,8 +668,8 @@ namespace WebDAV
 			"Connection: Keep-Alive"
 		};
 
-		auto target_urn = Urn(clientImpl->webdav_root, true) + remote_directory;
-		target_urn = Urn(target_urn.path(), true);
+		auto target_urn = Path(clientImpl->webdav_root, true) + remote_directory;
+		target_urn = Path(target_urn.path(), true);
 
 		Request request(clientImpl->options());
 
@@ -687,7 +689,7 @@ namespace WebDAV
 		bool is_existed = this->check(remote_source_resource);
 		if (!is_existed) return false;
 
-		Urn root_urn(clientImpl->webdav_root, true);
+		Path root_urn(clientImpl->webdav_root, true);
 
 		auto source_resource_urn = root_urn + remote_source_resource;
 		auto destination_resource_urn = root_urn + remote_destination_resource;
@@ -715,7 +717,7 @@ namespace WebDAV
 		bool is_existed = this->check(remote_source_resource);
 		if (!is_existed) return false;
 
-		Urn root_urn(clientImpl->webdav_root, true);
+		Path root_urn(clientImpl->webdav_root, true);
 
 		auto source_resource_urn = root_urn + remote_source_resource;
 		auto destination_resource_urn = root_urn + remote_destination_resource;
@@ -790,7 +792,7 @@ namespace WebDAV
 		bool is_existed = this->check(remote_resource);
 		if (!is_existed) return true;
 
-		auto root_urn = Urn(clientImpl->webdav_root, true);
+		auto root_urn = Path(clientImpl->webdav_root, true);
 		auto resource_urn = root_urn + remote_resource;
 
 		Header header = {

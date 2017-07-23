@@ -35,6 +35,7 @@ namespace WebDAV
         void * handle;
 
         Header(const std::initializer_list<std::string>& init_list) noexcept;
+
         ~Header();
 
         void append(const std::string& item) noexcept;

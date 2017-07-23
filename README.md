@@ -1,8 +1,8 @@
 WebDAV Client
 ===
-[![version](https://img.shields.io/badge/version-1.0.1-brightgreen.svg)](https://github.com/designerror/webdav-client-cpp/releases/tag/v1.0.1)
+[![version](https://img.shields.io/badge/version-1.0.2-brightgreen.svg)](https://github.com/designerror/webdav-client-cpp/releases/tag/v1.0.2)
 [![Gitter](https://badges.gitter.im/designerror/webdav-client-cpp.svg)](https://gitter.im/designerror/webdav-client-cpp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Build Status](https://travis-ci.org/designerror/webdav-client-cpp.svg?branch=v0.9.9)](https://travis-ci.org/designerror/webdav-client-cpp)
+[![Build Status](https://travis-ci.org/designerror/webdav-client-cpp.svg?branch=master)](https://travis-ci.org/designerror/webdav-client-cpp)
 [![Build status](https://ci.appveyor.com/api/projects/status/l0nwebsyxwcc3lcs?svg=true)](https://ci.appveyor.com/project/designerror/webdav-client-cpp)
 
 Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-servers:
@@ -14,47 +14,25 @@ Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-ser
  - 4shared
  - ...
 
-Requirements
-===
-
- - [curl](https://github.com/curl/curl) `>= 7.38.0`
- - [openssl](https://github.com/openssl/openssl) `>= 1.0.1f`
- - [pugixml](https://github.com/zeux/pugixml) `>= 1.0.0`
-
 Install
 ===
 
-For `Windows` see `INSTALL.WIN.md` file.
-
-**Building requirements**
-
-For `*-nix` or `macOS` you can build the requirements with package manager or from sources.
-
-If you want to build the requirements from sources then see `INSTALL.UNIX.md` and `INSTALL.macOS.md` respectively.
-
-If you want to use package manager then input:
-
-```bash
-# Debian or Ubuntu
-$ sudo apt-get install libssl-dev libcurl4-openssl-dev libpugixml-dev
-
-# Fedora
-$ sudo dnf install openssl-devel curl-devel pugixml-devel
-
-# macOS
-$ brew install curl pugixml
+```ShellSession
+# via brew or homebrew
+$ brew install wdc
 ```
 
-**Building WebDAV Client**
+Build
+===
+
+**Building WebDAV Client from sources**
 
 ```bash
 $ git clone https://github.com/designerror/webdav-client-cpp
 $ cd webdav-client-cpp
-$ mkdir build && cd build
-# The next line is needed for building on macOS
-$ export OPENSSL_ROOT_DIR=/usr/local/opt/openssl/
-$ cmake .. && make
-$ make install
+$ cmake -H. -B_builds # -DCMAKE_INSTALL_PREFIX=install
+$ cmake --build _builds
+$ cmake --build _builds --target install
 ```
 
 Documentation
@@ -63,7 +41,7 @@ Documentation
 ```bash
 $ cd docs
 $ doxygen doxygen.conf
-$ firefox html/index.html
+$ open html/index.html
 ```
 
 Usage examples
@@ -131,24 +109,3 @@ int main()
   client->async_download("/path/to/remote/file", "/path/to/local/file");
 }
 ```
-
-Soon
-===
-```bash
-# via apt
-$ sudo apt install libwdc-dev
-
-# via dnf
-$ sudo dnf install wdc-devel
-
-# via yum
-$ yum install wdc
-```
-
-Until
-===
-```bash
-# via homebrew or linuxbrew
-$ brew install wdc
-```
-

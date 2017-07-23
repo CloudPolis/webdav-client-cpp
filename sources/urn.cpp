@@ -21,124 +21,175 @@
 ############################################################################*/
 
 #include <algorithm>
+#include <string>
 #include <vector>
 #include <curl/curl.h>
+
+using std::string;
+using std::vector;
 
 #include "urn.hpp"
 
 namespace WebDAV {
 
-	const std::string Urn::separate = "/";
+    namespace Urn {
 
-	Urn::Urn(std::string path, bool directory) {
-		if (path.empty()) path = Urn::separate;
-		auto first_position = path.find(Urn::separate);
-		if (first_position != 0) path = Urn::separate + path;
-		auto last_symbol_index = path.length() - 1;
-		auto last_symbol = std::string{path[last_symbol_index]};
-		auto is_dir = Urn::separate.compare(last_symbol) == 0;
-		if (directory && !is_dir) path += Urn::separate;
-		m_path = path;
+        const string Path::separate = "/";
+        const string Path::root = "/";
 
-		auto double_separte = Urn::separate + Urn::separate;
-		bool isFind = false;
-		do {
-			auto first_position = m_path.find(double_separte);
-			isFind = first_position != std::string::npos;
-			if (isFind) m_path.replace(first_position, double_separte.size(), Urn::separate);
-		} while (isFind);
-	}
+        Path::Path(const string& path_, bool force_dir) {
 
-	Urn::Urn(std::nullptr_t) {
-		m_path = nullptr;
-	}
+            string path = path_;
+            if (path_.empty()) path = Path::root;
+            auto first_position = path.find(Path::separate);
+            if (first_position != 0) path = Path::root + path;
+            auto last_symbol_index = path.length() - 1;
+            auto last_symbol = string{ path[last_symbol_index] };
+            auto is_dir = Path::separate.compare(last_symbol) == 0;
+            if (force_dir && !is_dir) path += Path::separate;
+            m_path = path;
 
-	std::string Urn::path() {
-		return m_path;
-	}
+            auto double_separte = Path::separate + Path::separate;
+            bool is_find = false;
+            do {
+                auto first_position = m_path.find(double_separte);
+                is_find = first_position != string::npos;
+                if (is_find) {
+                    m_path.replace(first_position, double_separte.size(), Path::separate);
+                }
+            } while (is_find);
+        }
 
-	std::string escape(void *request, std::string& name) {
-		
-		std::string path = curl_easy_escape(request, name.c_str(), (int)name.length());
-		return path;
-	}
+        Path::Path(std::nullptr_t) {
+            m_path = nullptr;
+        }
 
-	std::vector<std::string> split(const std::string& text, const std::string& delims)
-	{
-		std::vector<std::string> tokens;
-		std::size_t start = text.find_first_not_of(delims), end = 0;
+        auto Path::path() const -> string {
+            return m_path;
+        }
 
-		while ((end = text.find_first_of(delims, start)) != std::string::npos)
-		{
-			tokens.push_back(text.substr(start, end - start));
-			start = text.find_first_not_of(delims, end);
-		}
-		if (start != std::string::npos)
-			tokens.push_back(text.substr(start));
+        auto escape(void * request, const string& name) -> string {
+            
+            string path = curl_easy_escape(request, name.c_str(), (int)name.length());
+            return path;
+        }
 
-		return tokens;
-	}
+        auto split(const string& text, const string& delims) -> vector<string> {
 
-	std::string Urn::quote(void *request) {
-		if (this->is_root()) return m_path;
-		auto names = split(m_path, Urn::separate);
-		std::string quote_path;
-		std::for_each(names.begin(), names.end(), [&quote_path, request](std::string& name) {
-			auto escape_name = escape(request, name);
-			quote_path.append(Urn::separate);
-			quote_path.append(escape_name);
-		});
-		if (is_directory()) quote_path.append(Urn::separate);
-		return quote_path;
-	}
+            vector<string> tokens;
+            std::size_t start = text.find_first_not_of(delims), end = 0;
 
-	std::string Urn::name() {
-		auto path = this->path();
-		auto is_root = Urn::separate.compare(path) == 0;
-		if (is_root) return std::string{""};
+            while ((end = text.find_first_of(delims, start)) != string::npos)
+            {
+                tokens.push_back(text.substr(start, end - start));
+                start = text.find_first_not_of(delims, end);
+            }
+            if (start != string::npos)
+                tokens.push_back(text.substr(start));
 
-		if (this->is_directory())
-		{
-			auto path_without_slash = path.substr(0, path.length() - 1);
-			auto pre_last_separate_position = path_without_slash.rfind(Urn::separate);
-			auto name = path.substr(pre_last_separate_position + 1);
-			return name;
-		}
-		else
-		{
-			auto last_separate_position = path.rfind(Urn::separate);
-			auto name = path.substr(last_separate_position + 1);
-			return name;
-		}
-	}
+            return tokens;
+        }
 
-	std::string Urn::parent() {
-		if (this->is_root()) return m_path;
+        auto Path::quote(void *request) const -> string {
 
-		auto last_separate_position = m_path.rfind(Urn::separate);
-		if (last_separate_position == 0) return Urn::separate;
+            if (this->is_root()) return m_path;
 
-		auto parent = m_path.substr(0, last_separate_position + 1);
-		return parent;
-	}
+            auto names = split(m_path, Path::separate);
+            std::string quote_path;
 
-	bool Urn::is_directory() {
-		auto path = this->path();
-		auto last_symbol_index = path.length() - 1;
-		auto last_symbol = std::string{path[last_symbol_index]};
-		auto is_equal = Urn::separate.compare(last_symbol) == 0;
-		return is_equal;
-	}
+            std::for_each(names.begin(), names.end(), [&quote_path, request](string& name) {
+                auto escape_name = escape(request, name);
+                quote_path.append(Path::separate);
+                quote_path.append(escape_name);
+            });
 
-	bool Urn::is_root() {
-		return Urn::separate.compare(m_path) == 0;
-	}
+            if (is_directory()) {
+                quote_path.append(Path::separate);
+            }
+            return quote_path;
+        }
 
-	Urn Urn::operator+(std::string resource_path) {
-		bool is_directory = this->is_directory();
-		if (!is_directory) return *this;
-		auto directory_path = this->path();
-		resource_path = directory_path + resource_path;
-		return Urn(resource_path);
-	}
+        auto Path::name() const -> string {
+
+            auto path = this->path();
+            auto is_root = Path::separate.compare(path) == 0;
+            if (is_root) return string{""};
+
+            if (this->is_directory()) {
+
+                auto path_without_slash = path.substr(0, path.length() - 1);
+                auto pre_last_separate_position = path_without_slash.rfind(Path::separate);
+                auto name = path.substr(pre_last_separate_position + 1);
+                return name;
+            }
+            else {
+
+                auto last_separate_position = path.rfind(Path::separate);
+                auto name = path.substr(last_separate_position + 1);
+                return name;
+            }
+        }
+
+        auto Path::parent() const -> Path {
+
+            if (this->is_root()) return m_path;
+
+            auto last_separate_position = m_path.rfind(Path::separate);
+            if (last_separate_position == 0) return Path::separate;
+
+            auto parent = m_path.substr(0, last_separate_position + 1);
+            return parent;
+        }
+
+        auto Path::is_directory() const -> bool {
+
+            auto path = this->path();
+            auto last_symbol_index = path.length() - 1;
+            auto last_symbol = std::string{path[last_symbol_index]};
+            auto is_equal = Path::separate.compare(last_symbol) == 0;
+            return is_equal;
+        }
+
+        auto Path::is_root() const -> bool {
+            return Path::separate.compare(m_path) == 0;
+        }
+
+        auto Path::operator+(const string& resource_path) const -> Path {
+
+            return Path{ m_path + resource_path };
+        }
+
+        auto Path::operator==(const Path& rhs) const -> bool {
+           
+            if (this->is_root()) {
+                if (rhs.is_root()) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else if (rhs.is_root()) {
+                return false;
+            }
+
+            string lhs_path;
+            bool is_dir = is_directory();
+            if (is_dir) {
+                lhs_path = m_path.substr(0, m_path.length()-1);
+            }
+            else {
+                lhs_path = m_path;
+            }
+            string rhs_path;
+            if (rhs.is_directory()) {
+                rhs_path = rhs.path();
+                rhs_path = rhs_path.substr(0, rhs_path.length()-1);
+            }
+            else {
+                rhs_path = rhs.path();
+            }
+            return lhs_path == rhs_path;
+        }
+    }
 }
