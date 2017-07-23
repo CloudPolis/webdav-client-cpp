@@ -436,11 +436,11 @@ namespace WebDAV
 
 		document.load_buffer(data.buffer, (size_t)data.size);
 
-		pugi::xml_node multistatus = document.select_single_node("d:multistatus").node();
-		pugi::xml_node response = multistatus.select_single_node("d:response").node();
-		pugi::xml_node propstat = response.select_single_node("d:propstat").node();
-		prop = propstat.select_single_node("d:prop").node();
-		pugi::xml_node quota_available_bytes = prop.select_single_node("d:quota-available-bytes").node();
+		pugi::xml_node multistatus = document.select_single_node("*[local-name()='multistatus']").node();
+		pugi::xml_node response = multistatus.select_single_node("*[local-name()='response']").node();
+		pugi::xml_node propstat = response.select_single_node("*[local-name()='propstat']").node();
+		prop = propstat.select_single_node("*[local-name()='prop']").node();
+		pugi::xml_node quota_available_bytes = prop.select_single_node("*[local-name()='quota-available-bytes']").node();
 		std::string free_size_text = quota_available_bytes.first_child().value();
 
 		auto free_size = atol(free_size_text.c_str());
@@ -504,24 +504,24 @@ namespace WebDAV
 
 		pugi::xml_document document;
 		document.load_buffer(data.buffer, (size_t)data.size);
-		auto multistatus = document.select_single_node("d:multistatus").node();
-		auto responses = multistatus.select_nodes("d:response");
+		auto multistatus = document.select_single_node("*[local-name()='multistatus']").node();
+		auto responses = multistatus.select_nodes("*[local-name()='response']");
 		for (auto response : responses)
 		{
-			pugi::xml_node href = response.node().select_single_node("d:href").node();
+			pugi::xml_node href = response.node().select_single_node("*[local-name()='href']").node();
 			std::string encode_file_name = href.first_child().value();
 			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
 			auto target_path = target_urn.path();
 			auto target_path_without_sep = std::string(target_path, 0, target_path.rfind("/") + 1);
 			auto resource_path_without_sep = std::string(resource_path, 0, resource_path.rfind("/") + 1);
 			if (resource_path_without_sep.compare(target_path_without_sep) == 0) {
-				auto propstat = response.node().select_single_node("d:propstat").node();
-				auto prop = propstat.select_single_node("d:prop").node();
-				auto creation_date = prop.select_single_node("d:creationdate").node();
-				auto display_name = prop.select_single_node("d:displayname").node();
-				auto content_length = prop.select_single_node("d:getcontentlength").node();
-				auto modified_date = prop.select_single_node("d:getlastmodified").node();
-				auto resource_type = prop.select_single_node("d:resourcetype").node();
+				auto propstat = response.node().select_single_node("*[local-name()='propstat']").node();
+				auto prop = propstat.select_single_node("*[local-name()='prop']").node();
+				auto creation_date = prop.select_single_node("*[local-name()='creationdate']").node();
+				auto display_name = prop.select_single_node("*[local-name()='displayname']").node();
+				auto content_length = prop.select_single_node("*[local-name()='getcontentlength']").node();
+				auto modified_date = prop.select_single_node("*[local-name()='getlastmodified']").node();
+				auto resource_type = prop.select_single_node("*[local-name()='resourcetype']").node();
 
 				dict_t information = {
 					{ "created", creation_date.first_child().value() },
@@ -585,11 +585,11 @@ namespace WebDAV
 
 		pugi::xml_document document;
 		document.load_buffer(data.buffer, (size_t)data.size);
-		auto multistatus = document.select_single_node("d:multistatus").node();
-		auto responses = multistatus.select_nodes("d:response");
+		auto multistatus = document.select_single_node("*[local-name()='multistatus']").node();
+		auto responses = multistatus.select_nodes("*[local-name()='response']");
 		for (auto response : responses)
 		{
-			pugi::xml_node href = response.node().select_single_node("d:href").node();
+			pugi::xml_node href = response.node().select_single_node("*[local-name()='href']").node();
 			std::string encode_file_name = href.first_child().value();
 			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
 			auto target_path = target_urn.path();
