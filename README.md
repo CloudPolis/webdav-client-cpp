@@ -69,20 +69,20 @@ int main()
   
 	auto check_connection = client->check();
 	std::cout   << "test connection with WebDAV drive is " 
-                << (check_connection ? "" : "not ")
-                << "successful"<< std::endl;
+                    << (check_connection ? "" : "not ")
+                    << "successful"<< std::endl;
   
 	auto is_directory = client->is_dir("/path/to/remote/resource");
 	std::cout   << "remote resource is " 
-                << (is_directory ? "" : "not ") 
-                << "directory" << std::endl;
+                    << (is_directory ? "" : "not ") 
+                    << "directory" << std::endl;
   
   	client->create_directory("/path/to/remote/directory/");
   	client->clean("/path/to/remote/directory/");
   
   	std::cout   << "On WebDAV-disk available free space: " 
-                << client->free_size() 
-                << std::endl;
+                    << client->free_size() 
+                    << std::endl;
   
 	std::cout << "remote_directory_name";
 	for(auto& resource_name : client->list("/path/to/remote/directory/")) {
