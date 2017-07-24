@@ -28,7 +28,7 @@ matrix:
           env: COMPILER="clang++-3.6"
 
 script:
-- cmake -H. -B_builds -DBUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=install
+- cmake -H. -B_builds -DBUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=Release
 - cmake --build _builds
 - cmake --build _builds --target test -- ARGS=--verbose
 - cmake --build _builds --target install
