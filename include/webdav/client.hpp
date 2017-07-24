@@ -168,7 +168,7 @@ namespace WebDAV
 		auto download_to(
 			const std::string& remote_file,
 			char * & buffer_ptr, 
-			unsigned long long int & buffer_size, 
+			unsigned long long & buffer_size, 
 			progress_t progress = nullptr
 		) const noexcept -> bool;
 
@@ -224,7 +224,7 @@ namespace WebDAV
 		auto upload_from(
 			const std::string& remote_file, 
 			char * buffer_ptr, 
-			unsigned long long int buffer_size, 
+			unsigned long long buffer_size, 
 			progress_t progress = nullptr
 		) const noexcept -> bool;
 

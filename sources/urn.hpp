@@ -22,14 +22,14 @@
 
 #ifndef WEBDAV_URN_H
 #define WEBDAV_URN_H
-#pragma once
 
+#include <iostream>
 #include <string>
 using std::string;
 
 namespace WebDAV
 {
-    namespace Urn {    
+    namespace Urn {
 
         class Path {
 
@@ -61,8 +61,9 @@ namespace WebDAV
 
             auto operator==(const Path& rhs) const -> bool;
         };
-
     }
 }
+
+auto operator<<(std::ostream& stream, const WebDAV::Urn::Path& path) -> std::ostream&;
 
 #endif

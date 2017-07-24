@@ -45,7 +45,7 @@ int main() {
 
     for (auto remote_resource : remote_resources) {
         bool is_clean = client->clean(remote_resource);
-        std::cout << "Resource: " << remote_resource << " is " << is_clean ? "" : "not " << "clean" << std::endl;
+        std::cout << "Resource: " << remote_resource << " is " << (is_clean ? "" : "not ") << "clean" << std::endl;
     }
 }
 
