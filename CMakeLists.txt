@@ -40,6 +40,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_EXAMPLES "Build Examples" OFF)
 option(BUILD_PKGCONFIG "Build in PKGCONFIG mode" OFF)
 
 hunter_add_package(OpenSSL)
@@ -82,6 +83,20 @@ if(BUILD_TESTS)
 	add_executable(check ${${PROJECT_NAME}_TEST_SOURCES})
 	target_link_libraries(check ${PROJECT_NAME} ${DEPENDS_LIBRARIES})
 	add_test(NAME check COMMAND check "-s" "-r" "compact" "--use-colour" "yes") 
+endif()
+
+if(BUILD_EXAMPLES)
+    file(GLOB EXAMPLE_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/examples/*/*.cpp")
+    foreach(EXAMPLE_SOURCE ${EXAMPLE_SOURCES})
+        get_filename_component(EXAMPLE_NAME ${EXAMPLE_SOURCE} NAME_WE)
+        set(EXAMPLE_TARGET_NAME example_${EXAMPLE_NAME})
+        add_executable(${EXAMPLE_TARGET_NAME} ${EXAMPLE_SOURCE})
+        target_link_libraries(${EXAMPLE_TARGET_NAME} ${PROJECT_NAME})
+        set_target_properties(${EXAMPLE_TARGET_NAME} PROPERTIES OUTPUT_NAME ${EXAMPLE_NAME})
+        install(TARGETS ${EXAMPLE_TARGET_NAME}
+                RUNTIME DESTINATION bin
+                )
+    endforeach(EXAMPLE_SOURCE ${EXAMPLE_SOURCES})
 endif()
 
 include(CPackConfig.cmake)

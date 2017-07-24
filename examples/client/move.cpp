@@ -22,14 +22,15 @@
 
 #include <webdav/client.hpp>
 
-std::ostream resources_to_string(std::vector<std::string> & resources)
-{
-    std::ostream stream;
+#include <sstream>
+
+std::string resources_to_string(const std::vector<std::string> & resources) {
+    std::stringstream stream;
     for (auto resource : resources)
     {
         stream << "\t" << "- " << resource << std::endl;
     }
-    return stream;
+    return stream.str();
 }
 
 int main() {
@@ -55,7 +56,7 @@ int main() {
     client->move(remote_file, new_remote_file);
     client->move(remote_directory, new_remote_directory);
 
-    resources = client.list();
+    resources = client->list();
     std::cout << "\"/\" resource contain:" << std::endl;
     std::cout << resources_to_string(resources) << std::endl;
 }

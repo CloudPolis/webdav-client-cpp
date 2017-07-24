@@ -193,3 +193,7 @@ namespace WebDAV {
         }
     }
 }
+
+auto operator<<(std::ostream& stream, const WebDAV::Urn::Path& path) -> std::ostream& {
+    return stream << path.path();
+}

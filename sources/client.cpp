@@ -180,6 +180,9 @@ namespace WebDAV
 		request.set(CURLOPT_HEADER, 0L);
 		request.set(CURLOPT_WRITEDATA, (size_t)&file_stream);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Write::stream);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 		if (progress != nullptr) {
 			request.set(CURLOPT_XFERINFOFUNCTION, (size_t)progress.target<progress_funptr>());
 			request.set(CURLOPT_NOPROGRESS, 0L);
@@ -217,6 +220,9 @@ namespace WebDAV
 		request.set(CURLOPT_HEADER, 0L);
 		request.set(CURLOPT_WRITEDATA, (size_t)&data);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 		if (progress != nullptr) {
 			request.set(CURLOPT_XFERINFOFUNCTION, (size_t)progress.target<progress_funptr>());
 			request.set(CURLOPT_NOPROGRESS, 0L);
@@ -254,6 +260,9 @@ namespace WebDAV
 		request.set(CURLOPT_HEADER, 0L);
 		request.set(CURLOPT_WRITEDATA, (size_t)&stream);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Write::stream);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 		if (progress != nullptr) {
 			request.set(CURLOPT_XFERINFOFUNCTION, (size_t)progress.target<progress_funptr>());
 			request.set(CURLOPT_NOPROGRESS, 0L);
@@ -297,6 +306,9 @@ namespace WebDAV
 		request.set(CURLOPT_BUFFERSIZE, (long)Client::buffer_size);
 		request.set(CURLOPT_WRITEDATA, (size_t)&response);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 		if (progress != nullptr) {
 			request.set(CURLOPT_XFERINFOFUNCTION, (size_t)progress.target<progress_funptr>());
 			request.set(CURLOPT_NOPROGRESS, 0L);
@@ -336,6 +348,9 @@ namespace WebDAV
 		request.set(CURLOPT_BUFFERSIZE, (long)Client::buffer_size);
 		request.set(CURLOPT_WRITEDATA, (size_t)&response);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 		if (progress != nullptr) {
 			request.set(CURLOPT_XFERINFOFUNCTION, (size_t)progress.target<progress_funptr>());
 			request.set(CURLOPT_NOPROGRESS, 0L);
@@ -375,6 +390,9 @@ namespace WebDAV
 		request.set(CURLOPT_BUFFERSIZE, (long)Client::buffer_size);
 		request.set(CURLOPT_WRITEDATA, (size_t)&response);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 		if (progress != nullptr) {
 			request.set(CURLOPT_XFERINFOFUNCTION, (size_t)progress.target<progress_funptr>());
 			request.set(CURLOPT_NOPROGRESS, 0L);
@@ -430,6 +448,9 @@ namespace WebDAV
 		request.set(CURLOPT_HEADER, 0);
 		request.set(CURLOPT_WRITEDATA, (size_t)&data);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 
 		auto is_performed = request.perform();
 		if (!is_performed) return 0;
@@ -470,6 +491,9 @@ namespace WebDAV
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
 		request.set(CURLOPT_WRITEDATA, (size_t)&data);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 
 		return request.perform();
 	}
@@ -497,13 +521,18 @@ namespace WebDAV
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
 		request.set(CURLOPT_WRITEDATA, (size_t)&data);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
-
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 		bool is_performed = request.perform();
 
 		if (!is_performed) return dict_t();
 
 		pugi::xml_document document;
 		document.load_buffer(data.buffer, (size_t)data.size);
+#ifndef NDEBUG
+		document.save(std::cout);
+#endif
 		auto multistatus = document.select_single_node("*[local-name()='multistatus']").node();
 		auto responses = multistatus.select_nodes("*[local-name()='response']");
 		for (auto response : responses)
@@ -544,6 +573,7 @@ namespace WebDAV
 		auto information = this->info(remote_resource);
 		auto resource_type = information["type"];
 		bool is_directory = resource_type.compare("d:collection") == 0;
+		is_directory |= resource_type.compare("D:collection") == 0;
 		return is_directory;
 	}
 
@@ -576,6 +606,9 @@ namespace WebDAV
 		request.set(CURLOPT_HEADER, 0);
 		request.set(CURLOPT_WRITEDATA, (size_t)&data);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 
 		bool is_performed = request.perform();
 
@@ -678,6 +711,9 @@ namespace WebDAV
 		request.set(CURLOPT_CUSTOMREQUEST, "MKCOL");
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 
 		return request.perform();
 	}
@@ -706,6 +742,9 @@ namespace WebDAV
 		request.set(CURLOPT_CUSTOMREQUEST, "MOVE");
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 
 		return request.perform();
 	}
@@ -734,6 +773,9 @@ namespace WebDAV
 		request.set(CURLOPT_CUSTOMREQUEST, "COPY");
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 
 		return request.perform();
 	}
@@ -807,6 +849,9 @@ namespace WebDAV
 		request.set(CURLOPT_CUSTOMREQUEST, "DELETE");
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
+#ifndef NDEBUG
+		request.set(CURLOPT_VERBOSE, 1);
+#endif
 
 		return request.perform();
 	}

@@ -22,6 +22,8 @@
 
 #include <webdav/client.hpp>
 
+#include <sstream>
+
 std::map<std::string, std::string> base_options =
         {
                 { "webdav_hostname", "https://webdav.yandex.ru" },
@@ -48,14 +50,13 @@ std::map<std::string, std::string> options_with_cert =
                 { "key_path", "/etc/ssl/private/client.key" }
         };
 
-std::ostream options_to_string(std::map<std::string, std::string> & options)
-{
-    std::ostream stream;
+std::string options_to_string(const std::map<std::string, std::string> & options) {
+    std::stringstream stream;
     for (auto option :options)
     {
         stream << "\t" << option.first << ": " << option.second << std::endl;
     }
-    return stream;
+    return stream.str();
 }
 
 int main() {
@@ -71,8 +72,8 @@ int main() {
         bool is_connected = client->check();
         std::cout << "Client with options: " << std::endl;
         std::cout << options_to_string(options);
-        std::cout << " is " << is_connected ? " " : "not " << "connected" << std::endl;
-        std::cout << endl;
+        std::cout << " is " << (is_connected ? " " : "not ") << "connected" << std::endl;
+        std::cout << std::endl;
     }
 }
 

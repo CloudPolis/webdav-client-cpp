@@ -22,26 +22,40 @@
 
 #include <webdav/client.hpp>
 
-std::ostream info_to_string(std::map<std::string, std::string> & info)
-{
-    std::ostream stream;
-    for (auto option :info)
-    {
+#include <sstream>
+
+std::string info_to_string(std::map<std::string, std::string> & info) {
+
+    std::stringstream stream;
+    for (auto& option : info){
         stream << "/t" << option.first << ": " << option.second << std::endl;
     }
-    return stream;
+    return stream.str();
 }
 
 int main() {
 
-    std::map<std::string, std::string> options =
-            {
-                    { "webdav_hostname", "https://webdav.yandex.ru" },
-                    { "webdav_login", "{webdav_login}" },
-                    { "webdav_password", "{webdav_password}" }
-            };
+    auto hostname_ptr = std::getenv("WEBDAV_HOSTNAME");
+    auto username_ptr = std::getenv("WEBDAV_USERNAME");
+    auto password_ptr = std::getenv("WEBDAV_PASSWORD");
+    auto root_ptr = std::getenv("WEBDAV_ROOT");
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    if (hostname_ptr == nullptr) return -1;
+    if (username_ptr == nullptr) return -1;
+    if (password_ptr == nullptr) return -1;
+
+    std::map<std::string, std::string> options =
+    {
+        { "webdav_hostname", hostname_ptr },
+        { "webdav_login", username_ptr },
+        { "webdav_password", password_ptr }
+    };
+
+    if (root_ptr != nullptr) {
+        options["webdav_root"] = root_ptr;
+    }
+
+    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
     auto remote_resources = {
             "existing_file.dat",
