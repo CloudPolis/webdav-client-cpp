@@ -33,7 +33,7 @@ install:
 - cd cmake-3.8.2
 - ./configure > /dev/null
 - make > /dev/null
-- sudo make install > /dev/null
+- make install > /dev/null
 
 script:
 - cmake -H. -B_builds -DBUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=Debug
