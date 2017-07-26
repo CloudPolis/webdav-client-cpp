@@ -1,9 +1,9 @@
 WebDAV Client
 ===
-[![version](https://img.shields.io/badge/version-1.0.2-brightgreen.svg)](https://github.com/designerror/webdav-client-cpp/releases/tag/v1.0.2)
+[![version](https://img.shields.io/badge/version-1.0.4-brightgreen.svg)](https://github.com/designerror/webdav-client-cpp/releases/tag/v1.0.4)
 [![Gitter](https://badges.gitter.im/designerror/webdav-client-cpp.svg)](https://gitter.im/designerror/webdav-client-cpp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Build Status](https://travis-ci.org/designerror/webdav-client-cpp.svg?branch=master)](https://travis-ci.org/designerror/webdav-client-cpp)
-[![Build status](https://ci.appveyor.com/api/projects/status/l0nwebsyxwcc3lcs?svg=true)](https://ci.appveyor.com/project/designerror/webdav-client-cpp)
+[![Build Status](https://travis-ci.org/CloudPolis/webdav-client-cpp.svg?branch=master)](https://travis-ci.org/CloudPolis/webdav-client-cpp)
+[![Build status](https://ci.appveyor.com/api/projects/status/cr2xwpwe3iiafbwg?svg=true)](https://ci.appveyor.com/project/rusdevops/webdav-client-cpp)
 
 Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-servers:
 
