@@ -81,7 +81,7 @@ namespace fixture
 
             std::map<std::string, std::string> options = {
                     {"webdav_hostname", hostname_ptr},
-                    {"webdav_login",    username_ptr},
+                    {"webdav_username",    username_ptr},
                     {"webdav_password", password_ptr}
             };
 
@@ -97,7 +97,7 @@ namespace fixture
                 options["proxy_hostname"] = proxy_hostname_ptr;
             }
             if (proxy_username_ptr != nullptr) {
-                options["proxy_login"] = proxy_username_ptr;
+                options["proxy_username"] = proxy_username_ptr;
             }
             if (proxy_password_ptr != nullptr && proxy_username_ptr != nullptr) {
                 options["proxy_password"] = proxy_password_ptr;

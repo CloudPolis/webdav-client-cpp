@@ -50,21 +50,18 @@ if(WDC_VERBOSE)
 endif()
 
 hunter_add_package(OpenSSL)
-hunter_add_package(CURL)
-hunter_add_package(pugixml)
-hunter_add_package(Boost COMPONENTS system filesystem)
-
 find_package(OpenSSL REQUIRED)
+hunter_add_package(CURL)
 find_package(CURL CONFIG REQUIRED)
+hunter_add_package(pugixml)
 find_package(pugixml CONFIG REQUIRED)
-find_package(Boost CONFIG REQUIRED system filesystem)
 
 file(GLOB ${PROJECT_NAME}_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/sources/*.cpp")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
 add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
 
-target_link_libraries(${PROJECT_NAME} OpenSSL::SSL OpenSSL::Crypto CURL::libcurl pugixml Boost::filesystem Boost::system)
+target_link_libraries(${PROJECT_NAME} OpenSSL::SSL OpenSSL::Crypto CURL::libcurl pugixml)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -86,10 +83,17 @@ if(BUILD_PKGCONFIG)
 endif()	       
 
 if(BUILD_TESTS)
+    hunter_add_package(Boost COMPONENTS system filesystem)
+    find_package(Boost CONFIG REQUIRED system filesystem)
+    hunter_add_package(Catch)
+    find_package(Catch CONFIG REQUIRED)
+
 	enable_testing()
+
 	file(GLOB ${PROJECT_NAME}_TEST_SOURCES tests/*.cpp)
 	add_executable(check ${${PROJECT_NAME}_TEST_SOURCES})
-	target_link_libraries(check ${PROJECT_NAME})
+	target_link_libraries(check ${PROJECT_NAME} Catch::Catch Boost::filesystem Boost::system)
+
 	add_test(NAME check COMMAND check "-s" "-r" "compact" "--use-colour" "yes") 
 endif()
 

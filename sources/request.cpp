@@ -35,11 +35,11 @@ namespace WebDAV
 	Request::Request(dict_t&& options_) : options(options_)
 	{
 		auto webdav_hostname = get(options, "webdav_hostname");
-		auto webdav_login = get(options, "webdav_login");
+		auto webdav_username = get(options, "webdav_username");
 		auto webdav_password = get(options, "webdav_password");
 
 		auto proxy_hostname = get(options, "proxy_hostname");
-		auto proxy_login = get(options, "proxy_login");
+		auto proxy_username = get(options, "proxy_username");
 		auto proxy_password = get(options, "proxy_password");
 
 		auto cert_path = get(options, "cert_path");
@@ -66,7 +66,7 @@ namespace WebDAV
 		
 		this->set(CURLOPT_URL, (char *)webdav_hostname.c_str());
 		this->set(CURLOPT_HTTPAUTH, (int)CURLAUTH_BASIC);
-		auto token = webdav_login + ":" + webdav_password;
+		auto token = webdav_username + ":" + webdav_password;
 		this->set(CURLOPT_USERPWD, (char *)token.c_str());
 
 		if (!this->proxy_enabled()) return;
@@ -74,15 +74,15 @@ namespace WebDAV
 		this->set(CURLOPT_PROXY, (char *)proxy_hostname.c_str());
 		this->set(CURLOPT_PROXYAUTH, (int)CURLAUTH_BASIC);
 
-		if (proxy_login.empty()) return;
+		if (proxy_username.empty()) return;
 
 		if (proxy_password.empty())
 		{
-			this->set(CURLOPT_PROXYUSERNAME, (char *)proxy_login.c_str());
+			this->set(CURLOPT_PROXYUSERNAME, (char *)proxy_username.c_str());
 		}
 		else
 		{
-			token = proxy_login + ":" + proxy_password;
+			token = proxy_username + ":" + proxy_password;
 			this->set(CURLOPT_PROXYUSERPWD, (char *)token.c_str());
 		}
 	}
@@ -107,13 +107,13 @@ namespace WebDAV
 	bool Request::proxy_enabled() const noexcept
 	{
 		auto proxy_hostname = get(options, "proxy_hostname");
-		auto proxy_login = get(options, "proxy_login");
+		auto proxy_username = get(options, "proxy_username");
 		auto proxy_password = get(options, "proxy_password");
 		bool proxy_hostname_presented = !proxy_hostname.empty();
 		if (!proxy_hostname_presented) return false;
-		bool proxy_login_presented = !proxy_login.empty();
+		bool proxy_username_presented = !proxy_username.empty();
 		bool proxy_password_presented = !proxy_password.empty();
-		if (proxy_password_presented && !proxy_login_presented) return false;
+		if (proxy_password_presented && !proxy_username_presented) return false;
 		return true;
 	}
 

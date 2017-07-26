@@ -56,10 +56,10 @@ namespace WebDAV
 		///
 		/// \param[in] webdav_hostname
 		/// \param[in] webdav_root
-		/// \param[in] webdav_login
+		/// \param[in] webdav_username
 		/// \param[in] webdav_password
 		/// \param[in] proxy_hostname
-		/// \param[in] proxy_login
+		/// \param[in] proxy_username
 		/// \param[in] proxy_password
 		/// \param[in] cert_path
 		/// \param[in] key_path

@@ -50,11 +50,11 @@ namespace WebDAV
 
 		std::string webdav_hostname;
 		std::string webdav_root;
-		std::string webdav_login;
+		std::string webdav_username;
 		std::string webdav_password;
 
 		std::string proxy_hostname;
-		std::string proxy_login;
+		std::string proxy_username;
 		std::string proxy_password;
 
 		std::string cert_path;
@@ -118,11 +118,11 @@ namespace WebDAV
 	{
 		this->webdav_hostname = get(options, "webdav_hostname");
 		this->webdav_root = get(options, "webdav_root");
-		this->webdav_login = get(options, "webdav_login");
+		this->webdav_username = get(options, "webdav_username");
 		this->webdav_password = get(options, "webdav_password");
 
 		this->proxy_hostname = get(options, "proxy_hostname");
-		this->proxy_login = get(options, "proxy_login");
+		this->proxy_username = get(options, "proxy_username");
 		this->proxy_password = get(options, "proxy_password");
 
 		this->cert_path = get(options, "cert_path");
@@ -144,10 +144,10 @@ namespace WebDAV
 		{
 			{ "webdav_hostname", this->webdav_hostname },
 			{ "webdav_root", this->webdav_root },
-			{ "webdav_login", this->webdav_login },
+			{ "webdav_username", this->webdav_username },
 			{ "webdav_password", this->webdav_password },
 			{ "proxy_hostname", this->proxy_hostname },
-			{ "proxy_login", this->proxy_login },
+			{ "proxy_username", this->proxy_username },
 			{ "proxy_password", this->proxy_password },
 			{ "cert_path", this->cert_path },
 			{ "key_path", this->key_path },

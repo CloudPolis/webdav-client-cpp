@@ -38,7 +38,7 @@ int main() {
     std::map<std::string, std::string> options =
             {
                     { "webdav_hostname", "https://webdav.yandex.ru" },
-                    { "webdav_login", "{webdav_login}" },
+                    { "webdav_username", "{webdav_username}" },
                     { "webdav_password", "{webdav_password}" }
             };
 

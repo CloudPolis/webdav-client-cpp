@@ -57,13 +57,13 @@ int main()
 	std::map<std::string, std::string> options =
 	{
 		{"webdav_hostname", "https://webdav.yandex.ru"},
-		{"webdav_login",    "webdav_login"},
+		{"webdav_username", "webdav_username"},
 		{"webdav_password", "webdav_password"}
 	};
 	// additional keys: 
 	// - webdav_root
 	// - cert_path, key_path
-	// - proxy_hostname, proxy_login, proxy_password
+	// - proxy_hostname, proxy_username, proxy_password
             
 	std::shared_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
   
