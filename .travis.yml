@@ -11,9 +11,9 @@ addons:
             - cmake-data
             - cmake
         sources:
+            - george-edison55-precise-backports
             - llvm-toolchain-trusty-3.6
             - ubuntu-toolchain-r-test
-            - george-edison55-precise-backports
 
 matrix:
     include:
