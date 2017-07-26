@@ -20,10 +20,10 @@
 #
 ############################################################################*/
 
-#include "catch.hpp"
+#include <catch.hpp>
+#include <webdav/client.hpp>
 #include "fixture.hpp"
 
-#include <webdav/client.hpp>
 
 SCENARIO("Client must clean an existing remote resources", "[clean]") {
 

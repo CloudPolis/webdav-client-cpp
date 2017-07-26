@@ -20,10 +20,9 @@
 #
 ############################################################################*/
 
-#include "catch.hpp"
-#include "fixture.hpp"
-
+#include <catch.hpp>
 #include <webdav/client.hpp>
+#include "fixture.hpp"
 
 SCENARIO("Client must list a remote files and a remote directories", "[list]") {
 

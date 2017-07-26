@@ -20,10 +20,9 @@
 #
 ############################################################################*/
 
-#include "catch.hpp"
-#include "fixture.hpp"
-
+#include <catch.hpp>
 #include <webdav/client.hpp>
+#include "fixture.hpp"
 
 SCENARIO("Client must check an existing remote resources", "[check]") {
 
