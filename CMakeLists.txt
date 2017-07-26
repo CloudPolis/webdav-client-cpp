@@ -26,14 +26,16 @@ include("cmake/HunterGate.cmake")
 HunterGate(
     URL "https://github.com/ruslo/hunter/archive/v0.19.45.tar.gz"
     SHA1 "56b690cd9bf54de1099727672b8525a4102f124f"
-    LOCAL
+	LOCAL # issue #29
 )
 
 project(wdc)
 
+include($ENV{POLLY_ROOT}/analyze.cmake OPTIONAL)
+
 set(WDC_VERSION_MAJOR 1)
 set(WDC_VERSION_MINOR 0)
-set(WDC_VERSION_PATCH 4)
+set(WDC_VERSION_PATCH 5)
 set(WDC_VERSION ${WDC_VERSION_MAJOR}.${WDC_VERSION_MINOR}.${WDC_VERSION_PATCH})
 
 set(CMAKE_CXX_STANDARD 11)

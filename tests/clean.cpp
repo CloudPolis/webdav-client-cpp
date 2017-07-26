@@ -171,6 +171,8 @@ SCENARIO("Client must clean a remote directory", "[clean]") {
 			REQUIRE(client->check(directory_name));
 
 			auto is_success = client->clean(directory_name);
+    
+            REQUIRE(is_success);
 
 			THEN("The directory is cleaning") {
 
