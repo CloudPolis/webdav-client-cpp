@@ -33,5 +33,7 @@ before_build:
 build_script:
 - cmake -H. -B_builds -DBUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=Release
 - cmake --build _builds
+- cmake --build _builds --target help
 - cmake --build _builds --target RUN_TESTS
 - cmake --build _builds --target install
+
