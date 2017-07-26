@@ -31,7 +31,7 @@ before_build:
     - call "%VSCOMNTOOLS%\..\..\VC\vcvarsall.bat" %VCVARS_PLATFORM%
 
 build_script:
-- cmake -H. -B_builds -DCMAKE_INSTALL_PREFIX=install
+- cmake -H. -B_builds -DBUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=Release
 - cmake --build _builds
 - cmake --build _builds --target RUN_TESTS
 - cmake --build _builds --target install
