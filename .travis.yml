@@ -28,12 +28,12 @@ matrix:
           env: COMPILER="clang++-3.6"
 
 install:
-- wget https://cmake.org/files/v3.8/cmake-3.8.2.tar.gz
-- tar xf cmake-3.8.2.tar.gz
-- cd cmake-3.8.2
-- ./configure > /dev/null
-- make > /dev/null
-- make install > /dev/null
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; 
+     wget https://cmake.org/files/v3.8/cmake-3.8.2-Linux-x86_64.sh;
+     chmod +x cmake-3.8.2-Linux-x86_64.sh;
+     ./cmake-3.8.2-Linux-x86_64.sh;
+  fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; brew install cmake; fi
 
 script:
 - cmake -H. -B_builds -DBUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=Debug
