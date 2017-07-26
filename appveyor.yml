@@ -1,10 +1,16 @@
 platform:
     - x86
     - x64
-
+    
 environment:
-    matrix:
-        - VSVER: 14
+  WEBDAV_HOSTNAME:
+    secure: qMCWqchDp72RftbP5uTufNPtD0/7Jla3VJ/Yx3Xuwyc=
+  WEBDAV_USERNAME:
+    secure: 4IlY8dVOhjsf+RWnameAyQ2ELLifB2T1agRXsJ08pGE=
+  WEBDAV_PASSWORD:
+    secure: 4Us1bf4SKdfTiKKp6TcBf4Mtw/aRVv6sTvGc0SpSNmU=
+build:
+  verbosity: minimal    
 
 configuration:
     - plain
