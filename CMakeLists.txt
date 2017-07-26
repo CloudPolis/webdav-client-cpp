@@ -24,15 +24,15 @@ cmake_minimum_required(VERSION 3.1)
 
 include("cmake/HunterGate.cmake")
 HunterGate(
-    URL "https://github.com/ruslo/hunter/archive/v0.19.39.tar.gz"
-    SHA1 "3973bc272a54ec30fe366dbbb793c840516733bc"
+    URL "https://github.com/ruslo/hunter/archive/v0.19.45.tar.gz"
+    SHA1 "56b690cd9bf54de1099727672b8525a4102f124f"
 )
 
 project(wdc)
 
 set(WDC_VERSION_MAJOR 1)
 set(WDC_VERSION_MINOR 0)
-set(WDC_VERSION_PATCH 3)
+set(WDC_VERSION_PATCH 4)
 set(WDC_VERSION ${WDC_VERSION_MAJOR}.${WDC_VERSION_MINOR}.${WDC_VERSION_PATCH})
 
 set(CMAKE_CXX_STANDARD 11)
