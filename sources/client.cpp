@@ -180,7 +180,7 @@ namespace WebDAV
 		request.set(CURLOPT_HEADER, 0L);
 		request.set(CURLOPT_WRITEDATA, (size_t)&file_stream);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Write::stream);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		if (progress != nullptr) {
@@ -220,7 +220,7 @@ namespace WebDAV
 		request.set(CURLOPT_HEADER, 0L);
 		request.set(CURLOPT_WRITEDATA, (size_t)&data);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		if (progress != nullptr) {
@@ -260,7 +260,7 @@ namespace WebDAV
 		request.set(CURLOPT_HEADER, 0L);
 		request.set(CURLOPT_WRITEDATA, (size_t)&stream);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Write::stream);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		if (progress != nullptr) {
@@ -306,7 +306,7 @@ namespace WebDAV
 		request.set(CURLOPT_BUFFERSIZE, (long)Client::buffer_size);
 		request.set(CURLOPT_WRITEDATA, (size_t)&response);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		if (progress != nullptr) {
@@ -348,7 +348,7 @@ namespace WebDAV
 		request.set(CURLOPT_BUFFERSIZE, (long)Client::buffer_size);
 		request.set(CURLOPT_WRITEDATA, (size_t)&response);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		if (progress != nullptr) {
@@ -390,7 +390,7 @@ namespace WebDAV
 		request.set(CURLOPT_BUFFERSIZE, (long)Client::buffer_size);
 		request.set(CURLOPT_WRITEDATA, (size_t)&response);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		if (progress != nullptr) {
@@ -448,7 +448,7 @@ namespace WebDAV
 		request.set(CURLOPT_HEADER, 0);
 		request.set(CURLOPT_WRITEDATA, (size_t)&data);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 
@@ -491,7 +491,7 @@ namespace WebDAV
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
 		request.set(CURLOPT_WRITEDATA, (size_t)&data);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 
@@ -521,7 +521,7 @@ namespace WebDAV
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
 		request.set(CURLOPT_WRITEDATA, (size_t)&data);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		bool is_performed = request.perform();
@@ -530,7 +530,7 @@ namespace WebDAV
 
 		pugi::xml_document document;
 		document.load_buffer(data.buffer, (size_t)data.size);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		document.save(std::cout);
 #endif
 		auto multistatus = document.select_single_node("*[local-name()='multistatus']").node();
@@ -606,7 +606,7 @@ namespace WebDAV
 		request.set(CURLOPT_HEADER, 0);
 		request.set(CURLOPT_WRITEDATA, (size_t)&data);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 
@@ -711,7 +711,7 @@ namespace WebDAV
 		request.set(CURLOPT_CUSTOMREQUEST, "MKCOL");
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 
@@ -742,7 +742,7 @@ namespace WebDAV
 		request.set(CURLOPT_CUSTOMREQUEST, "MOVE");
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 
@@ -773,7 +773,7 @@ namespace WebDAV
 		request.set(CURLOPT_CUSTOMREQUEST, "COPY");
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 
@@ -849,7 +849,7 @@ namespace WebDAV
 		request.set(CURLOPT_CUSTOMREQUEST, "DELETE");
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
-#ifndef NDEBUG
+#ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 

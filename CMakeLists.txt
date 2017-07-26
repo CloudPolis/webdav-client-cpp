@@ -43,6 +43,11 @@ option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_EXAMPLES "Build Examples" OFF)
 option(BUILD_PKGCONFIG "Build in PKGCONFIG mode" OFF)
 
+option(WDC_VERBOSE "Print verbose information" OFF)
+if(WDC_VERBOSE)
+    add_definitions(-DWDC_VERBOSE)
+endif()
+
 hunter_add_package(OpenSSL)
 hunter_add_package(CURL)
 hunter_add_package(pugixml)
