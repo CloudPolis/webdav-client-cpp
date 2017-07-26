@@ -11,7 +11,7 @@ addons:
             - cmake-data
             - cmake
         sources:
-            - george-edison55-precise-backports
+            - george-edison55/cmake-3.x
             - llvm-toolchain-trusty-3.6
             - ubuntu-toolchain-r-test
 
