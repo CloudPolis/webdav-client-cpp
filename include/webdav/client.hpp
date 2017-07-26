@@ -102,7 +102,7 @@ namespace WebDAV
 		/// Checks whether the resource directory
 		/// \param[in] remote_resource
 		///
-		auto is_dir(const std::string& remote_resource) const noexcept -> bool;
+		auto is_directory(const std::string& remote_resource) const noexcept -> bool;
 
 		///
 		/// List a remote directory

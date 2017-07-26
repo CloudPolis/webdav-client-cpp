@@ -20,19 +20,29 @@
 #
 ############################################################################*/
 
-#include "stdafx.h"
 #include "catch.hpp"
+#include "fixture.hpp"
+
+#include <webdav/client.hpp>
 
 SCENARIO("Client must clean an existing remote resources", "[clean]") {
+
+    auto options = fixture::get_options();
+    auto content = fixture::get_buff_content();
+    auto dirname = fixture::get_dir_name();
+    auto filename = fixture::get_file_name();
+
+    CAPTURE(dirname);
+    CAPTURE(filename);
 
 	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
 	GIVEN("An existing remote resource") {
 
-		std::string existing_file = "file.dat";
-		std::string existing_directory = "existing_directory/";
+		std::string existing_file = filename;
+		std::string existing_directory = dirname;
 
-		client->upload_from(existing_file, (char *)file_content.c_str(), file_content.length());
+		client->upload_from(existing_file, (char *)content.c_str(), content.length());
 		client->create_directory(existing_directory);
 
 		WHEN("Clean an existing remote file") {
@@ -64,6 +74,8 @@ SCENARIO("Client must clean an existing remote resources", "[clean]") {
 }
 
 SCENARIO("Client must clean not an existing remote resources", "[clean]") {
+
+    auto options = fixture::get_options();
 
 	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
@@ -102,16 +114,22 @@ SCENARIO("Client must clean not an existing remote resources", "[clean]") {
 
 SCENARIO("Client must clean not an empty remote directories", "[clean]") {
 
+    auto options = fixture::get_options();
+    auto content = fixture::get_buff_content();
+    auto dirname = fixture::get_dir_name();
+
+    CAPTURE(dirname);
+
 	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
 	GIVEN("Not an empty remote directory") {
 
-		std::string not_empty_directory = "not_empty_directory/";
-		std::string attached_file = "not_empty_directory/attached_file.dat";
-		std::string attached_directory = "not_empty_directory/attached_directory/";
+		std::string not_empty_directory = dirname;
+		std::string attached_file = not_empty_directory + "/" + "attached_file.dat";
+		std::string attached_directory = not_empty_directory + "/" + "attached_directory/";
 
 		client->create_directory(not_empty_directory);
-		client->upload_from(attached_file, (char *)file_content.c_str(), file_content.length());
+		client->upload_from(attached_file, (char *)content.c_str(), content.length());
 		client->create_directory(attached_directory);
 
 		WHEN("Clean not an empty directory") {
@@ -136,11 +154,16 @@ SCENARIO("Client must clean not an empty remote directories", "[clean]") {
 
 SCENARIO("Client must clean a remote directory", "[clean]") {
 
+    auto options = fixture::get_options();
+    auto dirname = fixture::get_dir_name();
+
+    CAPTURE(dirname);
+
 	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
 	GIVEN("An existing directory") {
 		
-		std::string directory_name = "directory";	
+		std::string directory_name = dirname;	
 		client->create_directory(directory_name);
 
 		WHEN("Clean directory by a name") {

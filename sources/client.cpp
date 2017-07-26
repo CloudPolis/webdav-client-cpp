@@ -568,13 +568,13 @@ namespace WebDAV
 	}
 
 	bool
-		Client::is_dir(const std::string& remote_resource) const noexcept
+		Client::is_directory(const std::string& remote_resource) const noexcept
 	{
 		auto information = this->info(remote_resource);
 		auto resource_type = information["type"];
-		bool is_directory = resource_type.compare("d:collection") == 0;
-		is_directory |= resource_type.compare("D:collection") == 0;
-		return is_directory;
+		bool is_dir = resource_type.compare("d:collection") == 0;
+		is_dir |= resource_type.compare("D:collection") == 0;
+		return is_dir;
 	}
 
 	strings_t
@@ -584,8 +584,6 @@ namespace WebDAV
 		bool is_existed = this->check(remote_directory);
 		if (!is_existed) return strings_t();
 
-		bool is_directory = this->is_dir(remote_directory);
-		if (!is_directory) return strings_t();
 		auto target_urn = Path(clientImpl->webdav_root, true) + remote_directory;
 		target_urn = Path(target_urn.path(), true);
 

@@ -20,19 +20,29 @@
 #
 ############################################################################*/
 
-#include "stdafx.h"
 #include "catch.hpp"
+#include "fixture.hpp"
+
+#include <webdav/client.hpp>
 
 SCENARIO("Client must check an existing remote resources", "[check]") {
+
+    auto options = fixture::get_options();
+    auto content = fixture::get_buff_content();
+    auto dirname = fixture::get_dir_name();
+    auto filename = fixture::get_file_name();
+
+    CAPTURE(dirname);
+    CAPTURE(filename);
 
 	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
 	GIVEN("An existing remote resource") {
 
-		std::string existing_file = "file.dat";
-		std::string existing_directory = "dir/";
+		std::string existing_file = filename;
+		std::string existing_directory = dirname; 
 
-		client->upload_from(existing_file, (char *)file_content.c_str(), file_content.length());
+		client->upload_from(existing_file, (char *)content.c_str(), content.length());
 		client->create_directory(existing_directory);
 
 		WHEN("Check for existence of an existing remote file") {
@@ -62,6 +72,8 @@ SCENARIO("Client must check an existing remote resources", "[check]") {
 }
 
 SCENARIO("Client must check not an existing remote resources", "[check]") {
+
+    auto options = fixture::get_options();
 
 	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 

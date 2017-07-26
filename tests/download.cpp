@@ -20,17 +20,25 @@
 #
 ############################################################################*/
 
-#include "stdafx.h"
 #include "catch.hpp"
+#include "fixture.hpp"
+
+#include <webdav/client.hpp>
 
 SCENARIO("Client must download into buffer", "[download][buffer]") {
+
+    auto options = fixture::get_options();
+    auto content = fixture::get_buff_content();
+    auto filename = fixture::get_file_name();
+
+    CAPTURE(filename);
 
 	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
 	GIVEN("A buffer") {
 
-		std::string source_buffer = "content of the buffer";
-		std::string remote_resource = "file.dat";
+		std::string source_buffer = content;
+		std::string remote_resource = filename;
 
 		auto buffer_pointer = const_cast<char *>(source_buffer.c_str());
 		unsigned long long buffer_size = (source_buffer.length() + 1)* sizeof(source_buffer.c_str()[0]);
@@ -56,14 +64,20 @@ SCENARIO("Client must download into buffer", "[download][buffer]") {
 
 SCENARIO("Client must download stream", "[download][stream]") {
 
+    auto options = fixture::get_options();
+    auto content = fixture::get_buff_content();
+    auto filename = fixture::get_file_name();
+
+    CAPTURE(filename);
+
 	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
 	GIVEN("A stream") {
 
 		std::stringstream destination_stream;
 
-		std::stringstream source_stream("content of the stream");
-		std::string remote_resource = "file.dat";
+		std::stringstream source_stream(content);
+		std::string remote_resource = filename;
 
 		auto is_success = client->upload_from(remote_resource, source_stream);
 		REQUIRE(is_success);

@@ -20,88 +20,107 @@
 #
 ############################################################################*/
 
-#include "stdafx.h"
 #include "catch.hpp"
+#include "fixture.hpp"
+
+#include <webdav/client.hpp>
 
 SCENARIO("Client must list a remote files and a remote directories", "[list]") {
 
-  std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    auto options = fixture::get_options();
+    auto content = fixture::get_buff_content();
+    auto dirname = fixture::get_dir_name();
 
-  GIVEN("A remote directory with 5 files and 5 directories") {
+    CAPTURE(dirname);
 
-    std::string root = "dir_with_files_and_dirs/";
+    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
-    std::string template_filename = "file";
-    std::string template_dirname = "dir";
+    GIVEN("A remote directory with 5 files and 5 directories") {
 
-    CHECK(client->clean(root));
-    REQUIRE(client->create_directory(root));
+        std::string root = dirname;
 
-    for (auto i = 1; i <= 5; ++i)
-    {
-      auto number = std::to_string(i);
-      auto directory = root + template_dirname + number;
-      auto file = root + template_filename + number;
-      client->create_directory(directory);
-      client->upload_from(file, (char *)file_content.c_str(), file_content.length());
+        std::string template_filename = "file";
+        std::string template_dirname = "dir";
+
+        CHECK(client->clean(root));
+        REQUIRE(client->create_directory(root));
+
+        for (auto i = 1; i <= 5; ++i)
+        {
+            auto number = std::to_string(i);
+            auto directory = root + "/" + template_dirname + number;
+            auto file = root + "/"+ template_filename + number;
+            client->create_directory(directory);
+            client->upload_from(file, (char *)content.c_str(), content.length());
+        }
+
+        WHEN("List the directory") {
+
+            auto resources = client->list(root);
+
+            THEN("Get 10 resources") {
+
+                CHECK(resources.size() == 10);
+            }
+        }
     }
-
-    WHEN("List the directory") {
-
-      auto resources = client->list(root);
-
-      THEN("Get 10 resources") {
-
-        CHECK(resources.size() == 10);
-      }
-    }
-  }
 }
 
 SCENARIO("Client can not list a remote file", "[list][file]") {
 
-  std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    auto options = fixture::get_options();
+    auto content = fixture::get_buff_content();
+    auto filename = fixture::get_file_name();
 
-  GIVEN("An existing remote file") {
+    CAPTURE(filename);
 
-    std::string existing_file = "file.dat";
+    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
-    client->upload_from(existing_file, (char *)file_content.c_str(), file_content.length());
+    GIVEN("An existing remote file") {
 
-    WHEN("List content of the file") {
+        std::string existing_file = filename;
 
-      REQUIRE(client->check(existing_file));
+        client->upload_from(existing_file, (char *)content.c_str(), content.length());
 
-      auto resources = client->list(existing_file);
+        WHEN("List content of the file") {
 
-      THEN("Get an empty list") {
+            REQUIRE(client->check(existing_file));
 
-        CHECK(resources.empty());
-      }
+            auto resources = client->list(existing_file);
+
+            THEN("Get an empty list") {
+
+                CHECK(resources.empty());
+            }
+        }
     }
-  }
 }
 
 SCENARIO("Client can list an empty remote directory", "[list][empty]") {
 
-  std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    auto options = fixture::get_options();
+    auto dirname = fixture::get_dir_name();
+
+    CAPTURE(dirname);
+
+    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
     GIVEN("An empty remote directory") {
 
-    std::string empty_directory = "empty_directory/";
+        std::string empty_directory = dirname;
 
-    client->create_directory(empty_directory);
+        client->create_directory(empty_directory);
 
-    WHEN("List content of the directory") {
+        WHEN("List content of the directory") {
 
-      REQUIRE(client->check(empty_directory));
+            REQUIRE(client->check(empty_directory));
 
-      auto resources = client->list(empty_directory);
+            auto resources = client->list(empty_directory);
 
-      THEN("Get an empty list") {
+            THEN("Get an empty list") {
 
-        CHECK(resources.empty());
-      }
+                CHECK(resources.empty());
+            }
+        }
     }
-  }
 }

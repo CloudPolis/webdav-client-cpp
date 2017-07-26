@@ -20,20 +20,29 @@
 #
 ############################################################################*/
 
-#include "stdafx.h"
 #include "catch.hpp"
+#include "fixture.hpp"
+
+#include <webdav/client.hpp>
+
+#include <fstream>
 
 SCENARIO("Client must upload buffer", "[upload][buffer]") {
+
+    auto options = fixture::get_options();
+    auto content = fixture::get_buff_content();
+    auto filename = fixture::get_file_name();
+
+    CAPTURE(filename);
 
 	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
 	GIVEN("A buffer") {
 
-		std::string buffer = "content of the buffer";
-		std::string remote_resource = "file.dat";
+		std::string remote_resource = filename;
 
-		auto buffer_pointer = const_cast<char *>(buffer.c_str());
-		auto buffer_size = buffer.length() * sizeof(buffer.c_str()[0]);
+		auto buffer_pointer = const_cast<char *>(content.c_str());
+		auto buffer_size = content.length() * sizeof(content.c_str()[0]);
 
 		WHEN("Upload the buffer") {
 
@@ -51,14 +60,20 @@ SCENARIO("Client must upload buffer", "[upload][buffer]") {
 	}
 }
 
-SCENARIO("Client must upload stream", "[upload][string][stream]") {
+SCENARIO("Client must upload string stream", "[upload][string][stream]") {
+
+    auto options = fixture::get_options();
+    auto content = fixture::get_buff_content();
+    auto filename = fixture::get_file_name();
+
+    CAPTURE(filename);
 
 	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
 	GIVEN("A stream") {
 
-		std::stringstream stream("content of the stream");
-		std::string remote_resource = "file.dat";
+		std::stringstream stream(content);
+		std::string remote_resource = filename;
 
 		WHEN("Upload the stream") {
 
@@ -78,19 +93,28 @@ SCENARIO("Client must upload stream", "[upload][string][stream]") {
 
 SCENARIO("Client must upload file stream", "[upload][file][stream]") {
 
+    auto options = fixture::get_options();
+    auto content = fixture::get_file_content();
+    auto filename = fixture::get_file_name();
+
+    CAPTURE(filename);
+
 	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
 
 	GIVEN("A stream") {
 
-		std::fstream stream("C:\\Users\\host\\Downloads\\libyaml-master.zip", std::ios::binary | std::ios::in | std::ios::out);
-		std::string remote_resource = "libyaml-master.zip";
+        std::ofstream out(filename);
+        out << content;
+
+		std::ifstream in(filename, std::ios::binary);
+		std::string remote_resource = filename;
 
 		WHEN("Upload the stream") {
 
 			REQUIRE(client->clean(remote_resource));
 			REQUIRE(!client->check(remote_resource));
 
-			auto is_success = client->upload_from(remote_resource, stream);
+			auto is_success = client->upload_from(remote_resource, in);
 
 			THEN("stream must be uploaded") {
 
