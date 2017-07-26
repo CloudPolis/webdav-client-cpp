@@ -8,9 +8,12 @@ addons:
             - ccache
             - clang-3.6
             - gcc-5
+            - cmake-data
+            - cmake
         sources:
             - llvm-toolchain-trusty-3.6
             - ubuntu-toolchain-r-test
+            - george-edison55-precise-backports
 
 matrix:
     include:
