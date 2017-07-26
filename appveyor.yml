@@ -1,8 +1,10 @@
 platform:
-    - x86
-    - x64
+- x86
+- x64
     
 environment:
+  matrix:        
+  - VSVER: 14
   WEBDAV_HOSTNAME:
     secure: qMCWqchDp72RftbP5uTufNPtD0/7Jla3VJ/Yx3Xuwyc=
   WEBDAV_USERNAME:
@@ -13,8 +15,8 @@ build:
   verbosity: minimal    
 
 configuration:
-    - plain
-    - shared
+- plain
+- shared
 
 before_build:
     - ps: >-
