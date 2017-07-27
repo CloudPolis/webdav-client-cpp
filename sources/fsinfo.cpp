@@ -22,6 +22,7 @@
 
 
 #include "fsinfo.hpp"
+#include <fstream>
 
 namespace WebDAV
 {

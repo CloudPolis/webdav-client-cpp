@@ -24,6 +24,7 @@
 #define WEBDAV_URN_H
 
 #include <iostream>
+#include <cstddef>
 #include <string>
 using std::string;
 

@@ -44,7 +44,7 @@ namespace WebDAV {
             auto first_position = path.find(Path::separate);
             if (first_position != 0) path = Path::root + path;
             auto last_symbol_index = path.length() - 1;
-            auto last_symbol = string{ path[last_symbol_index] };
+            auto last_symbol = path.substr(last_symbol_index, 1);
             auto is_dir = Path::separate.compare(last_symbol) == 0;
             if (force_dir && !is_dir) path += Path::separate;
             m_path = path;
