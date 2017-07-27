@@ -21,6 +21,7 @@
 ############################################################################*/
 
 #include <thread>
+#include <cstdlib>
 #include <webdav/client.hpp>
 #include "pugiext.hpp"
 #include "header.hpp"
@@ -464,7 +465,7 @@ namespace WebDAV
 		pugi::xml_node quota_available_bytes = prop.select_node("*[local-name()='quota-available-bytes']").node();
 		std::string free_size_text = quota_available_bytes.first_child().value();
 
-		auto free_size = atol(free_size_text.c_str());
+		auto free_size = std::atoll(free_size_text.c_str());
 		return free_size;
 	}
 
