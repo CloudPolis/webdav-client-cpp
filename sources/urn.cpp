@@ -145,7 +145,7 @@ namespace WebDAV {
 
             auto path = this->path();
             auto last_symbol_index = path.length() - 1;
-            auto last_symbol = std::string{path[last_symbol_index]};
+            auto last_symbol = path.substr(last_symbol_index, 1);
             auto is_equal = Path::separate.compare(last_symbol) == 0;
             return is_equal;
         }
