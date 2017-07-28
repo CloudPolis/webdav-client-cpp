@@ -32,7 +32,7 @@ matrix:
       apt:
         packages:
         - lcov
-      env: COMPILER="g++-5" BUILD_TYPE=Coverage
+    env: COMPILER="g++-5" BUILD_TYPE=Coverage
 
 install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
