@@ -73,13 +73,13 @@ target_include_directories(libwdc PUBLIC
 )
 
 install(TARGETS libwdc
-    EXPORT ${PROJECT_NAME}-config
+    EXPORT wdc-config
     RUNTIME DESTINATION bin
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
 )
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include)
-install(EXPORT ${PROJECT_NAME}-config NAMESPACE WDC:: DESTINATION cmake)
+install(EXPORT wdc-config NAMESPACE WDC:: DESTINATION cmake)
 
 if(BUILD_PKGCONFIG)
 	configure_file(scripts/wdc.pc.in ${PROJECT_BINARY_DIR}/wdc.pc @ONLY)
