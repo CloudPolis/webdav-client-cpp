@@ -36,13 +36,10 @@ $ cmake --build _builds
 $ cmake --build _builds --target install
 ```
 
-Documentation
-===
-
+Building documentation:
 ```ShellSession
-$ cd docs
-$ doxygen doxygen.conf
-$ open html/index.html
+$ doxygen docs/doxygen.conf
+$ open docs/html/index.html
 ```
 
 Usage
