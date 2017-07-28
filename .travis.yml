@@ -56,5 +56,5 @@ script:
 
 after_success:
 - if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
-    coveralls --include sources --include include --gcov-options '\-lp' --root .. --build-root .;
+    coveralls --include sources --include include --gcov-options '\-lp' --root . --build-root _builds;
   fi
