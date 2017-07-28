@@ -24,19 +24,18 @@ cmake_minimum_required(VERSION 3.3)
 
 include("cmake/HunterGate.cmake")
 HunterGate(
-    URL "https://github.com/ruslo/hunter/archive/v0.19.45.tar.gz"
-    SHA1 "56b690cd9bf54de1099727672b8525a4102f124f"
-	LOCAL # issue #29
+    URL "https://github.com/ruslo/hunter/archive/v0.19.51.tar.gz"
+    SHA1 "d238dc1dd4db83e45a592f96fdb95d17c688600a"
 )
-
-project(WDC)
-
-#include($ENV{POLLY_ROOT}/analyze.cmake OPTIONAL)
 
 set(WDC_VERSION_MAJOR 1)
 set(WDC_VERSION_MINOR 0)
-set(WDC_VERSION_PATCH 8)
+set(WDC_VERSION_PATCH 9)
 set(WDC_VERSION ${WDC_VERSION_MAJOR}.${WDC_VERSION_MINOR}.${WDC_VERSION_PATCH})
+
+project(WDC VERSION ${WDC_VERSION})
+
+#include($ENV{POLLY_ROOT}/analyze.cmake OPTIONAL)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -47,9 +46,6 @@ option(BUILD_EXAMPLES "Build Examples" OFF)
 option(BUILD_PKGCONFIG "Build in PKGCONFIG mode" OFF)
 
 option(WDC_VERBOSE "Print verbose information" OFF)
-if(WDC_VERBOSE)
-    add_definitions(-DWDC_VERBOSE)
-endif()
 
 hunter_add_package(OpenSSL)
 find_package(OpenSSL REQUIRED)
@@ -64,6 +60,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
 add_library(libwdc ${${PROJECT_NAME}_SOURCES})
 set_target_properties(libwdc PROPERTIES PREFIX "")
 set_target_properties(libwdc PROPERTIES IMPORT_PREFIX "")
+if(WDC_VERBOSE)
+  target_compile_definitions(libwdc PUBLIC WDC_VERBOSE=1)
+endif()
 
 target_link_libraries(libwdc OpenSSL::SSL OpenSSL::Crypto CURL::libcurl pugixml)
 
@@ -72,14 +71,46 @@ target_include_directories(libwdc PUBLIC
     $<INSTALL_INTERFACE:include>
 )
 
+# Install
+
+set(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
+
+set(CONFIG_INSTALL_DIR "lib/cmake/${PROJECT_NAME}")
+set(INCLUDE_INSTALL_DIR "include")
+
+set(VERSION_CONFIG "${GENERATED_DIR}/${PROJECT_NAME}ConfigVersion.cmake")
+set(PROJECT_CONFIG "${GENERATED_DIR}/${PROJECT_NAME}Config.cmake")
+set(TARGETS_EXPORT_NAME "${PROJECT_NAME}Targets")
+set(NAMESPACE "${PROJECT_NAME}::")
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "${VERSION_CONFIG}" COMPATIBILITY SameMajorVersion
+)
+
+configure_package_config_file(
+    "${PROJECT_SOURCE_DIR}/cmake/Config.cmake.in"
+    "${PROJECT_CONFIG}"
+     INSTALL_DESTINATION "${CONFIG_INSTALL_DIR}"
+)
+
 install(TARGETS libwdc
-    EXPORT wdc-config
+    EXPORT "${TARGETS_EXPORT_NAME}"
     RUNTIME DESTINATION bin
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
 )
+
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include)
-install(EXPORT wdc-config NAMESPACE WDC:: DESTINATION cmake)
+
+install(
+  FILES "${PROJECT_CONFIG}" "${VERSION_CONFIG}"
+  DESTINATION "${CONFIG_INSTALL_DIR}"
+  )
+
+install(EXPORT "${TARGETS_EXPORT_NAME}" 
+    NAMESPACE "${NAMESPACE}" 
+    DESTINATION "${CONFIG_INSTALL_DIR}")
 
 if(BUILD_PKGCONFIG)
 	configure_file(scripts/wdc.pc.in ${PROJECT_BINARY_DIR}/wdc.pc @ONLY)
