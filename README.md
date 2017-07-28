@@ -25,7 +25,7 @@ $ brew install wdc
 Build
 ===
 
-**Building WebDAV Client from sources**
+Building WebDAV Client from sources:
 
 ```ShellSession
 $ git clone https://github.com/designerror/webdav-client-cpp
@@ -44,9 +44,10 @@ $ doxygen doxygen.conf
 $ open html/index.html
 ```
 
-Usage examples
+Usage
 ===
 
+**example.cpp**
 ```C++
 #include <iostream>
 #include <memory>
@@ -106,4 +107,23 @@ int main()
   	client->async_upload("/path/to/remote/file", "/path/to/local/file");
   	client->async_download("/path/to/remote/file", "/path/to/local/file");
 }
+```
+
+**CMakeLists.txt**
+```cmake
+cmake_minimum_required(VERSION 3.3)
+
+include(cmake/HunterGate.cmake)
+HunterGate(
+    URL "https://github.com/ruslo/hunter/archive/v0.19.51.tar.gz"
+    SHA1 "d238dc1dd4db83e45a592f96fdb95d17c688600a"
+)
+
+project(example)
+
+hunter_add_package(WDC)
+find_package(WDC CONFIG REQUIRED)
+
+add_executable(example example.cpp)
+target_link_libraries(example WDC::libwdc)
 ```
