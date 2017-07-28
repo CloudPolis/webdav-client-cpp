@@ -11,6 +11,7 @@ addons:
     packages:
     - clang-3.6
     - gcc-5
+    - lcov
     sources:
     - llvm-toolchain-trusty-3.6
     - ubuntu-toolchain-r-test
@@ -19,18 +20,30 @@ matrix:
   include:
   - os: linux
     compiler: gcc-5
-    env: COMPILER="g++-5"
+    env: COMPILER="g++-5" BUILD_TYPE=Debug
   - os: linux
     compiler: clang-3.6
-    env: COMPILER="clang++-3.6"
+    env: COMPILER="clang++-3.6" BUILD_TYPE=Debug
   - os: osx
     compiler: clang-3.6
-    env: COMPILER="clang++-3.6"
+    env: COMPILER="clang++-3.6" BUILD_TYPE=Debug
+  - os: linux
+    compiler: gcc
+      addons:
+        apt:
+          packages:
+            - lcov
+      env: COMPILER=g++ BUILD_TYPE=Coverage
 
 install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     wget https://cmake.org/files/v3.9/cmake-3.9.0-Linux-x86_64.tar.gz;
     sudo tar -xf cmake-3.9.0-Linux-x86_64.tar.gz -C /usr/local/ --strip-components=1;
+  fi
+- if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
+    PATH=~/.local/bin:${PATH};
+    pip install --user --upgrade pip;
+    pip install --user cpp-coveralls;
   fi
 
 cache:
@@ -38,6 +51,11 @@ cache:
   - $HOME/.hunter
 
 script:
-- cmake -H. -B_builds -DBUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=Debug
+- cmake -H. -B_builds -DBUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
 - cmake --build _builds
 - cmake --build _builds --target test -- ARGS=--verbose
+
+after_success:
+- if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
+    coveralls --include sources --include include --gcov-options '\-lp' --root .. --build-root .;
+  fi
