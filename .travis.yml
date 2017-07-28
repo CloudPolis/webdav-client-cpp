@@ -11,7 +11,6 @@ addons:
     packages:
     - clang-3.6
     - gcc-5
-    - lcov
     sources:
     - llvm-toolchain-trusty-3.6
     - ubuntu-toolchain-r-test
@@ -28,12 +27,12 @@ matrix:
     compiler: clang-3.6
     env: COMPILER="clang++-3.6" BUILD_TYPE=Debug
   - os: linux
-    compiler: gcc
-      addons:
-        apt:
-          packages:
-            - lcov
-      env: COMPILER=g++ BUILD_TYPE=Coverage
+    compiler: gcc-5
+    addons:
+      apt:
+        packages:
+        - lcov
+      env: COMPILER="g++-5" BUILD_TYPE=Coverage
 
 install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
