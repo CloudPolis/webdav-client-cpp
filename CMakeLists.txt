@@ -29,13 +29,13 @@ HunterGate(
 	LOCAL # issue #29
 )
 
-project(wdc)
+project(WDC)
 
 #include($ENV{POLLY_ROOT}/analyze.cmake OPTIONAL)
 
 set(WDC_VERSION_MAJOR 1)
 set(WDC_VERSION_MINOR 0)
-set(WDC_VERSION_PATCH 7)
+set(WDC_VERSION_PATCH 8)
 set(WDC_VERSION ${WDC_VERSION_MAJOR}.${WDC_VERSION_MINOR}.${WDC_VERSION_PATCH})
 
 set(CMAKE_CXX_STANDARD 11)
@@ -61,23 +61,25 @@ find_package(pugixml CONFIG REQUIRED)
 file(GLOB ${PROJECT_NAME}_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/sources/*.cpp")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
-add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
+add_library(libwdc ${${PROJECT_NAME}_SOURCES})
+set_target_properties(libwdc PROPERTIES PREFIX "")
+set_target_properties(libwdc PROPERTIES IMPORT_PREFIX "")
 
-target_link_libraries(${PROJECT_NAME} OpenSSL::SSL OpenSSL::Crypto CURL::libcurl pugixml)
+target_link_libraries(libwdc OpenSSL::SSL OpenSSL::Crypto CURL::libcurl pugixml)
 
-target_include_directories(${PROJECT_NAME} PUBLIC
+target_include_directories(libwdc PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 
-install(TARGETS ${PROJECT_NAME}
+install(TARGETS libwdc
     EXPORT ${PROJECT_NAME}-config
     RUNTIME DESTINATION bin
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
 )
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include)
-install(EXPORT ${PROJECT_NAME}-config DESTINATION cmake)
+install(EXPORT ${PROJECT_NAME}-config NAMESPACE WDC:: DESTINATION cmake)
 
 if(BUILD_PKGCONFIG)
 	configure_file(scripts/wdc.pc.in ${PROJECT_BINARY_DIR}/wdc.pc @ONLY)
@@ -94,7 +96,7 @@ if(BUILD_TESTS)
 
 	file(GLOB ${PROJECT_NAME}_TEST_SOURCES tests/*.cpp)
 	add_executable(check ${${PROJECT_NAME}_TEST_SOURCES})
-	target_link_libraries(check ${PROJECT_NAME} Catch::Catch Boost::filesystem Boost::system)
+	target_link_libraries(check libwdc Catch::Catch Boost::filesystem Boost::system)
 
 	add_test(NAME check COMMAND check "-s" "-r" "compact" "--use-colour" "yes") 
 endif()
@@ -105,7 +107,7 @@ if(BUILD_EXAMPLES)
         get_filename_component(EXAMPLE_NAME ${EXAMPLE_SOURCE} NAME_WE)
         set(EXAMPLE_TARGET_NAME example_${EXAMPLE_NAME})
         add_executable(${EXAMPLE_TARGET_NAME} ${EXAMPLE_SOURCE})
-        target_link_libraries(${EXAMPLE_TARGET_NAME} ${PROJECT_NAME})
+        target_link_libraries(${EXAMPLE_TARGET_NAME} libwdc)
         set_target_properties(${EXAMPLE_TARGET_NAME} PROPERTIES OUTPUT_NAME ${EXAMPLE_NAME})
         install(TARGETS ${EXAMPLE_TARGET_NAME}
                 RUNTIME DESTINATION bin
