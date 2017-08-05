@@ -52,7 +52,7 @@ cache:
 script:
 - cmake -H. -B_builds -DBUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
 - cmake --build _builds
-- cmake --build _builds --target test -- ARGS=--verbose
+- cmake --build _builds --target test -- ARGS="--verbose -C=${BUILD_TYPE}"
 
 after_success:
 - if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
