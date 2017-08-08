@@ -35,7 +35,7 @@ SCENARIO("Client must clean an existing remote resources", "[clean]") {
     CAPTURE(dirname);
     CAPTURE(filename);
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
 	GIVEN("An existing remote resource") {
 
@@ -77,7 +77,7 @@ SCENARIO("Client must clean not an existing remote resources", "[clean]") {
 
     auto options = fixture::get_options();
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
 	GIVEN("Not an existing remote resource") {
 
@@ -120,7 +120,7 @@ SCENARIO("Client must clean not an empty remote directories", "[clean]") {
 
     CAPTURE(dirname);
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
 	GIVEN("Not an empty remote directory") {
 
@@ -159,7 +159,7 @@ SCENARIO("Client must clean a remote directory", "[clean]") {
 
     CAPTURE(dirname);
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
 	GIVEN("An existing directory") {
 		

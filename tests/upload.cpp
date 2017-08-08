@@ -34,7 +34,7 @@ SCENARIO("Client must upload buffer", "[upload][buffer]") {
 
     CAPTURE(filename);
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
 	GIVEN("A buffer") {
 
@@ -67,7 +67,7 @@ SCENARIO("Client must upload string stream", "[upload][string][stream]") {
 
     CAPTURE(filename);
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
 	GIVEN("A stream") {
 
@@ -98,7 +98,7 @@ SCENARIO("Client must upload file stream", "[upload][file][stream]") {
 
     CAPTURE(filename);
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
 	GIVEN("A stream") {
 

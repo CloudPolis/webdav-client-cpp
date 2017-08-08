@@ -20,9 +20,8 @@
 #
 ############################################################################*/
 
-#ifndef WEBDAV_CLIENT_H
-#define WEBDAV_CLIENT_H
-#pragma once
+#ifndef WEBDAV_CLIENT_HPP
+#define WEBDAV_CLIENT_HPP
 
 #include <functional>
 #include <iostream>
@@ -46,8 +45,8 @@ namespace WebDAV
 	///
 	/// \brief WebDAV Client
 	/// \author designerror
-	/// \version 1.0.1
-	/// \date 08/11/2016
+	/// \version 1.1.0
+	/// \date 08/8/2016
 	///
 	class Client
 	{	
@@ -65,10 +64,7 @@ namespace WebDAV
 		/// \param[in] key_path
 		/// \include client/init.cpp
 		///
-		static auto Init(const dict_t& options) noexcept -> Client *;
-
-		/// This function releases resources acquired by curl_global_init
-		static void Cleanup() noexcept;
+		Client(const dict_t& options);
 
 		///
 		/// Get free size of the WebDAV server
@@ -256,14 +252,71 @@ namespace WebDAV
 			progress_t progress = nullptr
 		) const noexcept -> void;
 
-
-		virtual ~Client() {};
+		virtual ~Client();
 
 	protected:
 
+		auto sync_download(
+			const std::string& remote_file,
+			const std::string& local_file,
+			callback_t callback = nullptr,
+			progress_t progress = nullptr
+		) const noexcept -> bool;
+
+		auto sync_download_to(
+			const std::string& remote_file,
+			char * & buffer_ptr,
+			unsigned long long int & buffer_size,
+			callback_t callback = nullptr,
+			progress_t progress = nullptr
+		) const noexcept -> bool;
+
+		bool sync_download_to(
+			const std::string& remote_file,
+			std::ostream& stream,
+			callback_t callback = nullptr,
+			progress_t progress = nullptr
+		) const noexcept;
+
+		bool sync_upload(
+			const std::string& remote_file,
+			const std::string& local_file,
+			callback_t callback = nullptr,
+			progress_t progress = nullptr
+		) const noexcept;
+
+		auto sync_upload_from(
+			const std::string& remote_file,
+			char * buffer_ptr,
+			unsigned long long int buffer_size,
+			callback_t callback = nullptr,
+			progress_t progress = nullptr
+		) const noexcept -> bool;
+
+		auto sync_upload_from(
+			const std::string& remote_file,
+			std::istream& stream,
+			callback_t callback = nullptr,
+			progress_t progress = nullptr
+		) const noexcept -> bool;
+
+    private:
+
 		enum { buffer_size = 1000 * 1000 };
 
-		Client() {}
+		std::string webdav_hostname;
+		std::string webdav_root;
+		std::string webdav_username;
+		std::string webdav_password;
+
+		std::string proxy_hostname;
+		std::string proxy_username;
+		std::string proxy_password;
+
+		std::string cert_path;
+		std::string key_path;
+
+		dict_t options() const noexcept;
 	};
 }
 

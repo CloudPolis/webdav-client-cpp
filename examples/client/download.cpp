@@ -35,7 +35,7 @@ void download_to_file()
                     {"webdav_password", "{webdav_password}"}
             };
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     std::string remote_file = "dir/file.dat";
     auto local_file = "/home/user/Downloads/file.dat";
@@ -59,7 +59,7 @@ void async_download_to_file()
                     {"webdav_password", "{webdav_password}"}
             };
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     std::string remote_file = "dir/file.dat";
     std::string local_file = "/home/user/Downloads/file.dat";
@@ -85,7 +85,7 @@ void download_to_buffer()
                     {"webdav_password", "{webdav_password}"}
             };
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     std::string remote_file = "dir/file.dat";
     char * buffer_ptr = nullptr;
@@ -112,7 +112,7 @@ void async_download_to_buffer()
                     {"webdav_password", "{webdav_password}"}
             };
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     std::string remote_file = "dir/file.dat";
     char * buffer_ptr = nullptr;
@@ -140,7 +140,7 @@ void download_from_stream()
                     {"webdav_password", "{webdav_password}"}
             };
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     std::string remote_file = "dir/file.dat";
     std::ofstream stream("/home/user/Downloads/file.dat");

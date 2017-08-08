@@ -20,8 +20,8 @@
 #
 ############################################################################*/
 
-#ifndef WEBDAV_URN_H
-#define WEBDAV_URN_H
+#ifndef WEBDAV_URN_HPP
+#define WEBDAV_URN_HPP
 
 #include <iostream>
 #include <cstddef>

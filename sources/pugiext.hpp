@@ -20,9 +20,9 @@
 #
 ############################################################################*/
 
-#ifndef WEBDAV_PUGIEXT_H
-#define WEBDAV_PUGIEXT_H
-#pragma once
+#ifndef WEBDAV_PUGIEXT_HPP
+#define WEBDAV_PUGIEXT_HPP
+
 #include <pugixml.hpp>
 
 namespace pugi
