@@ -42,10 +42,10 @@ $ doxygen docs/doxygen.conf
 $ open docs/html/index.html
 ```
 
-Run tests
+Running tests
 ===
 
-For run tests you need set environment variables `WEBDAV_HOSTNAME`, 
+For run tests you need to set environment variables `WEBDAV_HOSTNAME`, 
 `WEBDAV_USERNAME` and `WEBDAV_PASSWORD` (optional `WEBDAV_ROOT`).
 
 ```ShellSession
