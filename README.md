@@ -44,7 +44,14 @@ $ open docs/html/index.html
 
 Run tests
 ===
+
+For run tests you need set environment variables `WEBDAV_HOSTNAME`, 
+`WEBDAV_USERNAME` and `WEBDAV_PASSWORD` (optional `WEBDAV_ROOT`).
+
 ```ShellSession
+$ export WEBDAV_HOSTNAME=<your_webdav_hostname>
+$ export WEBDAV_USERNAME=<your_webdav_username>
+$ export WEBDAV_PASSWORD=<your_webdav_password>
 $ cmake -H. -B_builds -DBUILD_TESTS=ON
 $ cmake --build _builds
 $ cmake --build _builds --target test -- ARGS=--verbose
