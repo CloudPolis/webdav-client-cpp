@@ -32,10 +32,6 @@
 
 namespace WebDAV
 {
-    using Urn::Path;
-
-	using progress_funptr = int(*)(void *context, size_t dltotal, size_t dlnow, size_t ultotal, size_t ulnow);
-
 	auto inline get(const dict_t& options, const std::string&& name) -> std::string
 	{
 		auto it = options.find(name);
@@ -43,126 +39,34 @@ namespace WebDAV
 		else return it->second;
 	}
 
-	class ClientImpl : public Client
-	{
-	public:
+    using Urn::Path;
 
-		void init() const noexcept;
+	using progress_funptr = int(*)(void *context, size_t dltotal, size_t dlnow, size_t ultotal, size_t ulnow);
 
-		std::string webdav_hostname;
-		std::string webdav_root;
-		std::string webdav_username;
-		std::string webdav_password;
-
-		std::string proxy_hostname;
-		std::string proxy_username;
-		std::string proxy_password;
-
-		std::string cert_path;
-		std::string key_path;
-
-		dict_t options() const noexcept;
-
-		bool sync_download(
-			const std::string& remote_file,
-			const std::string& local_file,
-			callback_t callback = nullptr,
-			progress_t progress = nullptr
-		) const noexcept;
-
-		bool sync_download_to(
-			const std::string& remote_file,
-			char * & buffer_ptr,
-			unsigned long long int & buffer_size,
-			callback_t callback = nullptr,
-			progress_t progress = nullptr
-		) const noexcept;
-
-		bool sync_download_to(
-			const std::string& remote_file,
-			std::ostream& stream,
-			callback_t callback = nullptr,
-			progress_t progress = nullptr
-		) const noexcept;
-
-		bool sync_upload(
-			const std::string& remote_file,
-			const std::string& local_file,
-			callback_t callback = nullptr,
-			progress_t progress = nullptr
-		) const noexcept;
-
-		bool sync_upload_from(
-			const std::string& remote_file,
-			char * buffer_ptr,
-			unsigned long long int buffer_size,
-			callback_t callback = nullptr,
-			progress_t progress = nullptr
-		) const noexcept;
-
-		bool sync_upload_from(
-			const std::string& remote_file,
-			std::istream& stream,
-			callback_t callback = nullptr,
-			progress_t progress = nullptr
-		) const noexcept;
-
-		ClientImpl(const dict_t & options);
-
-		~ClientImpl();
-	};
-
-	inline ClientImpl * GetImpl(Client * ptr) { return (ClientImpl *)ptr; }
-	inline const ClientImpl * GetImpl(const Client * ptr) { return (const ClientImpl *)ptr; }
-
-	ClientImpl::ClientImpl(const dict_t& options)
-	{
-		this->webdav_hostname = get(options, "webdav_hostname");
-		this->webdav_root = get(options, "webdav_root");
-		this->webdav_username = get(options, "webdav_username");
-		this->webdav_password = get(options, "webdav_password");
-
-		this->proxy_hostname = get(options, "proxy_hostname");
-		this->proxy_username = get(options, "proxy_username");
-		this->proxy_password = get(options, "proxy_password");
-
-		this->cert_path = get(options, "cert_path");
-		this->key_path = get(options, "key_path");
-
-		this->init();
-	}
-
-	void
-		ClientImpl::init() const noexcept
-	{
-		curl_global_init(CURL_GLOBAL_DEFAULT);
-	}
-
-	dict_t
-		ClientImpl::options() const noexcept
-	{
-		return dict_t
-		{
-			{ "webdav_hostname", this->webdav_hostname },
-			{ "webdav_root", this->webdav_root },
-			{ "webdav_username", this->webdav_username },
-			{ "webdav_password", this->webdav_password },
-			{ "proxy_hostname", this->proxy_hostname },
-			{ "proxy_username", this->proxy_username },
-			{ "proxy_password", this->proxy_password },
-			{ "cert_path", this->cert_path },
-			{ "key_path", this->key_path },
-		};
-	}
+    dict_t
+    Client::options() const noexcept
+    {
+        return dict_t
+        {
+            { "webdav_hostname", this->webdav_hostname },
+            { "webdav_root", this->webdav_root },
+            { "webdav_username", this->webdav_username },
+            { "webdav_password", this->webdav_password },
+            { "proxy_hostname", this->proxy_hostname },
+            { "proxy_username", this->proxy_username },
+            { "proxy_password", this->proxy_password },
+            { "cert_path", this->cert_path },
+            { "key_path", this->key_path },
+        };
+    }
 
 	bool
-		ClientImpl::sync_download(
-			const std::string& remote_file,
-			const std::string& local_file,
-			callback_t callback,
-			progress_t progress
-		) const noexcept
-
+    Client::sync_download(
+        const std::string& remote_file,
+        const std::string& local_file,
+        callback_t callback,
+        progress_t progress
+    ) const noexcept
 	{
 		bool is_existed = this->check(remote_file);
 		if (!is_existed) return false;
@@ -196,13 +100,13 @@ namespace WebDAV
 	}
 
 	bool
-		ClientImpl::sync_download_to(
-			const std::string& remote_file,
-			char * & buffer_ptr,
-			unsigned long long int & buffer_size,
-			callback_t callback,
-			progress_t progress
-		) const noexcept
+    Client::sync_download_to(
+        const std::string& remote_file,
+        char * & buffer_ptr,
+        unsigned long long int & buffer_size,
+        callback_t callback,
+        progress_t progress
+    ) const noexcept
 	{
 		bool is_existed = this->check(remote_file);
 		if (!is_existed) return false;
@@ -239,12 +143,12 @@ namespace WebDAV
 	}
 
 	bool
-		ClientImpl::sync_download_to(
-			const std::string& remote_file,
-			std::ostream & stream,
-			callback_t callback,
-			progress_t progress
-		) const noexcept
+    Client::sync_download_to(
+        const std::string& remote_file,
+        std::ostream & stream,
+        callback_t callback,
+        progress_t progress
+    ) const noexcept
 	{
 		bool is_existed = this->check(remote_file);
 		if (!is_existed) return false;
@@ -277,12 +181,12 @@ namespace WebDAV
 	}
 
 	bool
-		ClientImpl::sync_upload(
-			const std::string& remote_file,
-			const std::string& local_file,
-			callback_t callback,
-			progress_t progress
-		) const noexcept
+    Client::sync_upload(
+        const std::string& remote_file,
+        const std::string& local_file,
+        callback_t callback,
+        progress_t progress
+    ) const noexcept
 	{
 		bool is_existed = FileInfo::exists(local_file);
 		if (!is_existed) return false;
@@ -322,13 +226,13 @@ namespace WebDAV
 	}
 
 	bool
-		ClientImpl::sync_upload_from(
-			const std::string& remote_file,
-			char * buffer,
-			unsigned long long int buffer_size,
-			callback_t callback,
-			progress_t progress
-		) const noexcept
+    Client::sync_upload_from(
+        const std::string& remote_file,
+        char * buffer,
+        unsigned long long int buffer_size,
+        callback_t callback,
+        progress_t progress
+    ) const noexcept
 	{
 		auto root_urn = Path(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
@@ -364,12 +268,12 @@ namespace WebDAV
 	}
 
 	bool
-		ClientImpl::sync_upload_from(
-			const std::string& remote_file,
-			std::istream& stream,
-			callback_t callback,
-			progress_t progress
-		) const noexcept
+    Client::sync_upload_from(
+        const std::string& remote_file,
+        std::istream& stream,
+        callback_t callback,
+        progress_t progress
+    ) const noexcept
 	{
 		auto root_urn = Path(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
@@ -405,18 +309,25 @@ namespace WebDAV
 		return is_performed;
 	}
 
-	Client* Client::Init(const dict_t& options) noexcept
+	Client::Client(const dict_t& options)
 	{
-		return new ClientImpl(options);
+		this->webdav_hostname = get(options, "webdav_hostname");
+		this->webdav_root = get(options, "webdav_root");
+		this->webdav_username = get(options, "webdav_username");
+		this->webdav_password = get(options, "webdav_password");
+
+		this->proxy_hostname = get(options, "proxy_hostname");
+		this->proxy_username = get(options, "proxy_username");
+		this->proxy_password = get(options, "proxy_password");
+
+		this->cert_path = get(options, "cert_path");
+		this->key_path = get(options, "key_path");
 	}
 
-	ClientImpl::~ClientImpl() {
-	}
+    Client::~Client() 
+    {
+    }
 
-	void Client::Cleanup() noexcept
-	{
-		curl_global_cleanup();
-	}
 
 	unsigned long long
 		Client::free_size() const noexcept
@@ -440,7 +351,7 @@ namespace WebDAV
 
 		Data data = { 0, 0, 0 };
 
-		Request request(GetImpl(this)->options());
+		Request request(this->options());
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
@@ -472,8 +383,7 @@ namespace WebDAV
 	bool
 		Client::check(const std::string& remote_resource) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
-		auto root_urn = Path(clientImpl->webdav_root, true);
+		auto root_urn = Path(this->webdav_root, true);
 		auto resource_urn = root_urn + remote_resource;
 
 		Header header = {
@@ -483,9 +393,9 @@ namespace WebDAV
 
 		Data data = { 0, 0, 0 };
 
-		Request request(clientImpl->options());
+		Request request(this->options());
 
-		auto url = clientImpl->webdav_hostname + resource_urn.quote(request.handle);
+		auto url = this->webdav_hostname + resource_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
@@ -502,8 +412,7 @@ namespace WebDAV
 	dict_t
 		Client::info(const std::string& remote_resource) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
-		auto root_urn = Path(clientImpl->webdav_root, true);
+		auto root_urn = Path(this->webdav_root, true);
 		auto target_urn = root_urn + remote_resource;
 
 		Header header = {
@@ -513,9 +422,9 @@ namespace WebDAV
 
 		Data data = { 0, 0, 0 };
 
-		Request request(clientImpl->options());
+		Request request(this->options());
 
-		auto url = clientImpl->webdav_hostname + target_urn.quote(request.handle);
+		auto url = this->webdav_hostname + target_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
@@ -581,11 +490,10 @@ namespace WebDAV
 	strings_t
 		Client::list(const std::string& remote_directory) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
 		bool is_existed = this->check(remote_directory);
 		if (!is_existed) return strings_t();
 
-		auto target_urn = Path(clientImpl->webdav_root, true) + remote_directory;
+		auto target_urn = Path(this->webdav_root, true) + remote_directory;
 		target_urn = Path(target_urn.path(), true);
 
 		Header header = {
@@ -595,9 +503,9 @@ namespace WebDAV
 
 		Data data = { 0, 0, 0 };
 
-		Request request(clientImpl->options());
+		Request request(this->options());
 
-		auto url = clientImpl->webdav_hostname + target_urn.quote(request.handle);
+		auto url = this->webdav_hostname + target_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
@@ -639,8 +547,7 @@ namespace WebDAV
 		progress_t progress
 	) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
-		return clientImpl->sync_download(remote_file, local_file, nullptr, progress);
+		return this->sync_download(remote_file, local_file, nullptr, progress);
 	}
 
 	void
@@ -651,8 +558,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
-		std::thread downloading([&]() { clientImpl->sync_download(remote_file, local_file, callback, progress); });
+		std::thread downloading([&]() { this->sync_download(remote_file, local_file, callback, progress); });
 		downloading.detach();
 	}
 
@@ -664,8 +570,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
-		return clientImpl->sync_download_to(remote_file, buffer_ptr, buffer_size, nullptr, progress);
+		return this->sync_download_to(remote_file, buffer_ptr, buffer_size, nullptr, progress);
 	}
 
 	bool
@@ -675,14 +580,12 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
-		return clientImpl->sync_download_to(remote_file, stream, nullptr, progress);
+		return this->sync_download_to(remote_file, stream, nullptr, progress);
 	}
 
 	bool
 		Client::create_directory(const std::string& remote_directory, bool recursive) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
 		bool is_existed = this->check(remote_directory);
 		if (is_existed) return true;
 
@@ -700,12 +603,12 @@ namespace WebDAV
 			"Connection: Keep-Alive"
 		};
 
-		auto target_urn = Path(clientImpl->webdav_root, true) + remote_directory;
+		auto target_urn = Path(this->webdav_root, true) + remote_directory;
 		target_urn = Path(target_urn.path(), true);
 
-		Request request(clientImpl->options());
+		Request request(this->options());
 
-		auto url = clientImpl->webdav_hostname + target_urn.quote(request.handle);
+		auto url = this->webdav_hostname + target_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "MKCOL");
 		request.set(CURLOPT_URL, url.c_str());
@@ -720,11 +623,10 @@ namespace WebDAV
 	bool
 		Client::move(const std::string& remote_source_resource, const std::string& remote_destination_resource) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
 		bool is_existed = this->check(remote_source_resource);
 		if (!is_existed) return false;
 
-		Path root_urn(clientImpl->webdav_root, true);
+		Path root_urn(this->webdav_root, true);
 
 		auto source_resource_urn = root_urn + remote_source_resource;
 		auto destination_resource_urn = root_urn + remote_destination_resource;
@@ -734,9 +636,9 @@ namespace WebDAV
 			"Destination: " + destination_resource_urn.path()
 		};
 
-		Request request(clientImpl->options());
+		Request request(this->options());
 
-		auto url = clientImpl->webdav_hostname + source_resource_urn.quote(request.handle);
+		auto url = this->webdav_hostname + source_resource_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "MOVE");
 		request.set(CURLOPT_URL, url.c_str());
@@ -751,11 +653,10 @@ namespace WebDAV
 	bool
 		Client::copy(const std::string& remote_source_resource, const std::string& remote_destination_resource) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
 		bool is_existed = this->check(remote_source_resource);
 		if (!is_existed) return false;
 
-		Path root_urn(clientImpl->webdav_root, true);
+		Path root_urn(this->webdav_root, true);
 
 		auto source_resource_urn = root_urn + remote_source_resource;
 		auto destination_resource_urn = root_urn + remote_destination_resource;
@@ -765,9 +666,9 @@ namespace WebDAV
 			"Destination: " + destination_resource_urn.path()
 		};
 
-		Request request(clientImpl->options());
+		Request request(this->options());
 
-		auto url = clientImpl->webdav_hostname + source_resource_urn.quote(request.handle);
+		auto url = this->webdav_hostname + source_resource_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "COPY");
 		request.set(CURLOPT_URL, url.c_str());
@@ -786,8 +687,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
-		return clientImpl->sync_upload(remote_file, local_file, nullptr, progress);
+		return this->sync_upload(remote_file, local_file, nullptr, progress);
 	}
 
 	void
@@ -798,8 +698,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
-		std::thread uploading([&]() { clientImpl->sync_upload(remote_file, local_file, callback, progress); });
+		std::thread uploading([&]() { this->sync_upload(remote_file, local_file, callback, progress); });
 		uploading.detach();
 	}
 
@@ -810,8 +709,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
-		return clientImpl->sync_upload_from(remote_file, stream, nullptr, progress);
+		return this->sync_upload_from(remote_file, stream, nullptr, progress);
 	}
 
 	bool
@@ -822,18 +720,16 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
-		return clientImpl->sync_upload_from(remote_file, buffer_ptr, buffer_size, nullptr, progress);
+		return this->sync_upload_from(remote_file, buffer_ptr, buffer_size, nullptr, progress);
 	}
 
 	bool
 		Client::clean(const std::string& remote_resource) const noexcept
 	{
-		auto clientImpl = GetImpl(this);
 		bool is_existed = this->check(remote_resource);
 		if (!is_existed) return true;
 
-		auto root_urn = Path(clientImpl->webdav_root, true);
+		auto root_urn = Path(this->webdav_root, true);
 		auto resource_urn = root_urn + remote_resource;
 
 		Header header = {
@@ -841,9 +737,9 @@ namespace WebDAV
 			"Connection: Keep-Alive"
 		};
 
-		Request request(clientImpl->options());
+		Request request(this->options());
 
-		auto url = clientImpl->webdav_hostname + resource_urn.quote(request.handle);
+		auto url = this->webdav_hostname + resource_urn.quote(request.handle);
 
 		request.set(CURLOPT_CUSTOMREQUEST, "DELETE");
 		request.set(CURLOPT_URL, url.c_str());
@@ -854,4 +750,16 @@ namespace WebDAV
 
 		return request.perform();
 	}
+
+    class Environment {
+    public:
+        Environment() {
+            curl_global_init(CURL_GLOBAL_ALL);
+        }
+        ~Environment() {
+            curl_global_cleanup();
+        }
+    };
 }
+
+static const WebDAV::Environment env;

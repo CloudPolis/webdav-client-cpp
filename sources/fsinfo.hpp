@@ -20,9 +20,8 @@
 #
 ############################################################################*/
 
-#ifndef WEBDAV_FSINFO_H
-#define WEBDAV_FSINFO_H
-#pragma once
+#ifndef WEBDAV_FSINFO_HPP
+#define WEBDAV_FSINFO_HPP
 
 #include <string>
 #include <fstream>

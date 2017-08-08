@@ -20,9 +20,8 @@
 #
 ############################################################################*/
 
-#ifndef WEBDAV_CALLBACK_H
-#define WEBDAV_CALLBACK_H
-#pragma once
+#ifndef WEBDAV_CALLBACK_HPP
+#define WEBDAV_CALLBACK_HPP
 
 namespace WebDAV
 {

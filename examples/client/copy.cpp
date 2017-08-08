@@ -56,7 +56,7 @@ int main() {
         options["webdav_root"] = root_ptr;
     }
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     auto remote_file = "file.dat";
     auto remote_directory = "dir/";

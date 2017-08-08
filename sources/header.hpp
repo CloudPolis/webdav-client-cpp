@@ -20,9 +20,8 @@
 #
 ############################################################################*/
 
-#ifndef WEBDAV_HEADER_H
-#define WEBDAV_HEADER_H
-#pragma once
+#ifndef WEBDAV_HEADER_HPP
+#define WEBDAV_HEADER_HPP
 
 #include <string>
 #include <initializer_list>

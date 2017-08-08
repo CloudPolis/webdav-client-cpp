@@ -20,9 +20,8 @@
 #
 ############################################################################*/
 
-#ifndef WEBDAV_REQUEST_H
-#define WEBDAV_REQUEST_H
-#pragma once
+#ifndef WEBDAV_REQUEST_HPP
+#define WEBDAV_REQUEST_HPP
 
 #include <curl/curl.h>
 #include <string>

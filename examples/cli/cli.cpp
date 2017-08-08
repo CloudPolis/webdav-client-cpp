@@ -80,7 +80,7 @@ int main(int argc, char * argv[]) {
             options["webdav_root"] = root_ptr;
         }
 
-        std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+        std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
         if (command == "check") {
             bool is_existed = client->check(remote_resource);

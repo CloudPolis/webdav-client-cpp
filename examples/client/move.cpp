@@ -42,7 +42,7 @@ int main() {
                     { "webdav_password", "{webdav_password}" }
             };
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     auto remote_file = "file.dat";
     auto remote_directory = "dir/";
