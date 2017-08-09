@@ -1,5 +1,6 @@
 *.dat
 .idea/
 *.swp
+.DS_Store
 *build*/
 *install*/
