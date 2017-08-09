@@ -23,8 +23,8 @@
 #ifndef WEBDAV_HEADER_HPP
 #define WEBDAV_HEADER_HPP
 
-#include <string>
 #include <initializer_list>
+#include <string>
 
 namespace WebDAV
 {
@@ -35,9 +35,19 @@ namespace WebDAV
 
         Header(const std::initializer_list<std::string>& init_list) noexcept;
 
-        ~Header();
+        ~Header() noexcept;
+
+        Header(const Header& other) = delete;
+
+        auto operator=(const Header& other) -> Header& = delete;
+
+        Header(Header&& other) noexcept;
+
+        auto operator=(Header&& other) noexcept -> Header&;
 
         void append(const std::string& item) noexcept;
+    private:
+        auto swap(Header& other) noexcept -> void;
     };
 }
 

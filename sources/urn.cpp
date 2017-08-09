@@ -132,13 +132,13 @@ namespace WebDAV {
 
         auto Path::parent() const -> Path {
 
-            if (this->is_root()) return m_path;
+            if (this->is_root()) return Path{m_path};
 
             auto last_separate_position = m_path.rfind(Path::separate);
-            if (last_separate_position == 0) return Path::separate;
+            if (last_separate_position == 0) return Path{Path::separate};
 
             auto parent = m_path.substr(0, last_separate_position + 1);
-            return parent;
+            return Path{parent};
         }
 
         auto Path::is_directory() const -> bool {
@@ -154,9 +154,8 @@ namespace WebDAV {
             return Path::separate.compare(m_path) == 0;
         }
 
-        auto Path::operator+(const string& resource_path) const -> Path {
-
-            return Path{ m_path + resource_path };
+        auto Path::operator+(const string& rhs) const -> Path {
+            return Path{ m_path + rhs };
         }
 
         auto Path::operator==(const Path& rhs) const -> bool {

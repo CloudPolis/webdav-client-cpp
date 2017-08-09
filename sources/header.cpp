@@ -34,10 +34,32 @@ namespace WebDAV
         }
     }
 
-    Header::~Header()
+    Header::~Header() noexcept
     {
         curl_slist_free_all((curl_slist*)this->handle);
     }
+
+    Header::Header(Header&& other) noexcept
+    {
+        handle = other.handle;
+        other.handle = nullptr;   
+    }
+
+    auto Header::operator=(Header&& other) noexcept -> Header&
+    {
+        if (this != &other) {
+            Header(std::move(other)).swap(*this);
+        }
+
+        return *this;
+    }
+
+    auto Header::swap(Header& other) noexcept -> void
+    {
+        using std::swap;
+        swap(handle, other.handle);
+    }
+        
 
     void
     Header::append(const std::string& item) noexcept

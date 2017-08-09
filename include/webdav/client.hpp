@@ -64,7 +64,7 @@ namespace WebDAV
 		/// \param[in] key_path
 		/// \include client/init.cpp
 		///
-		Client(const dict_t& options);
+		explicit Client(const dict_t& options);
 
 		///
 		/// Get free size of the WebDAV server
@@ -251,10 +251,8 @@ namespace WebDAV
 			callback_t callback = nullptr,
 			progress_t progress = nullptr
 		) const noexcept -> void;
-
-		virtual ~Client();
-
-	protected:
+        
+	private:
 
 		auto sync_download(
 			const std::string& remote_file,
@@ -299,8 +297,6 @@ namespace WebDAV
 			callback_t callback = nullptr,
 			progress_t progress = nullptr
 		) const noexcept -> bool;
-
-    private:
 
 		enum { buffer_size = 1000 * 1000 };
 

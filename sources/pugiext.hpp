@@ -32,13 +32,13 @@ namespace pugi
 	public:
 		std::string result;
 
-		virtual void write(const void* data, size_t size)
+		void write(const void* data, size_t size) final
 		{
 			result += std::string(static_cast<const char*>(data), size);
 		}
 	};
 
-	std::string node_to_string(pugi::xml_node node)
+	inline std::string node_to_string(pugi::xml_node node)
 	{
 		xml_string_writer writer;
 		node.print(writer);

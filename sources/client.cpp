@@ -20,15 +20,18 @@
 #
 ############################################################################*/
 
-#include <thread>
+
 #include <cstdlib>
+#include <thread>
 #include <webdav/client.hpp>
-#include "pugiext.hpp"
+#include "callback.hpp"
 #include "header.hpp"
+#include "fsinfo.hpp"
+#include "pugiext.hpp"
 #include "request.hpp"
 #include "urn.hpp"
-#include "fsinfo.hpp"
-#include "callback.hpp"
+
+
 
 namespace WebDAV
 {
@@ -114,7 +117,7 @@ namespace WebDAV
 		auto root_urn = Path(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
 
-		Data data = { 0, 0, 0 };
+		Data data = { nullptr, 0, 0 };
 
 		Request request(this->options());
 
@@ -175,9 +178,8 @@ namespace WebDAV
 
 		bool is_performed = request.perform();
 		if (callback != nullptr) callback(is_performed);
-		if (!is_performed) return false;
-
-		return true;
+		
+        return is_performed;
 	}
 
 	bool
@@ -201,7 +203,7 @@ namespace WebDAV
 
 		auto url = this->webdav_hostname + file_urn.quote(request.handle);
 
-		Data response = { 0, 0, 0 };
+		Data response = { nullptr, 0, 0 };
 
 		request.set(CURLOPT_UPLOAD, 1L);
 		request.set(CURLOPT_URL, url.c_str());
@@ -228,7 +230,7 @@ namespace WebDAV
 	bool
     Client::sync_upload_from(
         const std::string& remote_file,
-        char * buffer,
+        char * buffer_ptr,
         unsigned long long int buffer_size,
         callback_t callback,
         progress_t progress
@@ -237,13 +239,13 @@ namespace WebDAV
 		auto root_urn = Path(this->webdav_root, true);
 		auto file_urn = root_urn + remote_file;
 
-		Data data = { buffer, 0, buffer_size };
+		Data data = { buffer_ptr, 0, buffer_size };
 
 		Request request(this->options());
 
 		auto url = this->webdav_hostname + file_urn.quote(request.handle);
 
-		Data response = { 0, 0, 0 };
+        Data response = { nullptr, 0, 0 };
 
 		request.set(CURLOPT_UPLOAD, 1L);
 		request.set(CURLOPT_URL, url.c_str());
@@ -285,7 +287,7 @@ namespace WebDAV
 		size_t stream_size = stream.tellg();
 		stream.seekg(0, std::ios::beg);
 
-		Data response = { 0, 0, 0 };
+		Data response = { nullptr, 0, 0 };
 
 		request.set(CURLOPT_UPLOAD, 1L);
 		request.set(CURLOPT_URL, url.c_str());
@@ -324,11 +326,6 @@ namespace WebDAV
 		this->key_path = get(options, "key_path");
 	}
 
-    Client::~Client() 
-    {
-    }
-
-
 	unsigned long long
 		Client::free_size() const noexcept
 	{
@@ -349,7 +346,7 @@ namespace WebDAV
 		auto document_print = pugi::node_to_string(document);
 		size_t size = document_print.length() * sizeof((document_print.c_str())[0]);
 
-		Data data = { 0, 0, 0 };
+		Data data = { nullptr, 0, 0 };
 
 		Request request(this->options());
 
@@ -391,7 +388,7 @@ namespace WebDAV
 			"Depth: 1"
 		};
 
-		Data data = { 0, 0, 0 };
+		Data data = { nullptr, 0, 0 };
 
 		Request request(this->options());
 
@@ -420,7 +417,7 @@ namespace WebDAV
 			"Depth: 1"
 		};
 
-		Data data = { 0, 0, 0 };
+		Data data = { nullptr, 0, 0 };
 
 		Request request(this->options());
 
@@ -451,9 +448,9 @@ namespace WebDAV
 			std::string encode_file_name = href.first_child().value();
 			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
 			auto target_path = target_urn.path();
-			auto target_path_without_sep = std::string(target_path, 0, target_path.rfind("/") + 1);
-			auto resource_path_without_sep = std::string(resource_path, 0, resource_path.rfind("/") + 1);
-			if (resource_path_without_sep.compare(target_path_without_sep) == 0) {
+			auto target_path_without_sep = std::string(target_path, 0, target_path.rfind('/') + 1);
+			auto resource_path_without_sep = std::string(resource_path, 0, resource_path.rfind('/') + 1);
+			if (resource_path_without_sep == target_path_without_sep) {
 				auto propstat = response.node().select_node("*[local-name()='propstat']").node();
 				auto prop = propstat.select_node("*[local-name()='prop']").node();
 				auto creation_date = prop.select_node("*[local-name()='creationdate']").node();
@@ -482,8 +479,7 @@ namespace WebDAV
 	{
 		auto information = this->info(remote_resource);
 		auto resource_type = information["type"];
-		bool is_dir = resource_type.compare("d:collection") == 0;
-		is_dir |= resource_type.compare("D:collection") == 0;
+		bool is_dir = resource_type == "d:collection" || resource_type == "D:collection";
 		return is_dir;
 	}
 
@@ -501,7 +497,7 @@ namespace WebDAV
 			"Depth: 1"
 		};
 
-		Data data = { 0, 0, 0 };
+		Data data = { nullptr, 0, 0 };
 
 		Request request(this->options());
 
@@ -753,10 +749,10 @@ namespace WebDAV
 
     class Environment {
     public:
-        Environment() {
+        Environment() noexcept {
             curl_global_init(CURL_GLOBAL_ALL);
         }
-        ~Environment() {
+        ~Environment() noexcept {
             curl_global_cleanup();
         }
     };

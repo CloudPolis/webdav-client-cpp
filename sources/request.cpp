@@ -93,6 +93,26 @@ namespace WebDAV
 	}
 
 
+    auto Request::swap(Request& other) noexcept -> void
+    {
+        using std::swap;
+        swap(handle, other.handle);
+    }
+
+    Request::Request(Request&& other) noexcept : handle{ other.handle }
+    {
+        other.handle = nullptr;
+    }
+
+    auto Request::operator=(Request&& other) noexcept -> Request &
+    {
+        if (this != &other) {
+            Request(std::move(other)).swap(*this);
+        }
+
+        return *this;
+    }
+
 	bool Request::perform() const noexcept
 	{
 		if (this->handle == nullptr) return false;
