@@ -72,7 +72,7 @@ int main(int argc, char * argv[]) {
 
         std::map<std::string, std::string> options = {
                 {"webdav_hostname", hostname_ptr},
-                {"webdav_login",    username_ptr},
+                {"webdav_username", username_ptr},
                 {"webdav_password", password_ptr}
         };
 
