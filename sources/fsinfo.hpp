@@ -23,8 +23,8 @@
 #ifndef WEBDAV_FSINFO_HPP
 #define WEBDAV_FSINFO_HPP
 
-#include <string>
 #include <fstream>
+#include <string>
 
 namespace WebDAV
 {
