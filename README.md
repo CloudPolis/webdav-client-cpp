@@ -13,6 +13,7 @@ Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-ser
  - Google Drive
  - Box
  - 4shared
+ - ownCloud
  - ...
 
 Install
