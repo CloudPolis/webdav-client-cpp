@@ -59,7 +59,7 @@ namespace fixture
         boost::uuids::random_generator gen;
         boost::uuids::uuid id = gen();
         auto ciid = to_string(id);
-        return ciid;
+        return ciid + "/";
     }
 
     auto get_options() -> dict_t {

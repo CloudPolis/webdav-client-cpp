@@ -45,7 +45,7 @@ namespace WebDAV
 	///
 	/// \brief WebDAV Client
 	/// \author designerror
-	/// \version 1.1.0
+	/// \version 1.1.1
 	/// \date 08/8/2016
 	///
 	class Client
@@ -264,7 +264,7 @@ namespace WebDAV
 		auto sync_download_to(
 			const std::string& remote_file,
 			char * & buffer_ptr,
-			unsigned long long int & buffer_size,
+			unsigned long long & buffer_size,
 			callback_t callback = nullptr,
 			progress_t progress = nullptr
 		) const noexcept -> bool;
@@ -286,7 +286,7 @@ namespace WebDAV
 		auto sync_upload_from(
 			const std::string& remote_file,
 			char * buffer_ptr,
-			unsigned long long int buffer_size,
+			unsigned long long buffer_size,
 			callback_t callback = nullptr,
 			progress_t progress = nullptr
 		) const noexcept -> bool;

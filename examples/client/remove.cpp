@@ -25,26 +25,26 @@
 int main() {
 
     std::map<std::string, std::string> options =
-            {
-                    { "webdav_hostname", "https://webdav.yandex.ru" },
-                    { "webdav_username", "{webdav_username}" },
-                    { "webdav_password", "{webdav_password}" }
-            };
+    {
+        { "webdav_hostname", "https://webdav.yandex.ru" },
+        { "webdav_username", "{webdav_username}" },
+        { "webdav_password", "{webdav_password}" }
+    };
 
     std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     bool is_connected = client->check();
 
     auto remote_resources = {
-            "existing_file.dat",
-            "not_existing_file.dat",
-            "existing_directory",
-            "existing_directory/",
-            "not_existing_directory",
-            "not_existing_directory/"
+        "existing_file.dat",
+        "not_existing_file.dat",
+        "existing_directory",
+        "existing_directory/",
+        "not_existing_directory",
+        "not_existing_directory/"
     };
 
-    for (auto remote_resource : remote_resources) {
+    for (const auto& remote_resource : remote_resources) {
         bool is_clean = client->clean(remote_resource);
         std::cout << "Resource: " << remote_resource << " is " << (is_clean ? "" : "not ") << "clean" << std::endl;
     }

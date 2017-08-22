@@ -23,6 +23,7 @@
 
 #include <cstdlib>
 #include <thread>
+#include <algorithm>
 #include <webdav/client.hpp>
 #include "callback.hpp"
 #include "header.hpp"
@@ -84,13 +85,13 @@ namespace WebDAV
 		request.set(CURLOPT_CUSTOMREQUEST, "GET");
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HEADER, 0L);
-		request.set(CURLOPT_WRITEDATA, (size_t)&file_stream);
-		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Write::stream);
+		request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&file_stream));
+		request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Write::stream));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		if (progress != nullptr) {
-			request.set(CURLOPT_XFERINFOFUNCTION, (size_t)progress.target<progress_funptr>());
+			request.set(CURLOPT_XFERINFOFUNCTION, reinterpret_cast<size_t>(progress.target<progress_funptr>()));
 			request.set(CURLOPT_NOPROGRESS, 0L);
 		}
 
@@ -104,7 +105,7 @@ namespace WebDAV
     Client::sync_download_to(
         const std::string& remote_file,
         char * & buffer_ptr,
-        unsigned long long int & buffer_size,
+        unsigned long long & buffer_size,
         callback_t callback,
         progress_t progress
     ) const noexcept
@@ -124,13 +125,13 @@ namespace WebDAV
 		request.set(CURLOPT_CUSTOMREQUEST, "GET");
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HEADER, 0L);
-		request.set(CURLOPT_WRITEDATA, (size_t)&data);
-		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+		request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&data));
+		request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Append::buffer));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		if (progress != nullptr) {
-			request.set(CURLOPT_XFERINFOFUNCTION, (size_t)progress.target<progress_funptr>());
+			request.set(CURLOPT_XFERINFOFUNCTION, reinterpret_cast<size_t>(progress.target<progress_funptr>()));
 			request.set(CURLOPT_NOPROGRESS, 0L);
 		}
 
@@ -164,13 +165,13 @@ namespace WebDAV
 		request.set(CURLOPT_CUSTOMREQUEST, "GET");
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HEADER, 0L);
-		request.set(CURLOPT_WRITEDATA, (size_t)&stream);
-		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Write::stream);
+		request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&stream));
+		request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Write::stream));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		if (progress != nullptr) {
-			request.set(CURLOPT_XFERINFOFUNCTION, (size_t)progress.target<progress_funptr>());
+			request.set(CURLOPT_XFERINFOFUNCTION, reinterpret_cast<size_t>(progress.target<progress_funptr>()));
 			request.set(CURLOPT_NOPROGRESS, 0L);
 		}
 
@@ -205,11 +206,11 @@ namespace WebDAV
 
 		request.set(CURLOPT_UPLOAD, 1L);
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_READDATA, static_cast<size_t>(&file_stream));
+		request.set(CURLOPT_READDATA, reinterpret_cast<size_t>(&file_stream));
 		request.set(CURLOPT_READFUNCTION, reinterpret_cast<size_t>(Callback::Read::stream));
 		request.set(CURLOPT_INFILESIZE_LARGE, static_cast<curl_off_t>(size));
 		request.set(CURLOPT_BUFFERSIZE, static_cast<long>(Client::buffer_size));
-		request.set(CURLOPT_WRITEDATA, static_cast<size_t>(&response));
+		request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&response));
 		request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Append::buffer));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
@@ -229,7 +230,7 @@ namespace WebDAV
     Client::sync_upload_from(
         const std::string& remote_file,
         char * buffer_ptr,
-        unsigned long long int buffer_size,
+        unsigned long long buffer_size,
         callback_t callback,
         progress_t progress
     ) const noexcept
@@ -247,17 +248,17 @@ namespace WebDAV
 
 		request.set(CURLOPT_UPLOAD, 1L);
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_READDATA, (size_t)&data);
-		request.set(CURLOPT_READFUNCTION, (size_t)Callback::Read::buffer);
-		request.set(CURLOPT_INFILESIZE_LARGE, (curl_off_t)buffer_size);
-		request.set(CURLOPT_BUFFERSIZE, (long)Client::buffer_size);
-		request.set(CURLOPT_WRITEDATA, (size_t)&response);
-		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+		request.set(CURLOPT_READDATA, reinterpret_cast<size_t>(&data));
+		request.set(CURLOPT_READFUNCTION, reinterpret_cast<size_t>(Callback::Read::buffer));
+		request.set(CURLOPT_INFILESIZE_LARGE, static_cast<curl_off_t>(buffer_size));
+		request.set(CURLOPT_BUFFERSIZE, static_cast<long>(Client::buffer_size));
+		request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&response));
+		request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Append::buffer));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		if (progress != nullptr) {
-			request.set(CURLOPT_XFERINFOFUNCTION, (size_t)progress.target<progress_funptr>());
+			request.set(CURLOPT_XFERINFOFUNCTION, reinterpret_cast<size_t>(progress.target<progress_funptr>()));
 			request.set(CURLOPT_NOPROGRESS, 0L);
 		}
 
@@ -289,17 +290,17 @@ namespace WebDAV
 
 		request.set(CURLOPT_UPLOAD, 1L);
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_READDATA, (size_t)&stream);
-		request.set(CURLOPT_READFUNCTION, (size_t)Callback::Read::stream);
-		request.set(CURLOPT_INFILESIZE_LARGE, (curl_off_t)stream_size);
-		request.set(CURLOPT_BUFFERSIZE, (long)Client::buffer_size);
-		request.set(CURLOPT_WRITEDATA, (size_t)&response);
-		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+		request.set(CURLOPT_READDATA, reinterpret_cast<size_t>(&stream));
+		request.set(CURLOPT_READFUNCTION, reinterpret_cast<size_t>(Callback::Read::stream));
+		request.set(CURLOPT_INFILESIZE_LARGE, static_cast<curl_off_t>(stream_size));
+		request.set(CURLOPT_BUFFERSIZE, static_cast<long>(Client::buffer_size));
+		request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&response));
+		request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Append::buffer));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		if (progress != nullptr) {
-			request.set(CURLOPT_XFERINFOFUNCTION, (size_t)progress.target<progress_funptr>());
+			request.set(CURLOPT_XFERINFOFUNCTION, reinterpret_cast<size_t>(progress.target<progress_funptr>()));
 			request.set(CURLOPT_NOPROGRESS, 0L);
 		}
 
@@ -431,7 +432,7 @@ namespace WebDAV
 #endif
 		bool is_performed = request.perform();
 
-		if (!is_performed) return dict_t();
+		if (!is_performed) return dict_t{};
 
 		pugi::xml_document document;
 		document.load_buffer(data.buffer, static_cast<size_t>(data.size));
@@ -444,7 +445,7 @@ namespace WebDAV
 		{
 			pugi::xml_node href = response.node().select_node("*[local-name()='href']").node();
 			std::string encode_file_name = href.first_child().value();
-			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
+			std::string resource_path = curl_unescape(encode_file_name.c_str(), static_cast<int>(encode_file_name.length()));
 			auto target_path = target_urn.path();
 			auto target_path_without_sep = std::string(target_path, 0, target_path.rfind('/') + 1);
 			auto resource_path_without_sep = std::string(resource_path, 0, resource_path.rfind('/') + 1);
@@ -469,7 +470,7 @@ namespace WebDAV
 			}
 		}
 
-		return dict_t();
+		return dict_t{};
 	}
 
 	bool
@@ -485,7 +486,7 @@ namespace WebDAV
 		Client::list(const std::string& remote_directory) const noexcept
 	{
 		bool is_existed = this->check(remote_directory);
-		if (!is_existed) return strings_t();
+		if (!is_existed) return strings_t{};
 
 		auto target_urn = Path(this->webdav_root, true) + remote_directory;
 		target_urn = Path(target_urn.path(), true);
@@ -505,15 +506,15 @@ namespace WebDAV
 		request.set(CURLOPT_URL, url.c_str());
 		request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
 		request.set(CURLOPT_HEADER, 0);
-		request.set(CURLOPT_WRITEDATA, (size_t)&data);
-		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+		request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&data));
+		request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Append::buffer));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 
 		bool is_performed = request.perform();
 
-		if (!is_performed) return strings_t();
+		if (!is_performed) return strings_t{};
 
 		strings_t resources;
 
@@ -541,7 +542,7 @@ namespace WebDAV
 		progress_t progress
 	) const noexcept
 	{
-		return this->sync_download(remote_file, local_file, nullptr, progress);
+		return this->sync_download(remote_file, local_file, nullptr, std::move(progress));
 	}
 
 	void
@@ -552,7 +553,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		std::thread downloading([&]() { this->sync_download(remote_file, local_file, callback, progress); });
+		std::thread downloading([&]() { this->sync_download(remote_file, local_file, callback, std::move(progress)); });
 		downloading.detach();
 	}
 
@@ -560,11 +561,11 @@ namespace WebDAV
 		Client::download_to(
 			const std::string& remote_file,
 			char * & buffer_ptr,
-			unsigned long long int & buffer_size,
+			unsigned long long & buffer_size,
 			progress_t progress
 		) const noexcept
 	{
-		return this->sync_download_to(remote_file, buffer_ptr, buffer_size, nullptr, progress);
+		return this->sync_download_to(remote_file, buffer_ptr, buffer_size, nullptr, std::move(progress));
 	}
 
 	bool
@@ -574,7 +575,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		return this->sync_download_to(remote_file, stream, nullptr, progress);
+		return this->sync_download_to(remote_file, stream, nullptr, std::move(progress));
 	}
 
 	bool
@@ -681,7 +682,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		return this->sync_upload(remote_file, local_file, nullptr, progress);
+		return this->sync_upload(remote_file, local_file, nullptr, std::move(progress));
 	}
 
 	void
@@ -692,7 +693,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		std::thread uploading([&]() { this->sync_upload(remote_file, local_file, callback, progress); });
+		std::thread uploading([&]() { this->sync_upload(remote_file, local_file, callback, std::move(progress)); });
 		uploading.detach();
 	}
 
@@ -703,18 +704,18 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		return this->sync_upload_from(remote_file, stream, nullptr, progress);
+		return this->sync_upload_from(remote_file, stream, nullptr, std::move(progress));
 	}
 
 	bool
 		Client::upload_from(
 			const std::string& remote_file,
 			char * buffer_ptr,
-			unsigned long long int buffer_size,
+			unsigned long long buffer_size,
 			progress_t progress
 		) const noexcept
 	{
-		return this->sync_upload_from(remote_file, buffer_ptr, buffer_size, nullptr, progress);
+		return this->sync_upload_from(remote_file, buffer_ptr, buffer_size, nullptr, std::move(progress));
 	}
 
 	bool
@@ -737,7 +738,7 @@ namespace WebDAV
 
 		request.set(CURLOPT_CUSTOMREQUEST, "DELETE");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
+		request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif

@@ -27,7 +27,7 @@
 std::string resources_to_string(std::vector<std::string> & resources)
 {
     std::stringstream stream;
-    for (auto resource : resources)
+    for (const auto& resource : resources)
     {
         stream << "\t" << "- " << resource << std::endl;
     }
@@ -46,11 +46,11 @@ int main() {
     if (password_ptr == nullptr) return -1;
 
     std::map<std::string, std::string> options =
-            {
-                    { "webdav_hostname", hostname_ptr },
-                    { "webdav_username", username_ptr },
-                    { "webdav_password", password_ptr }
-            };
+    {
+        { "webdav_hostname", hostname_ptr },
+        { "webdav_username", username_ptr },
+        { "webdav_password", password_ptr }
+    };
 
     if (root_ptr != nullptr) {
         options["webdav_root"] = root_ptr;

@@ -29,11 +29,11 @@
 void download_to_file()
 {
     std::map<std::string, std::string> options =
-            {
-                    {"webdav_hostname", "https://webdav.yandex.ru"},
-                    {"webdav_username", "{webdav_username}"},
-                    {"webdav_password", "{webdav_password}"}
-            };
+    {
+        {"webdav_hostname", "https://webdav.yandex.ru"},
+        {"webdav_username", "{webdav_username}"},
+        {"webdav_password", "{webdav_password}"}
+    };
 
     std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
@@ -53,11 +53,11 @@ void download_to_file()
 void async_download_to_file()
 {
     std::map<std::string, std::string> options =
-            {
-                    {"webdav_hostname", "https://webdav.yandex.ru"},
-                    {"webdav_username", "{webdav_username}"},
-                    {"webdav_password", "{webdav_password}"}
-            };
+    {
+        {"webdav_hostname", "https://webdav.yandex.ru"},
+        {"webdav_username", "{webdav_username}"},
+        {"webdav_password", "{webdav_password}"}
+    };
 
     std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
@@ -79,11 +79,11 @@ void async_download_to_file()
 void download_to_buffer()
 {
     std::map<std::string, std::string> options =
-            {
-                    {"webdav_hostname", "https://webdav.yandex.ru"},
-                    {"webdav_username", "{webdav_username}"},
-                    {"webdav_password", "{webdav_password}"}
-            };
+    {
+        {"webdav_hostname", "https://webdav.yandex.ru"},
+        {"webdav_username", "{webdav_username}"},
+        {"webdav_password", "{webdav_password}"}
+    };
 
     std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
@@ -106,11 +106,11 @@ void async_download_to_buffer()
 {
     /*
     std::map<std::string, std::string> options =
-            {
-                    {"webdav_hostname", "https://webdav.yandex.ru"},
-                    {"webdav_username", "{webdav_username}"},
-                    {"webdav_password", "{webdav_password}"}
-            };
+    {
+        {"webdav_hostname", "https://webdav.yandex.ru"},
+        {"webdav_username", "{webdav_username}"},
+        {"webdav_password", "{webdav_password}"}
+    };
 
     std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
@@ -134,11 +134,11 @@ void async_download_to_buffer()
 void download_from_stream()
 {
     std::map<std::string, std::string> options =
-            {
-                    {"webdav_hostname", "https://webdav.yandex.ru"},
-                    {"webdav_username", "{webdav_username}"},
-                    {"webdav_password", "{webdav_password}"}
-            };
+    {
+        {"webdav_hostname", "https://webdav.yandex.ru"},
+        {"webdav_username", "{webdav_username}"},
+        {"webdav_password", "{webdav_password}"}
+    };
 
     std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 

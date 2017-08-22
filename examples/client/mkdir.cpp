@@ -25,21 +25,21 @@
 int main() {
 
     std::map<std::string, std::string> options =
-            {
-                    { "webdav_hostname", "https://webdav.yandex.ru" },
-                    { "webdav_username", "{webdav_username}" },
-                    { "webdav_password", "{webdav_password}" }
-            };
+    {
+        { "webdav_hostname", "https://webdav.yandex.ru" },
+        { "webdav_username", "{webdav_username}" },
+        { "webdav_password", "{webdav_password}" }
+    };
 
     std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     auto remote_directories = {
-            "existing_directory",
-            "existing_directory/new_directory",
-            "not_existing_directory/new_directory",
+        "existing_directory",
+        "existing_directory/new_directory",
+        "not_existing_directory/new_directory",
     };
 
-    for (auto remote_directory : remote_directories) {
+    for (const auto& remote_directory : remote_directories) {
         bool is_created = client->create_directory(remote_directory);
         std::cout << "Directory: " << remote_directory << " is " << (is_created ? "" : "not ") << "created" << std::endl;
     }

@@ -38,7 +38,7 @@ namespace pugi
 		}
 	};
 
-	inline std::string node_to_string(pugi::xml_node node)
+	inline std::string node_to_string(const pugi::xml_node& node)
 	{
 		xml_string_writer writer;
 		node.print(writer);

@@ -26,7 +26,7 @@
 
 std::string resources_to_string(const std::vector<std::string> & resources) {
     std::stringstream stream;
-    for (auto resource : resources)
+    for (const auto& resource : resources)
     {
         stream << "\t" << "- " << resource << std::endl;
     }
@@ -36,11 +36,11 @@ std::string resources_to_string(const std::vector<std::string> & resources) {
 int main() {
 
     std::map<std::string, std::string> options =
-            {
-                    { "webdav_hostname", "https://webdav.yandex.ru" },
-                    { "webdav_username", "{webdav_username}" },
-                    { "webdav_password", "{webdav_password}" }
-            };
+    {
+        { "webdav_hostname", "https://webdav.yandex.ru" },
+        { "webdav_username", "{webdav_username}" },
+        { "webdav_password", "{webdav_password}" }
+    };
 
     std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 

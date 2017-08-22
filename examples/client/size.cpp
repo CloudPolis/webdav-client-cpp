@@ -25,11 +25,11 @@
 int main() {
 
     std::map<std::string, std::string> options =
-            {
-                    { "webdav_hostname", "https://webdav.yandex.ru" },
-                    { "webdav_username", "{webdav_username}" },
-                    { "webdav_password", "{webdav_password}" }
-            };
+    {
+        { "webdav_hostname", "https://webdav.yandex.ru" },
+        { "webdav_username", "{webdav_username}" },
+        { "webdav_password", "{webdav_password}" }
+    };
 
     std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
