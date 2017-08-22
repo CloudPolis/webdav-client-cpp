@@ -1,7 +1,7 @@
 WebDAV Client
 ===
 [![version](https://img.shields.io/badge/hunter-v0.19.61-blue.svg)](https://github.com/ruslo/hunter/tree/v0.19.61)
-[![version](https://img.shields.io/badge/wdc-v1.1.0-blue.svg)](https://github.com/CloudPolis/webdav-client-cpp/releases/tag/v1.1.0)
+[![version](https://img.shields.io/badge/wdc-v1.1.1-blue.svg)](https://github.com/CloudPolis/webdav-client-cpp/releases/tag/v1.1.1)
 [![Build Status](https://travis-ci.org/CloudPolis/webdav-client-cpp.svg?branch=master)](https://travis-ci.org/CloudPolis/webdav-client-cpp)
 [![Build status](https://ci.appveyor.com/api/projects/status/cr2xwpwe3iiafbwg?svg=true)](https://ci.appveyor.com/project/rusdevops/webdav-client-cpp)
 [![Join the chat at https://gitter.im/CloudPolis/webdav-client-cpp](https://badges.gitter.im/CloudPolis/webdav-client-cpp.svg)](https://gitter.im/CloudPolis/webdav-client-cpp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
