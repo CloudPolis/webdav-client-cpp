@@ -31,8 +31,6 @@
 #include "request.hpp"
 #include "urn.hpp"
 
-
-
 namespace WebDAV
 {
 	auto inline get(const dict_t& options, const std::string&& name) -> std::string
@@ -207,17 +205,17 @@ namespace WebDAV
 
 		request.set(CURLOPT_UPLOAD, 1L);
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_READDATA, (size_t)&file_stream);
-		request.set(CURLOPT_READFUNCTION, (size_t)Callback::Read::stream);
-		request.set(CURLOPT_INFILESIZE_LARGE, (curl_off_t)size);
-		request.set(CURLOPT_BUFFERSIZE, (long)Client::buffer_size);
-		request.set(CURLOPT_WRITEDATA, (size_t)&response);
-		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+		request.set(CURLOPT_READDATA, static_cast<size_t>(&file_stream));
+		request.set(CURLOPT_READFUNCTION, reinterpret_cast<size_t>(Callback::Read::stream));
+		request.set(CURLOPT_INFILESIZE_LARGE, static_cast<curl_off_t>(size));
+		request.set(CURLOPT_BUFFERSIZE, static_cast<long>(Client::buffer_size));
+		request.set(CURLOPT_WRITEDATA, static_cast<size_t>(&response));
+		request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Append::buffer));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
 		if (progress != nullptr) {
-			request.set(CURLOPT_XFERINFOFUNCTION, (size_t)progress.target<progress_funptr>());
+			request.set(CURLOPT_XFERINFOFUNCTION, reinterpret_cast<size_t>(progress.target<progress_funptr>()));
 			request.set(CURLOPT_NOPROGRESS, 0L);
 		}
 
@@ -351,12 +349,12 @@ namespace WebDAV
 		Request request(this->options());
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
-		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
+		request.set(CURLOPT_HTTPHEADER, reinterpret_cast<struct curl_slist *>(header.handle));
 		request.set(CURLOPT_POSTFIELDS, document_print.c_str());
-		request.set(CURLOPT_POSTFIELDSIZE, (long)size);
+		request.set(CURLOPT_POSTFIELDSIZE, static_cast<long>(size));
 		request.set(CURLOPT_HEADER, 0);
-		request.set(CURLOPT_WRITEDATA, (size_t)&data);
-		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+		request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&data));
+		request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Append::buffer));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
@@ -364,7 +362,7 @@ namespace WebDAV
 		auto is_performed = request.perform();
 		if (!is_performed) return 0;
 
-		document.load_buffer(data.buffer, (size_t)data.size);
+		document.load_buffer(data.buffer, static_cast<size_t>(data.size));
 
 		pugi::xml_node multistatus = document.select_node("*[local-name()='multistatus']").node();
 		pugi::xml_node response = multistatus.select_node("*[local-name()='response']").node();
@@ -396,9 +394,9 @@ namespace WebDAV
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
-		request.set(CURLOPT_WRITEDATA, (size_t)&data);
-		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+		request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
+		request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&data));
+		request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Append::buffer));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
@@ -425,9 +423,9 @@ namespace WebDAV
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
-		request.set(CURLOPT_WRITEDATA, (size_t)&data);
-		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
+		request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
+		request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&data));
+		request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Append::buffer));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
@@ -436,7 +434,7 @@ namespace WebDAV
 		if (!is_performed) return dict_t();
 
 		pugi::xml_document document;
-		document.load_buffer(data.buffer, (size_t)data.size);
+		document.load_buffer(data.buffer, static_cast<size_t>(data.size));
 #ifdef WDC_VERBOSE
 		document.save(std::cout);
 #endif
@@ -505,7 +503,7 @@ namespace WebDAV
 
 		request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
+		request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
 		request.set(CURLOPT_HEADER, 0);
 		request.set(CURLOPT_WRITEDATA, (size_t)&data);
 		request.set(CURLOPT_WRITEFUNCTION, (size_t)Callback::Append::buffer);
@@ -520,14 +518,14 @@ namespace WebDAV
 		strings_t resources;
 
 		pugi::xml_document document;
-		document.load_buffer(data.buffer, (size_t)data.size);
+		document.load_buffer(data.buffer, static_cast<size_t>(data.size));
 		auto multistatus = document.select_node("*[local-name()='multistatus']").node();
 		auto responses = multistatus.select_nodes("*[local-name()='response']");
 		for (auto response : responses)
 		{
 			pugi::xml_node href = response.node().select_node("*[local-name()='href']").node();
 			std::string encode_file_name = href.first_child().value();
-			std::string resource_path = curl_unescape(encode_file_name.c_str(), (int)encode_file_name.length());
+			std::string resource_path = curl_unescape(encode_file_name.c_str(), static_cast<int>(encode_file_name.length()));
 			auto target_path = target_urn.path();
 			Path resource_urn(resource_path);
             if (resource_urn == target_urn) continue;
@@ -608,7 +606,7 @@ namespace WebDAV
 
 		request.set(CURLOPT_CUSTOMREQUEST, "MKCOL");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
+		request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
@@ -638,7 +636,7 @@ namespace WebDAV
 
 		request.set(CURLOPT_CUSTOMREQUEST, "MOVE");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
+		request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
@@ -668,7 +666,7 @@ namespace WebDAV
 
 		request.set(CURLOPT_CUSTOMREQUEST, "COPY");
 		request.set(CURLOPT_URL, url.c_str());
-		request.set(CURLOPT_HTTPHEADER, (struct curl_slist *)header.handle);
+		request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
 #ifdef WDC_VERBOSE
 		request.set(CURLOPT_VERBOSE, 1);
 #endif
@@ -756,6 +754,6 @@ namespace WebDAV
             curl_global_cleanup();
         }
     };
-}
+} // namespace WebDAV
 
 static const WebDAV::Environment env;

@@ -314,6 +314,6 @@ namespace WebDAV
 
 		dict_t options() const noexcept;
 	};
-}
+} // namespace WebDAV
 
 #endif

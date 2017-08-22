@@ -52,6 +52,6 @@ namespace WebDAV
 			size_t buffer(char * data, size_t size, size_t count, void * buffer);
 		}
 	}
-}
+} // namespace WebDAV
 
 #endif

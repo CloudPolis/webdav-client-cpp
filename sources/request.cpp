@@ -28,8 +28,12 @@ namespace WebDAV
 	auto inline get(const dict_t& options, const std::string&& name) -> std::string
 	{
 		auto it = options.find(name);
-		if (it == options.end()) return "";
-		else return it->second;
+		if (it == options.end()) {
+            return std::string{""};
+        }
+		else {
+            return it->second;
+        }
 	}
 
 	Request::Request(dict_t&& options_) : options(options_)
@@ -59,31 +63,31 @@ namespace WebDAV
 
 			this->set(CURLOPT_SSLCERTTYPE, "PEM");
 			this->set(CURLOPT_SSLKEYTYPE, "PEM");
-			this->set(CURLOPT_SSLCERT, (char *)cert_path.c_str());
-			this->set(CURLOPT_SSLKEY, (char *)key_path.c_str());
+			this->set(CURLOPT_SSLCERT, const_cast<char *>(cert_path.c_str()));
+			this->set(CURLOPT_SSLKEY, const_cast<char *>(key_path.c_str()));
 
 		}
 		
-		this->set(CURLOPT_URL, (char *)webdav_hostname.c_str());
-		this->set(CURLOPT_HTTPAUTH, (int)CURLAUTH_BASIC);
+		this->set(CURLOPT_URL, const_cast<char *>(webdav_hostname.c_str()));
+		this->set(CURLOPT_HTTPAUTH, static_cast<int>(CURLAUTH_BASIC));
 		auto token = webdav_username + ":" + webdav_password;
-		this->set(CURLOPT_USERPWD, (char *)token.c_str());
+		this->set(CURLOPT_USERPWD, const_cast<char *>(token.c_str()));
 
 		if (!this->proxy_enabled()) return;
 
-		this->set(CURLOPT_PROXY, (char *)proxy_hostname.c_str());
-		this->set(CURLOPT_PROXYAUTH, (int)CURLAUTH_BASIC);
+		this->set(CURLOPT_PROXY, const_cast<char *>(proxy_hostname.c_str()));
+		this->set(CURLOPT_PROXYAUTH, static_cast<int>(CURLAUTH_BASIC));
 
 		if (proxy_username.empty()) return;
 
 		if (proxy_password.empty())
 		{
-			this->set(CURLOPT_PROXYUSERNAME, (char *)proxy_username.c_str());
+			this->set(CURLOPT_PROXYUSERNAME, const_cast<char *>(proxy_username.c_str()));
 		}
 		else
 		{
 			token = proxy_username + ":" + proxy_password;
-			this->set(CURLOPT_PROXYUSERPWD, (char *)token.c_str());
+			this->set(CURLOPT_PROXYUSERPWD, const_cast<char *>(token.c_str()));
 		}
 	}
 
@@ -147,4 +151,4 @@ namespace WebDAV
 		if (key_path.empty()) return false;
 		return FileInfo::exists(key_path);
 	}
-}
+} // namespace WebDAV

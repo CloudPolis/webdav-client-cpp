@@ -46,9 +46,11 @@ namespace WebDAV
         auto operator=(Header&& other) noexcept -> Header&;
 
         void append(const std::string& item) noexcept;
+
     private:
+
         auto swap(Header& other) noexcept -> void;
     };
-}
+} // namespace WebDAV
 
 #endif

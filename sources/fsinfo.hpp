@@ -33,7 +33,7 @@ namespace WebDAV
 		auto exists(const std::string& path) -> bool;
 	
 		auto size(const std::string& path_file) -> unsigned long long;
-	}
-}
+	} // namespace FileInfo
+} // namespace WebDAV
 
 #endif

@@ -45,6 +45,6 @@ namespace pugi
 
 		return writer.result;
 	}
-}
+} // namespace pugi
 
 #endif

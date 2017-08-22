@@ -36,7 +36,7 @@ namespace WebDAV
 
     Header::~Header() noexcept
     {
-        curl_slist_free_all((curl_slist*)this->handle);
+        curl_slist_free_all(reinterpret_cast<curl_slist *>(this->handle));
     }
 
     Header::Header(Header&& other) noexcept
@@ -64,6 +64,6 @@ namespace WebDAV
     void
     Header::append(const std::string& item) noexcept
     {
-        this->handle = curl_slist_append((curl_slist*)this->handle, item.c_str());
+        this->handle = curl_slist_append(reinterpret_cast<curl_slist *>(this->handle), item.c_str());
     }
-}
+} // namespace WebDAV

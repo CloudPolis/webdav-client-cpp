@@ -21,6 +21,7 @@
 ############################################################################*/
 
 #include <algorithm>
+#include <iterator>
 #include <string>
 #include <vector>
 #include <curl/curl.h>
@@ -30,9 +31,10 @@ using std::vector;
 
 #include "urn.hpp"
 
-namespace WebDAV {
-
-    namespace Urn {
+namespace WebDAV 
+{
+    namespace Urn 
+    {
 
         const string Path::separate = "/";
         const string Path::root = "/";
@@ -45,7 +47,7 @@ namespace WebDAV {
             if (first_position != 0) path = Path::root + path;
             auto last_symbol_index = path.length() - 1;
             auto last_symbol = path.substr(last_symbol_index, 1);
-            auto is_dir = Path::separate.compare(last_symbol) == 0;
+            auto is_dir = last_symbol == Path::separate;
             if (force_dir && !is_dir) path += Path::separate;
             m_path = path;
 
@@ -53,7 +55,7 @@ namespace WebDAV {
             bool is_find = false;
             do {
                 auto first_position = m_path.find(double_separte);
-                is_find = first_position != string::npos;
+                is_find = first_position != m_path.npos;
                 if (is_find) {
                     m_path.replace(first_position, double_separte.size(), Path::separate);
                 }
@@ -70,23 +72,24 @@ namespace WebDAV {
 
         auto escape(void * request, const string& name) -> string {
             
-            string path = curl_easy_escape(request, name.c_str(), (int)name.length());
+            string path = curl_easy_escape(request, name.c_str(), static_cast<int>(name.length()));
             return path;
         }
 
         auto split(const string& text, const string& delims) -> vector<string> {
 
             vector<string> tokens;
-            std::size_t start = text.find_first_not_of(delims), end = 0;
+            auto start = text.find_first_not_of(delims); 
+            auto end = text.npos;
 
-            while ((end = text.find_first_of(delims, start)) != string::npos)
-            {
-                tokens.push_back(text.substr(start, end - start));
+            while ((end = text.find_first_of(delims, start)) != text.npos){
+
+                tokens.push_back(text.substr(start, end-start));
                 start = text.find_first_not_of(delims, end);
             }
-            if (start != string::npos)
+            if (start != text.npos) {
                 tokens.push_back(text.substr(start));
-
+			}
             return tokens;
         }
 
@@ -95,7 +98,7 @@ namespace WebDAV {
             if (this->is_root()) return m_path;
 
             auto names = split(m_path, Path::separate);
-            std::string quote_path;
+            string quote_path;
 
             std::for_each(names.begin(), names.end(), [&quote_path, request](string& name) {
                 auto escape_name = escape(request, name);
@@ -112,7 +115,7 @@ namespace WebDAV {
         auto Path::name() const -> string {
 
             auto path = this->path();
-            auto is_root = Path::separate.compare(path) == 0;
+            auto is_root = path == Path::separate;
             if (is_root) return string{""};
 
             if (this->is_directory()) {
@@ -146,12 +149,12 @@ namespace WebDAV {
             auto path = this->path();
             auto last_symbol_index = path.length() - 1;
             auto last_symbol = path.substr(last_symbol_index, 1);
-            auto is_equal = Path::separate.compare(last_symbol) == 0;
+            auto is_equal = last_symbol == Path::separate;
             return is_equal;
         }
 
         auto Path::is_root() const -> bool {
-            return Path::separate.compare(m_path) == 0;
+            return m_path == Path::separate;
         }
 
         auto Path::operator+(const string& rhs) const -> Path {
@@ -160,17 +163,8 @@ namespace WebDAV {
 
         auto Path::operator==(const Path& rhs) const -> bool {
            
-            if (this->is_root()) {
-                if (rhs.is_root()) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-            else if (rhs.is_root()) {
-                return false;
-            }
+            if (this->is_root() && rhs.is_root()) return true;
+            if (!this->is_root() && rhs.is_root()) return false;
 
             string lhs_path;
             bool is_dir = is_directory();
@@ -190,8 +184,8 @@ namespace WebDAV {
             }
             return lhs_path == rhs_path;
         }
-    }
-}
+    } // namespace Urn
+} // namespace WebDAV
 
 auto operator<<(std::ostream& stream, const WebDAV::Urn::Path& path) -> std::ostream& {
     return stream << path.path();

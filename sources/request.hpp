@@ -45,8 +45,10 @@ namespace WebDAV
 		bool cert_required() const noexcept;
 
         auto swap(Request& other) noexcept -> void;
+
 	public:
-		explicit Request(dict_t&& options);
+
+		explicit Request(dict_t&& options_);
 
 		~Request() noexcept;
 
@@ -69,6 +71,6 @@ namespace WebDAV
 
 		void * handle;
 	};
-}
+} // namespace WebDAV
 
 #endif

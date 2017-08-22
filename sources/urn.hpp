@@ -29,7 +29,8 @@
 
 namespace WebDAV
 {
-    namespace Urn {
+    namespace Urn 
+    {
 
         using std::string;
         
@@ -43,7 +44,7 @@ namespace WebDAV
 
         public:
 
-            explicit Path(const string& path, bool force_dir = false);
+            explicit Path(const string& path_, bool force_dir = false);
 
             explicit Path(std::nullptr_t);
 
