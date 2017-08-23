@@ -1,6 +1,6 @@
 WebDAV Client
 ===
-[![version](https://img.shields.io/badge/hunter-v0.19.61-blue.svg)](https://github.com/ruslo/hunter/tree/v0.19.61)
+[![version](https://img.shields.io/badge/hunter-v0.19.79-blue.svg)](https://github.com/ruslo/hunter/tree/v0.19.79)
 [![version](https://img.shields.io/badge/wdc-v1.1.1-blue.svg)](https://github.com/CloudPolis/webdav-client-cpp/releases/tag/v1.1.1)
 [![Build Status](https://travis-ci.org/CloudPolis/webdav-client-cpp.svg?branch=master)](https://travis-ci.org/CloudPolis/webdav-client-cpp)
 [![Build status](https://ci.appveyor.com/api/projects/status/cr2xwpwe3iiafbwg?svg=true)](https://ci.appveyor.com/project/rusdevops/webdav-client-cpp)
@@ -128,8 +128,8 @@ cmake_minimum_required(VERSION 3.3)
 
 include(cmake/HunterGate.cmake)
 HunterGate(
-    URL "https://github.com/ruslo/hunter/archive/v0.19.61.tar.gz"
-    SHA1 "cd4dd406ca45bb6bb28a116d93c2958efac6bf09"
+    URL "https://github.com/ruslo/hunter/archive/v0.19.79.tar.gz"
+    SHA1 "f4ac704bdf9f32b52f718b1ac520bb6aca2d9be4"
 )
 
 project(example)
