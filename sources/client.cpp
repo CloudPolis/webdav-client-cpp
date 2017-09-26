@@ -441,7 +441,7 @@ namespace WebDAV
 #endif
 		auto multistatus = document.select_node("*[local-name()='multistatus']").node();
 		auto responses = multistatus.select_nodes("*[local-name()='response']");
-		for (auto response : responses)
+		for (const auto& response : responses)
 		{
 			pugi::xml_node href = response.node().select_node("*[local-name()='href']").node();
 			std::string encode_file_name = href.first_child().value();
@@ -457,12 +457,14 @@ namespace WebDAV
 				auto content_length = prop.select_node("*[local-name()='getcontentlength']").node();
 				auto modified_date = prop.select_node("*[local-name()='getlastmodified']").node();
 				auto resource_type = prop.select_node("*[local-name()='resourcetype']").node();
+				auto etag = prop.select_node("*[local-name()='getetag']").node();
 
 				dict_t information = {
 					{ "created", creation_date.first_child().value() },
+					{ "modified", modified_date.first_child().value() },
 					{ "name", display_name.first_child().value() },
 					{ "size", content_length.first_child().value() },
-					{ "modified", modified_date.first_child().value() },
+					{ "etag", etag.first_child().value() },
 					{ "type", resource_type.first_child().name() }
 				};
 

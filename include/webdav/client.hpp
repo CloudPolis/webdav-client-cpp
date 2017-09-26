@@ -45,8 +45,8 @@ namespace WebDAV
 	///
 	/// \brief WebDAV Client
 	/// \author designerror
-	/// \version 1.1.1
-	/// \date 08/8/2016
+	/// \version 1.1.2
+	/// \date 9/26/2017
 	///
 	class Client
 	{	
