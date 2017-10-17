@@ -25,6 +25,7 @@
 #include "fixture.hpp"
 
 #include <fstream>
+#include <memory>
 
 SCENARIO("Client must upload buffer", "[upload][buffer]") {
 
