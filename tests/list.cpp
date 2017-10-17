@@ -24,6 +24,8 @@
 #include <webdav/client.hpp>
 #include "fixture.hpp"
 
+#include <memory>
+
 SCENARIO("Client must list a remote files and a remote directories", "[list]") {
 
     auto options = fixture::get_options();
