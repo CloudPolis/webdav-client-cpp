@@ -24,6 +24,8 @@
 #include <webdav/client.hpp>
 #include "fixture.hpp"
 
+#include <memory>
+
 SCENARIO("Client must download into buffer", "[download][buffer]") {
 
     auto options = fixture::get_options();
