@@ -24,6 +24,7 @@
 #include <webdav/client.hpp>
 #include "fixture.hpp"
 
+#include <memory>
 
 SCENARIO("Client must clean an existing remote resources", "[clean]") {
 
