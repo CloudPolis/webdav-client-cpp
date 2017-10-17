@@ -24,6 +24,8 @@
 #include <webdav/client.hpp>
 #include "fixture.hpp"
 
+#include <memory>
+
 SCENARIO("Client must check an existing remote resources", "[check]") {
 
     auto options = fixture::get_options();
