@@ -123,13 +123,27 @@ if(BUILD_TESTS)
     hunter_add_package(Catch)
     find_package(Catch CONFIG REQUIRED)
 
-	enable_testing()
+    enable_testing()
 
-	file(GLOB ${PROJECT_NAME}_TEST_SOURCES tests/*.cpp)
-	add_executable(check ${${PROJECT_NAME}_TEST_SOURCES})
-	target_link_libraries(check libwdc Catch::Catch Boost::filesystem Boost::system)
+    file(GLOB ${PROJECT_NAME}_TEST_SOURCES tests/*.cpp)
+    add_executable(check ${${PROJECT_NAME}_TEST_SOURCES})
+    target_link_libraries(check libwdc Catch::Catch Boost::filesystem Boost::system)
 
-	add_test(NAME check COMMAND check "-s" "-r" "compact" "--use-colour" "yes") 
+    if (${CMAKE_BUILD_TYPE} MATCHES "Coverage")
+
+		set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+		include(CodeCoverage)
+
+		set(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -ftest-coverage")
+		set(LCOV_REMOVE_EXTRA "'tests/*'")
+		add_executable(unit_tests ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_TEST_SOURCES})
+		target_link_libraries(unit_tests Catch::Catch Boost::filesystem Boost::system libwdc OpenSSL::SSL OpenSSL::Crypto CURL::libcurl pugixml)
+
+		setup_target_for_coverage(unit_tests_coverage unit_tests coverage)
+    else()
+		add_test(NAME unit_tests COMMAND check "-s" "-r" "compact" "--use-colour" "yes") 
+	endif()
+
 endif()
 
 if(BUILD_EXAMPLES)
@@ -142,7 +156,7 @@ if(BUILD_EXAMPLES)
         set_target_properties(${EXAMPLE_TARGET_NAME} PROPERTIES OUTPUT_NAME ${EXAMPLE_NAME})
         install(TARGETS ${EXAMPLE_TARGET_NAME}
                 RUNTIME DESTINATION bin
-                )
+	)
     endforeach(EXAMPLE_SOURCE ${EXAMPLE_SOURCES})
 endif()
 
