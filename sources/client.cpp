@@ -553,7 +553,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		std::thread downloading([&]() { this->sync_download(remote_file, local_file, callback, std::move(progress)); });
+		std::thread downloading([=]() { this->sync_download(remote_file, local_file, callback, std::move(progress)); });
 		downloading.detach();
 	}
 
@@ -693,7 +693,7 @@ namespace WebDAV
 			progress_t progress
 		) const noexcept
 	{
-		std::thread uploading([&]() { this->sync_upload(remote_file, local_file, callback, std::move(progress)); });
+		std::thread uploading([=]() { this->sync_upload(remote_file, local_file, callback, std::move(progress)); });
 		uploading.detach();
 	}
 
