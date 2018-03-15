@@ -137,7 +137,7 @@ namespace WebDAV
 
             if (this->is_root()) return Path{m_path};
 
-            auto last_separate_position = m_path.rfind(Path::separate);
+            auto last_separate_position = m_path.rfind(Path::separate, m_path.length() - 2);
             if (last_separate_position == 0) return Path{Path::separate};
 
             auto parent = m_path.substr(0, last_separate_position + 1);
