@@ -30,6 +30,14 @@ namespace WebDAV
 		char * buffer;
 		unsigned long long position;
 		unsigned long long size;
+        void reset() {
+            buffer = nullptr;
+            position = 0;
+            size = 0;
+        }
+        ~Data() {
+            delete[] buffer;
+        }
 	};
 	
 	namespace Callback

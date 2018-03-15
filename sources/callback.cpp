@@ -74,7 +74,7 @@ namespace WebDAV
 				auto size = static_cast<unsigned long long>(item_size * item_count);
 				auto rest_bytes = data->size - data->position;
 				auto copied_bytes = std::min<unsigned long long>(size, rest_bytes);
-				memcpy(data->buffer, data->buffer, copied_bytes);
+				memcpy(data->buffer, ptr, copied_bytes);
 				data->position += copied_bytes;
 				return copied_bytes;
 			}

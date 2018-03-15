@@ -141,6 +141,7 @@ namespace WebDAV
 
 		buffer_ptr = data.buffer;
 		buffer_size = data.size;
+        data.reset();
 		return true;
 	}
 
@@ -265,6 +266,8 @@ namespace WebDAV
 		bool is_performed = request.perform();
 
 		if (callback != nullptr) callback(is_performed);
+
+        data.reset();
 		return is_performed;
 	}
 
