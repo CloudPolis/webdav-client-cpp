@@ -592,6 +592,7 @@ namespace WebDAV
 
 		if (recursive) {
 			auto remote_parent_directory = directory_urn.parent().path();
+			if (remote_parent_directory == remote_directory) return false;
 			bool is_created = this->create_directory(remote_parent_directory, true);
 			if (!is_created) return false;
 		}
