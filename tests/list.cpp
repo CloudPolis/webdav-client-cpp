@@ -24,6 +24,8 @@
 #include <webdav/client.hpp>
 #include "fixture.hpp"
 
+#include <memory>
+
 SCENARIO("Client must list a remote files and a remote directories", "[list]") {
 
     auto options = fixture::get_options();
@@ -32,7 +34,7 @@ SCENARIO("Client must list a remote files and a remote directories", "[list]") {
 
     CAPTURE(dirname);
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     GIVEN("A remote directory with 5 files and 5 directories") {
 
@@ -73,7 +75,7 @@ SCENARIO("Client can not list a remote file", "[list][file]") {
 
     CAPTURE(filename);
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     GIVEN("An existing remote file") {
 
@@ -102,7 +104,7 @@ SCENARIO("Client can list an empty remote directory", "[list][empty]") {
 
     CAPTURE(dirname);
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     GIVEN("An empty remote directory") {
 

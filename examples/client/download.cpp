@@ -29,13 +29,13 @@
 void download_to_file()
 {
     std::map<std::string, std::string> options =
-            {
-                    {"webdav_hostname", "https://webdav.yandex.ru"},
-                    {"webdav_username", "{webdav_username}"},
-                    {"webdav_password", "{webdav_password}"}
-            };
+    {
+        {"webdav_hostname", "https://webdav.yandex.ru"},
+        {"webdav_username", "{webdav_username}"},
+        {"webdav_password", "{webdav_password}"}
+    };
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     std::string remote_file = "dir/file.dat";
     auto local_file = "/home/user/Downloads/file.dat";
@@ -53,13 +53,13 @@ void download_to_file()
 void async_download_to_file()
 {
     std::map<std::string, std::string> options =
-            {
-                    {"webdav_hostname", "https://webdav.yandex.ru"},
-                    {"webdav_username", "{webdav_username}"},
-                    {"webdav_password", "{webdav_password}"}
-            };
+    {
+        {"webdav_hostname", "https://webdav.yandex.ru"},
+        {"webdav_username", "{webdav_username}"},
+        {"webdav_password", "{webdav_password}"}
+    };
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     std::string remote_file = "dir/file.dat";
     std::string local_file = "/home/user/Downloads/file.dat";
@@ -79,13 +79,13 @@ void async_download_to_file()
 void download_to_buffer()
 {
     std::map<std::string, std::string> options =
-            {
-                    {"webdav_hostname", "https://webdav.yandex.ru"},
-                    {"webdav_username", "{webdav_username}"},
-                    {"webdav_password", "{webdav_password}"}
-            };
+    {
+        {"webdav_hostname", "https://webdav.yandex.ru"},
+        {"webdav_username", "{webdav_username}"},
+        {"webdav_password", "{webdav_password}"}
+    };
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     std::string remote_file = "dir/file.dat";
     char * buffer_ptr = nullptr;
@@ -106,13 +106,13 @@ void async_download_to_buffer()
 {
     /*
     std::map<std::string, std::string> options =
-            {
-                    {"webdav_hostname", "https://webdav.yandex.ru"},
-                    {"webdav_username", "{webdav_username}"},
-                    {"webdav_password", "{webdav_password}"}
-            };
+    {
+        {"webdav_hostname", "https://webdav.yandex.ru"},
+        {"webdav_username", "{webdav_username}"},
+        {"webdav_password", "{webdav_password}"}
+    };
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     std::string remote_file = "dir/file.dat";
     char * buffer_ptr = nullptr;
@@ -134,13 +134,13 @@ void async_download_to_buffer()
 void download_from_stream()
 {
     std::map<std::string, std::string> options =
-            {
-                    {"webdav_hostname", "https://webdav.yandex.ru"},
-                    {"webdav_username", "{webdav_username}"},
-                    {"webdav_password", "{webdav_password}"}
-            };
+    {
+        {"webdav_hostname", "https://webdav.yandex.ru"},
+        {"webdav_username", "{webdav_username}"},
+        {"webdav_password", "{webdav_password}"}
+    };
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     std::string remote_file = "dir/file.dat";
     std::ofstream stream("/home/user/Downloads/file.dat");

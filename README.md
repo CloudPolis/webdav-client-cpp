@@ -1,7 +1,7 @@
 WebDAV Client
 ===
-[![version](https://img.shields.io/badge/hunter-v0.19.51-blue.svg)](https://github.com/ruslo/hunter/tree/v0.19.51)
-[![version](https://img.shields.io/badge/wdc-v1.0.9-blue.svg)](https://github.com/CloudPolis/webdav-client-cpp/releases/tag/v1.0.9)
+[![version](https://img.shields.io/badge/hunter-v0.19.79-blue.svg)](https://github.com/ruslo/hunter/tree/v0.19.79)
+[![version](https://img.shields.io/badge/wdc-v1.1.3-blue.svg)](https://github.com/CloudPolis/webdav-client-cpp/releases/tag/v1.1.3)
 [![Build Status](https://travis-ci.org/CloudPolis/webdav-client-cpp.svg?branch=master)](https://travis-ci.org/CloudPolis/webdav-client-cpp)
 [![Build status](https://ci.appveyor.com/api/projects/status/cr2xwpwe3iiafbwg?svg=true)](https://ci.appveyor.com/project/rusdevops/webdav-client-cpp)
 [![Join the chat at https://gitter.im/CloudPolis/webdav-client-cpp](https://badges.gitter.im/CloudPolis/webdav-client-cpp.svg)](https://gitter.im/CloudPolis/webdav-client-cpp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -13,9 +13,10 @@ Package ```WebDAV Client``` provides easy and convenient to work with WebDAV-ser
  - Google Drive
  - Box
  - 4shared
+ - ownCloud
  - ...
 
-Install
+Install old version
 ===
 
 ```ShellSession
@@ -42,6 +43,21 @@ $ doxygen docs/doxygen.conf
 $ open docs/html/index.html
 ```
 
+Running tests
+===
+
+For run tests you need to set environment variables `WEBDAV_HOSTNAME`, 
+`WEBDAV_USERNAME` and `WEBDAV_PASSWORD` (optional `WEBDAV_ROOT`).
+
+```ShellSession
+$ export WEBDAV_HOSTNAME=<your_webdav_hostname>
+$ export WEBDAV_USERNAME=<your_webdav_username>
+$ export WEBDAV_PASSWORD=<your_webdav_password>
+$ cmake -H. -B_builds -DBUILD_TESTS=ON
+$ cmake --build _builds
+$ cmake --build _builds --target test -- ARGS=--verbose
+```
+
 Usage
 ===
 
@@ -64,7 +80,7 @@ int main()
 	// - cert_path, key_path
 	// - proxy_hostname, proxy_username, proxy_password
             
-	std::shared_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+	std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
   
 	auto check_connection = client->check();
 	std::cout   << "test connection with WebDAV drive is " 
@@ -113,8 +129,8 @@ cmake_minimum_required(VERSION 3.3)
 
 include(cmake/HunterGate.cmake)
 HunterGate(
-    URL "https://github.com/ruslo/hunter/archive/v0.19.51.tar.gz"
-    SHA1 "d238dc1dd4db83e45a592f96fdb95d17c688600a"
+    URL "https://github.com/ruslo/hunter/archive/v0.19.79.tar.gz"
+    SHA1 "f4ac704bdf9f32b52f718b1ac520bb6aca2d9be4"
 )
 
 project(example)

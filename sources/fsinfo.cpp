@@ -37,7 +37,7 @@ namespace WebDAV
 		auto size(const std::string& path_file) -> unsigned long long 
 		{
 			std::ifstream file(path_file, std::ios::binary | std::ios::ate);
-			return (unsigned long long)file.tellg();
+			return static_cast<unsigned long long>(file.tellg());
 		}
-	}
-}
+	} // namespace FileInfo
+} // namespace WebDAV

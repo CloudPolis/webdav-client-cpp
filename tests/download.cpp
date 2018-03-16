@@ -24,6 +24,8 @@
 #include <webdav/client.hpp>
 #include "fixture.hpp"
 
+#include <memory>
+
 SCENARIO("Client must download into buffer", "[download][buffer]") {
 
     auto options = fixture::get_options();
@@ -32,7 +34,7 @@ SCENARIO("Client must download into buffer", "[download][buffer]") {
 
     CAPTURE(filename);
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
 	GIVEN("A buffer") {
 
@@ -69,7 +71,7 @@ SCENARIO("Client must download stream", "[download][stream]") {
 
     CAPTURE(filename);
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
 	GIVEN("A stream") {
 

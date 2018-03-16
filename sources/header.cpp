@@ -34,14 +34,36 @@ namespace WebDAV
         }
     }
 
-    Header::~Header()
+    Header::~Header() noexcept
     {
-        curl_slist_free_all((curl_slist*)this->handle);
+        curl_slist_free_all(reinterpret_cast<curl_slist *>(this->handle));
     }
+
+    Header::Header(Header&& other) noexcept
+    {
+        handle = other.handle;
+        other.handle = nullptr;   
+    }
+
+    auto Header::operator=(Header&& other) noexcept -> Header&
+    {
+        if (this != &other) {
+            Header(std::move(other)).swap(*this);
+        }
+
+        return *this;
+    }
+
+    auto Header::swap(Header& other) noexcept -> void
+    {
+        using std::swap;
+        swap(handle, other.handle);
+    }
+        
 
     void
     Header::append(const std::string& item) noexcept
     {
-        this->handle = curl_slist_append((curl_slist*)this->handle, item.c_str());
+        this->handle = curl_slist_append(reinterpret_cast<curl_slist *>(this->handle), item.c_str());
     }
-}
+} // namespace WebDAV

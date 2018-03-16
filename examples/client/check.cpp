@@ -34,28 +34,28 @@ int main() {
     if (password_ptr == nullptr) return -1;
 
     std::map<std::string, std::string> options =
-            {
-                    { "webdav_hostname", hostname_ptr },
-                    { "webdav_username", username_ptr },
-                    { "webdav_password", password_ptr }
-            };
+    {
+        { "webdav_hostname", hostname_ptr },
+        { "webdav_username", username_ptr },
+        { "webdav_password", password_ptr }
+    };
 
     if (root_ptr != nullptr) {
         options["webdav_root"] = root_ptr;
     }
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     auto remote_resources = {
-            "existing_file.dat",
-            "not_existing_file.dat",
-            "existing_directory",
-            "existing_directory/",
-            "not_existing_directory",
-            "not_existing_directory/"
+        "existing_file.dat",
+        "not_existing_file.dat",
+        "existing_directory",
+        "existing_directory/",
+        "not_existing_directory",
+        "not_existing_directory/"
     };
 
-    for (auto remote_resource : remote_resources) {
+    for (const auto& remote_resource : remote_resources) {
         bool is_existed = client->check(remote_resource);
         std::cout << "Resource: " << remote_resource << " is " << (is_existed ? "" : "not ") << "existed" << std::endl;
     }

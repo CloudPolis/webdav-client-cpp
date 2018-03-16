@@ -20,12 +20,11 @@
 #
 ############################################################################*/
 
-#ifndef WEBDAV_FSINFO_H
-#define WEBDAV_FSINFO_H
-#pragma once
+#ifndef WEBDAV_FSINFO_HPP
+#define WEBDAV_FSINFO_HPP
 
-#include <string>
 #include <fstream>
+#include <string>
 
 namespace WebDAV
 {
@@ -34,7 +33,7 @@ namespace WebDAV
 		auto exists(const std::string& path) -> bool;
 	
 		auto size(const std::string& path_file) -> unsigned long long;
-	}
-}
+	} // namespace FileInfo
+} // namespace WebDAV
 
 #endif

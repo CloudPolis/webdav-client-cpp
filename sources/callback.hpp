@@ -20,9 +20,8 @@
 #
 ############################################################################*/
 
-#ifndef WEBDAV_CALLBACK_H
-#define WEBDAV_CALLBACK_H
-#pragma once
+#ifndef WEBDAV_CALLBACK_HPP
+#define WEBDAV_CALLBACK_HPP
 
 namespace WebDAV
 {
@@ -31,6 +30,14 @@ namespace WebDAV
 		char * buffer;
 		unsigned long long position;
 		unsigned long long size;
+        void reset() {
+            buffer = nullptr;
+            position = 0;
+            size = 0;
+        }
+        ~Data() {
+            delete[] buffer;
+        }
 	};
 	
 	namespace Callback
@@ -53,6 +60,6 @@ namespace WebDAV
 			size_t buffer(char * data, size_t size, size_t count, void * buffer);
 		}
 	}
-}
+} // namespace WebDAV
 
 #endif

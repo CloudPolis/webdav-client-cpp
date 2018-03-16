@@ -25,13 +25,14 @@
 int main() {
 
     std::map<std::string, std::string> options =
-            {
-                    { "webdav_hostname", "https://webdav.yandex.ru" },
-                    { "webdav_username", "{webdav_username}" },
-                    { "webdav_password", "{webdav_password}" }
-            };
+    {
+        { "webdav_hostname", "https://webdav.yandex.ru" },
+        { "webdav_username", "{webdav_username}" },
+        { "webdav_password", "{webdav_password}" }
+    };
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+
     auto free_size = client->free_size();
     std::cout << "Free size: " << free_size << " bytes" << std::endl;
 }

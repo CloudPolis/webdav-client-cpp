@@ -27,7 +27,7 @@
 std::string resources_to_string(std::vector<std::string> & resources)
 {
     std::stringstream ss;
-    for (auto& resource : resources){
+    for (const auto& resource : resources){
         ss << "\t" << "- " << resource << std::endl;
     }
     return ss.str();
@@ -45,27 +45,27 @@ int main() {
     if (password_ptr == nullptr) return -1;
 
     std::map<std::string, std::string> options =
-            {
-                    { "webdav_hostname", hostname_ptr },
-                    { "webdav_username", username_ptr },
-                    { "webdav_password", password_ptr }
-            };
+    {
+        { "webdav_hostname", hostname_ptr },
+        { "webdav_username", username_ptr },
+        { "webdav_password", password_ptr }
+    };
 
     if (root_ptr != nullptr) {
         options["webdav_root"] = root_ptr;
     }
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     auto remote_resources = {
-            "/",
-            "existing_file.dat",
-            "not_existing_file.dat",
-            "existing_directory",
-            "not_existing_directory"
+        "/",
+        "existing_file.dat",
+        "not_existing_file.dat",
+        "existing_directory",
+        "not_existing_directory"
     };
 
-    for (auto& remote_resource : remote_resources) {
+    for (const auto& remote_resource : remote_resources) {
         auto resources = client->list(remote_resource);
         std::cout << remote_resource << " resource contain:" << std::endl;
         std::cout << resources_to_string(resources);

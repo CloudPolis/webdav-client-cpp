@@ -20,18 +20,20 @@
 #
 ############################################################################*/
 
-#ifndef WEBDAV_URN_H
-#define WEBDAV_URN_H
+#ifndef WEBDAV_URN_HPP
+#define WEBDAV_URN_HPP
 
-#include <iostream>
 #include <cstddef>
+#include <iostream>
 #include <string>
-using std::string;
 
 namespace WebDAV
 {
-    namespace Urn {
+    namespace Urn 
+    {
 
+        using std::string;
+        
         class Path {
 
             static const string separate;
@@ -42,9 +44,9 @@ namespace WebDAV
 
         public:
 
-            Path(const string& path, bool force_dir = false);
+            explicit Path(const string& path_, bool force_dir = false);
 
-            Path(std::nullptr_t);
+            explicit Path(std::nullptr_t);
 
             auto path() const -> string;
 

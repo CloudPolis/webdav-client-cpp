@@ -20,9 +20,9 @@
 #
 ############################################################################*/
 
-#ifndef WEBDAV_PUGIEXT_H
-#define WEBDAV_PUGIEXT_H
-#pragma once
+#ifndef WEBDAV_PUGIEXT_HPP
+#define WEBDAV_PUGIEXT_HPP
+
 #include <pugixml.hpp>
 
 namespace pugi
@@ -32,19 +32,19 @@ namespace pugi
 	public:
 		std::string result;
 
-		virtual void write(const void* data, size_t size)
+		void write(const void* data, size_t size) final
 		{
 			result += std::string(static_cast<const char*>(data), size);
 		}
 	};
 
-	std::string node_to_string(pugi::xml_node node)
+	inline std::string node_to_string(const pugi::xml_node& node)
 	{
 		xml_string_writer writer;
 		node.print(writer);
 
 		return writer.result;
 	}
-}
+} // namespace pugi
 
 #endif

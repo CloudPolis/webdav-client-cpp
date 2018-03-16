@@ -1,3 +1,0 @@
-libcurl-dev(>=7.38.0)
-libssl-dev(>=1.0.1f)
-libpugixml-dev(>=1.0.0)

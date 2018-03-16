@@ -27,7 +27,7 @@
 std::string info_to_string(std::map<std::string, std::string> & info) {
 
     std::stringstream stream;
-    for (auto& option : info){
+    for (const auto& option : info){
         stream << "/t" << option.first << ": " << option.second << std::endl;
     }
     return stream.str();
@@ -55,16 +55,16 @@ int main() {
         options["webdav_root"] = root_ptr;
     }
 
-    std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
     auto remote_resources = {
-            "existing_file.dat",
-            "not_existing_file.dat",
-            "existing_directory",
-            "not_existing_directory"
+        "existing_file.dat",
+        "not_existing_file.dat",
+        "existing_directory",
+        "not_existing_directory"
     };
 
-    for (auto remote_resource : remote_resources)
+    for (const auto& remote_resource : remote_resources)
     {
         auto info = client->info(remote_resource);
         std::cout << "Information about " << remote_resource << ":" << std::endl;

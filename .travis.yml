@@ -1,11 +1,9 @@
 language: generic
 dist: trusty
 sudo: required
-
 git:
   depth: 1
   submodules: false
-
 addons:
   apt:
     packages:
@@ -14,7 +12,6 @@ addons:
     sources:
     - llvm-toolchain-trusty-3.6
     - ubuntu-toolchain-r-test
-
 matrix:
   include:
   - os: linux
@@ -33,28 +30,22 @@ matrix:
         packages:
         - lcov
     env: COMPILER="g++-5" BUILD_TYPE=Coverage
-
 install:
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-    wget https://cmake.org/files/v3.9/cmake-3.9.0-Linux-x86_64.tar.gz;
-    sudo tar -xf cmake-3.9.0-Linux-x86_64.tar.gz -C /usr/local/ --strip-components=1;
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget https://cmake.org/files/v3.9/cmake-3.9.0-Linux-x86_64.tar.gz;
+  sudo tar -xf cmake-3.9.0-Linux-x86_64.tar.gz -C /usr/local/ --strip-components=1;
   fi
-- if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
-    PATH=~/.local/bin:${PATH};
-    pip install --user --upgrade pip;
-    pip install --user cpp-coveralls;
-  fi
-
+- if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then PATH=~/.local/bin:${PATH};
+  pip install --user --upgrade pip; pip install --user cpp-coveralls; fi
 cache:
   directories:
-  - $HOME/.hunter
-
+  - "$HOME/.hunter"
 script:
 - cmake -H. -B_builds -DBUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
 - cmake --build _builds
 - cmake --build _builds --target test -- ARGS="--verbose -C=${BUILD_TYPE}"
-
 after_success:
-- if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
-    coveralls --include sources --include include --gcov-options '\-lp' --root . --build-root _builds;
-  fi
+- if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then coveralls
+  --include sources --include include --gcov-options '\-lp' --root . --build-root
+  _builds; fi
+env:
+  secure: RTTk3A2/YE3onv4sdwI+UyNE2LwY+WI3GqEzODlJZHEUwDEU+qXLMXUIMP+XcO6Rd9rZ2J7vLf8aq9fajbMxxt9fNqiO42DprywLetGDtg+FhPQPD6hRrT8oQm5k9ss8gJqmC3u+QsmflmSsfv4MzBiHc6gunKw0sv1tWck+CTQ=

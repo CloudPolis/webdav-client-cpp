@@ -24,6 +24,8 @@
 #include <webdav/client.hpp>
 #include "fixture.hpp"
 
+#include <memory>
+
 SCENARIO("Client must check an existing remote resources", "[check]") {
 
     auto options = fixture::get_options();
@@ -34,7 +36,7 @@ SCENARIO("Client must check an existing remote resources", "[check]") {
     CAPTURE(dirname);
     CAPTURE(filename);
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
 	GIVEN("An existing remote resource") {
 
@@ -74,7 +76,7 @@ SCENARIO("Client must check not an existing remote resources", "[check]") {
 
     auto options = fixture::get_options();
 
-	std::unique_ptr<WebDAV::Client> client(WebDAV::Client::Init(options));
+    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
 	GIVEN("Not an existing remote resource") {
 

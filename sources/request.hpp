@@ -20,13 +20,12 @@
 #
 ############################################################################*/
 
-#ifndef WEBDAV_REQUEST_H
-#define WEBDAV_REQUEST_H
-#pragma once
+#ifndef WEBDAV_REQUEST_HPP
+#define WEBDAV_REQUEST_HPP
 
 #include <curl/curl.h>
-#include <string>
 #include <map>
+#include <string>
 
 namespace WebDAV
 {
@@ -45,11 +44,21 @@ namespace WebDAV
 
 		bool cert_required() const noexcept;
 
+        auto swap(Request& other) noexcept -> void;
+
 	public:
 
-		Request(dict_t&& options);
+		explicit Request(dict_t&& options_);
 
 		~Request() noexcept;
+
+        Request(const Request& other) = delete;
+
+        Request(Request&& other) noexcept;
+
+        auto operator=(const Request& other) -> Request & = delete;
+
+        auto operator=(Request&& other) noexcept -> Request &;
 
 		template <typename T>
 		auto set(CURLoption option, T value) const noexcept -> bool
@@ -62,6 +71,6 @@ namespace WebDAV
 
 		void * handle;
 	};
-}
+} // namespace WebDAV
 
 #endif
