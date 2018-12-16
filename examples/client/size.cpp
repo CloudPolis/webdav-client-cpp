@@ -22,6 +22,8 @@
 
 #include <webdav/client.hpp>
 
+#include <memory>
+
 int main() {
 
     std::map<std::string, std::string> options =

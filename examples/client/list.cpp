@@ -22,6 +22,7 @@
 
 #include <webdav/client.hpp>
 
+#include <memory>
 #include <sstream>
 
 std::string resources_to_string(std::vector<std::string> & resources)
