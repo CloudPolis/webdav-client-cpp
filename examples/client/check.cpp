@@ -22,6 +22,8 @@
 
 #include <webdav/client.hpp>
 
+#include <memory>
+
 int main() {
 
     auto hostname_ptr = std::getenv("WEBDAV_HOSTNAME");

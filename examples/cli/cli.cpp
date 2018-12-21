@@ -21,6 +21,8 @@
 ############################################################################*/
 
 #include <webdav/client.hpp>
+
+#include <memory>
 #include <exception>
 
 using dict_t = std::map<std::string, std::string>;

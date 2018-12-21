@@ -22,6 +22,7 @@
 
 #include <webdav/client.hpp>
 
+#include <memory>
 #include <fstream>
 
 //! [upload_from_file]

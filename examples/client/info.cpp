@@ -22,6 +22,7 @@
 
 #include <webdav/client.hpp>
 
+#include <memory>
 #include <sstream>
 
 std::string info_to_string(std::map<std::string, std::string> & info) {
