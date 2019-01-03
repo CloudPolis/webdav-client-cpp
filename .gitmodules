@@ -7,3 +7,6 @@
 [submodule "vendor/openssl"]
 	path = vendor/openssl
 	url = https://github.com/openssl/openssl
+[submodule "tools/gate"]
+	path = tools/gate
+	url = https://github.com/hunter-packages/gate

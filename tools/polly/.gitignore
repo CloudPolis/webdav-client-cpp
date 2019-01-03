@@ -1,0 +1,11 @@
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store
+*.*~
+
+docs/_build
+docs/activate.sh
+
+bin/detail/__pycache__
+*.pyc
+/.vs
