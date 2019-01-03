@@ -1,12 +1,3 @@
-[submodule "vendor/curl"]
-	path = vendor/curl
-	url = https://github.com/curl/curl.git
-[submodule "vendor/pugixml"]
-	path = vendor/pugixml
-	url = https://github.com/zeux/pugixml.git
-[submodule "vendor/openssl"]
-	path = vendor/openssl
-	url = https://github.com/openssl/openssl
 [submodule "tools/gate"]
 	path = tools/gate
 	url = https://github.com/hunter-packages/gate
