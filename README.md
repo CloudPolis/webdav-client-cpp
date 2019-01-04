@@ -70,26 +70,26 @@ Usage
 
 int main()
 {
-	std::map<std::string, std::string> options =
-	{
-		{"webdav_hostname", "https://webdav.yandex.ru"},
-		{"webdav_username", "webdav_username"},
-		{"webdav_password", "webdav_password"}
-	};
-	// additional keys: 
-	// - webdav_root
-	// - cert_path, key_path
-	// - proxy_hostname, proxy_username, proxy_password
+  std::map<std::string, std::string> options =
+  {
+    {"webdav_hostname", "https://webdav.yandex.ru"},
+    {"webdav_username", "webdav_username"},
+    {"webdav_password", "webdav_password"}
+  };
+  // additional keys: 
+  // - webdav_root
+  // - cert_path, key_path
+  // - proxy_hostname, proxy_username, proxy_password
             
-	std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
   
-	bool check_connection = client->check();
-	std::cout << "test connection with WebDAV drive is " 
+  bool check_connection = client->check();
+  std::cout << "test connection with WebDAV drive is " 
             << (check_connection ? "" : "not ")
             << "successful"<< std::endl;
   
-	bool is_dir = client->is_directory("/path/to/remote/resource");
-	std::cout << "remote resource is " 
+  bool is_dir = client->is_directory("/path/to/remote/resource");
+  std::cout << "remote resource is " 
             << (is_dir ? "" : "not ") 
             << "directory" << std::endl;
   
@@ -100,10 +100,10 @@ int main()
             << client->free_size() 
             << std::endl;
   
-	std::cout << "remote_directory_name";
-	for (const auto& resource_name : client->list("/path/to/remote/directory/"))
+  std::cout << "remote_directory_name";
+  for (const auto& resource_name : client->list("/path/to/remote/directory/"))
   {
-		std::cout << "\t" << "-" << resource_name;
+    std::cout << "\t" << "-" << resource_name;
   }
   std::cout << std::endl;
   
