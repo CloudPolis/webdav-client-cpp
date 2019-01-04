@@ -43,11 +43,14 @@ option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_EXAMPLES "Build Examples" OFF)
 option(WDC_VERBOSE "Print verbose information" OFF)
 
+hunter_add_package(Boost)
 hunter_add_package(OpenSSL)
-find_package(OpenSSL REQUIRED)
 hunter_add_package(CURL)
-find_package(CURL CONFIG REQUIRED)
 hunter_add_package(pugixml)
+
+find_package(Boost CONFIG REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(CURL CONFIG REQUIRED)
 find_package(pugixml CONFIG REQUIRED)
 
 file(GLOB WDC_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/sources/*.cpp")
@@ -59,9 +62,13 @@ if(WDC_VERBOSE)
   target_compile_definitions(libwdc PUBLIC WDC_VERBOSE=1)
 endif()
 
-target_link_libraries(libwdc OpenSSL::SSL OpenSSL::Crypto CURL::libcurl pugixml)
+target_link_libraries(libwdc Boost::boost OpenSSL::SSL OpenSSL::Crypto CURL::libcurl pugixml)
 
 target_include_directories(libwdc PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
 set(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
 
 set(CONFIG_INSTALL_DIR "lib/cmake/${PROJECT_NAME}")

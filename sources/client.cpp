@@ -20,17 +20,18 @@
 #
 ############################################################################*/
 
+#include <webdav/client.hpp>
+
+#include "callback.hpp"
+#include "fsinfo.hpp"
+#include "header.hpp"
+#include "pugiext.hpp"
+#include "request.hpp"
+#include "urn.hpp"
 
 #include <cstdlib>
 #include <thread>
 #include <algorithm>
-#include <webdav/client.hpp>
-#include "callback.hpp"
-#include "header.hpp"
-#include "fsinfo.hpp"
-#include "pugiext.hpp"
-#include "request.hpp"
-#include "urn.hpp"
 
 namespace WebDAV
 {

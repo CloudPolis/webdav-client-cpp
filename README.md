@@ -30,7 +30,7 @@ Build
 Building WebDAV Client from sources:
 
 ```ShellSession
-$ git clone https://github.com/designerror/webdav-client-cpp
+$ git clone https://github.com/CloudPolis/webdav-client-cpp
 $ cd webdav-client-cpp
 $ cmake -H. -B_builds # -DCMAKE_INSTALL_PREFIX=install
 $ cmake --build _builds
@@ -61,11 +61,12 @@ $ cmake --build _builds --target test -- ARGS=--verbose
 Usage
 ===
 
-**example.cpp**
 ```C++
-#include <iostream>
-#include <memory>
 #include <webdav/client.hpp>
+
+#include <iostream>
+#include <map>
+#include <memory>
 
 int main()
 {
@@ -82,55 +83,55 @@ int main()
             
 	std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
   
-	auto check_connection = client->check();
-	std::cout   << "test connection with WebDAV drive is " 
-                    << (check_connection ? "" : "not ")
-                    << "successful"<< std::endl;
+	bool check_connection = client->check();
+	std::cout << "test connection with WebDAV drive is " 
+            << (check_connection ? "" : "not ")
+            << "successful"<< std::endl;
   
-	auto is_dir = client->is_directory("/path/to/remote/resource");
-	std::cout   << "remote resource is " 
-                    << (is_dir ? "" : "not ") 
-                    << "directory" << std::endl;
+	bool is_dir = client->is_directory("/path/to/remote/resource");
+	std::cout << "remote resource is " 
+            << (is_dir ? "" : "not ") 
+            << "directory" << std::endl;
   
-  	client->create_directory("/path/to/remote/directory/");
-  	client->clean("/path/to/remote/directory/");
-  
-  	std::cout   << "On WebDAV-disk available free space: " 
-                    << client->free_size() 
-                    << std::endl;
+  client->create_directory("/path/to/remote/directory/");
+  client->clean("/path/to/remote/directory/");
+
+  std::cout << "On WebDAV-disk available free space: " 
+            << client->free_size() 
+            << std::endl;
   
 	std::cout << "remote_directory_name";
-	for(auto& resource_name : client->list("/path/to/remote/directory/")) {
+	for (const auto& resource_name : client->list("/path/to/remote/directory/"))
+  {
 		std::cout << "\t" << "-" << resource_name;
-  	}
-  	std::cout << std::endl;
+  }
+  std::cout << std::endl;
   
-  	client->download("/path/to/remote/file", "/path/to/local/file");
-  	client->clean("/path/to/remote/file");
-  	client->upload("/path/to/remote/file", "/path/to/local/file");
-  
-  	auto meta_info = client->info("/path/to/remote/resource");
-  	for(auto& field : meta_info) {
-		std::cout << field.first << ":" << "\t" << field.second;
-  	}
-  	std::cout << std::endl;
+  client->download("/path/to/remote/file", "/path/to/local/file");
+  client->clean("/path/to/remote/file");
+  client->upload("/path/to/remote/file", "/path/to/local/file");
 
-  	client->copy("/path/to/remote/file1", "/path/to/remote/file2");
-  	client->move("/path/to/remote/file1", "/path/to/remote/file3");
-  
-  	client->async_upload("/path/to/remote/file", "/path/to/local/file");
-  	client->async_download("/path/to/remote/file", "/path/to/local/file");
+  const auto meta_info = client->info("/path/to/remote/resource");
+  for (const auto& field : meta_info) {
+    std::cout << field.first << ":" << "\t" << field.second;
+  }
+  std::cout << std::endl;
+
+  client->copy("/path/to/remote/file1", "/path/to/remote/file2");
+  client->move("/path/to/remote/file1", "/path/to/remote/file3");
+
+  client->async_upload("/path/to/remote/file", "/path/to/local/file");
+  client->async_download("/path/to/remote/file", "/path/to/local/file");
 }
 ```
 
 **CMakeLists.txt**
 ```cmake
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.4)
 
-include(cmake/HunterGate.cmake)
 HunterGate(
-    URL "https://github.com/ruslo/hunter/archive/v0.19.79.tar.gz"
-    SHA1 "f4ac704bdf9f32b52f718b1ac520bb6aca2d9be4"
+  URL "https://github.com/ruslo/hunter/archive/v0.23.83.tar.gz"
+  SHA1 "12dec078717539eb7b03e6d2a17797cba9be9ba9"
 )
 
 project(example)

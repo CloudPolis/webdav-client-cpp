@@ -71,28 +71,28 @@ namespace WebDAV
 		/// \return size in bytes
 		/// \include client/size.cpp
 		///
-		auto free_size() const noexcept -> unsigned long long;
+		auto free_size() const  -> unsigned long long;
 
 		///
 		/// Check for existence of a remote resource
 		/// \param[in] remote_resource
 		/// \include client/check.cpp
 		///
-		auto check(const std::string& remote_resource = "/") const noexcept -> bool;
+		auto check(const std::string& remote_resource = "/") const  -> bool;
 
 		///
 		/// Get information of a remote resource
 		/// \param[in] remote_resource
 		/// \include client/info.cpp
 		///
-		auto info(const std::string& remote_resource) const noexcept -> dict_t;
+		auto info(const std::string& remote_resource) const  -> dict_t;
 
 		///
 		/// Clean an remote resource
 		/// \param[in] remote_resource
 		/// \include client/clean.cpp
 		///
-		auto clean(const std::string& remote_resource) const noexcept -> bool;
+		auto clean(const std::string& remote_resource) const  -> bool;
 
 		///
 		/// Checks whether the resource directory
@@ -105,7 +105,7 @@ namespace WebDAV
 		/// \param[in] remote_directory
 		/// \include client/list.cpp
 		///
-		auto list(const std::string& remote_directory = "") const noexcept -> strings_t;
+		auto list(const std::string& remote_directory = "") const  -> strings_t;
 
 		///
 		/// Create a remote directory
@@ -116,7 +116,7 @@ namespace WebDAV
 		auto create_directory(
 			const std::string& remote_directory, 
 			bool recursive = false
-		) const noexcept -> bool;
+		) const  -> bool;
 
 		///
 		/// Move a remote resource
@@ -127,7 +127,7 @@ namespace WebDAV
 		auto move(
 			const std::string& remote_source_resource, 
 			const std::string& remote_destination_resource
-		) const noexcept -> bool;
+		) const  -> bool;
 
 		///
 		/// Copy a remote resource
@@ -138,7 +138,7 @@ namespace WebDAV
 		auto copy(
 			const std::string& remote_source_resource, 
 			const std::string& remote_destination_resource
-		) const noexcept -> bool;
+		) const  -> bool;
 
 		///
 		/// Download a remote file to a local file
@@ -151,7 +151,7 @@ namespace WebDAV
 			const std::string& remote_file, 
 			const std::string& local_file, 
 			progress_t progress = nullptr
-		) const noexcept -> bool;
+		) const  -> bool;
 
 		///
 		/// Download a remote file to a buffer
@@ -166,7 +166,7 @@ namespace WebDAV
 			char * & buffer_ptr, 
 			unsigned long long & buffer_size, 
 			progress_t progress = nullptr
-		) const noexcept -> bool;
+		) const  -> bool;
 
 		///
 		/// Download a remote file to a stream
@@ -179,7 +179,7 @@ namespace WebDAV
 			const std::string& remote_file,
 			std::ostream& stream,
 			progress_t progress = nullptr
-		) const noexcept -> bool;
+		) const  -> bool;
 
 		///
 		/// Asynchronously download a remote file to a local file
@@ -194,7 +194,7 @@ namespace WebDAV
 			const std::string& local_file, 
 			callback_t callback = nullptr, 
 			progress_t progress = nullptr
-		) const noexcept -> void;
+		) const -> void;
 
 		///
 		/// Upload a remote file from a local file
@@ -207,7 +207,7 @@ namespace WebDAV
 			const std::string& remote_file,
 			const std::string& local_file, 
 			progress_t progress = nullptr
-		) const noexcept -> bool;
+		) const  -> bool;
 
 		///
 		/// Upload a remote file from a buffer
@@ -222,7 +222,7 @@ namespace WebDAV
 			char * buffer_ptr, 
 			unsigned long long buffer_size, 
 			progress_t progress = nullptr
-		) const noexcept -> bool;
+		) const  -> bool;
 
 		///
 		/// Upload a remote file from a stream
@@ -235,7 +235,7 @@ namespace WebDAV
 			const std::string& remote_file, 
 			std::istream& stream, 
 			progress_t progress = nullptr
-		) const noexcept -> bool;
+		) const  -> bool;
 
 		///
 		/// Asynchronously upload a remote file from a local file
