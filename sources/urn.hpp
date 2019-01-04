@@ -2,14 +2,14 @@
 #                         __    __   _____       _____
 #   Project              |  |  |  | |     \     /  ___|
 #                        |  |__|  | |  |\  \   /  /
-#                        |        | |  | )  ) (  (     
+#                        |        | |  | )  ) (  (
 #                        |   /\   | |  |/  /   \  \___
 #                         \_/  \_/  |_____/     \_____|
 #
-# Copyright (C) 2016, The WDC Project, <designerror@yandex.ru>, et al.
+# Copyright (C) 2018, The WDC Project, <rusdevops@gmail.com>, et al.
 #
 # This software is licensed as described in the file LICENSE, which
-# you should have received as part of this distribution. 
+# you should have received as part of this distribution.
 #
 # You may opt to use, copy, modify, merge, publish, distribute and/or sell
 # copies of the Software, and permit persons to whom the Software is
@@ -29,42 +29,36 @@
 
 namespace WebDAV
 {
-    namespace Urn 
+  namespace Urn 
+  {
+    using std::string;
+    using std::nullptr_t;
+
+    class Path
     {
+    public:
 
-        using std::string;
-        
-        class Path {
+      explicit Path(const string& path_, bool force_dir = false);
+      explicit Path(nullptr_t);
 
-            static const string separate;
+      auto operator+(const std::string& rhs) const -> Path;
+      auto operator==(const Path& rhs) const -> bool;
 
-            static const string root;
+      auto is_directory() const -> bool;
+      auto is_root() const -> bool;
+      auto name() const -> string;
+      auto parent() const -> Path;
+      auto path() const -> string;
+      auto quote(void * request) const -> string;
 
-            string m_path;
+    private:
 
-        public:
+      string m_path;
 
-            explicit Path(const string& path_, bool force_dir = false);
-
-            explicit Path(std::nullptr_t);
-
-            auto path() const -> string;
-
-            auto quote(void * request) const -> string;
-
-            auto name() const -> string;
-
-            auto parent() const -> Path;
-
-            auto is_directory() const -> bool;
-
-            auto is_root() const -> bool;
-
-            auto operator+(const std::string& rhs) const -> Path;
-
-            auto operator==(const Path& rhs) const -> bool;
-        };
-    }
+      static const string separate;
+      static const string root;
+    };
+  }
 }
 
 auto operator<<(std::ostream& stream, const WebDAV::Urn::Path& path) -> std::ostream&;

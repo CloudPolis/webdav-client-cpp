@@ -2,14 +2,14 @@
 #                         __    __   _____       _____
 #   Project              |  |  |  | |     \     /  ___|
 #                        |  |__|  | |  |\  \   /  /
-#                        |        | |  | )  ) (  (     
+#                        |        | |  | )  ) (  (
 #                        |   /\   | |  |/  /   \  \___
 #                         \_/  \_/  |_____/     \_____|
 #
-# Copyright (C) 2016, The WDC Project, <designerror@yandex.ru>, et al.
+# Copyright (C) 2018, The WDC Project, <rusdevops@gmail.com>, et al.
 #
 # This software is licensed as described in the file LICENSE, which
-# you should have received as part of this distribution. 
+# you should have received as part of this distribution.
 #
 # You may opt to use, copy, modify, merge, publish, distribute and/or sell
 # copies of the Software, and permit persons to whom the Software is
@@ -29,48 +29,40 @@
 
 namespace WebDAV
 {
-	bool inline check_code(CURLcode code)
-	{
-		return code == CURLE_OK;
-	}
+  bool inline check_code(CURLcode code)
+  {
+    return code == CURLE_OK;
+  }
 
-	using dict_t = std::map<std::string, std::string>; 
-	
-	class Request
-	{
-		const dict_t options;
+  using dict_t = std::map<std::string, std::string>; 
+  
+  class Request
+  {
+  public:
+    explicit Request(dict_t&& options_);
+    Request(const Request& other) = delete;
+    Request(Request&& other) noexcept;
+    ~Request() noexcept;
 
-		bool proxy_enabled() const noexcept;
+    auto operator=(const Request& other) -> Request & = delete;
+    auto operator=(Request&& other) noexcept -> Request &;
 
-		bool cert_required() const noexcept;
+    template <typename T>
+    auto set(CURLoption option, T value) const noexcept -> bool
+    {
+      if (this->handle == nullptr) return false;
+      return check_code(curl_easy_setopt(this->handle, option, value));
+    }
 
-        auto swap(Request& other) noexcept -> void;
+    bool perform() const noexcept;
+    void * handle;
 
-	public:
-
-		explicit Request(dict_t&& options_);
-
-		~Request() noexcept;
-
-        Request(const Request& other) = delete;
-
-        Request(Request&& other) noexcept;
-
-        auto operator=(const Request& other) -> Request & = delete;
-
-        auto operator=(Request&& other) noexcept -> Request &;
-
-		template <typename T>
-		auto set(CURLoption option, T value) const noexcept -> bool
-		{
-			if (this->handle == nullptr) return false;
-			return check_code(curl_easy_setopt(this->handle, option, value));
-		}
-		
-		bool perform() const noexcept;
-
-		void * handle;
-	};
+  private:
+    const dict_t options;
+    bool proxy_enabled() const noexcept;
+    bool cert_required() const noexcept;
+    auto swap(Request& other) noexcept -> void;
+  };
 } // namespace WebDAV
 
 #endif

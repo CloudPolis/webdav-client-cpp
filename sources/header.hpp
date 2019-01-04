@@ -2,14 +2,14 @@
 #                         __    __   _____       _____
 #   Project              |  |  |  | |     \     /  ___|
 #                        |  |__|  | |  |\  \   /  /
-#                        |        | |  | )  ) (  (     
+#                        |        | |  | )  ) (  (
 #                        |   /\   | |  |/  /   \  \___
 #                         \_/  \_/  |_____/     \_____|
 #
-# Copyright (C) 2016, The WDC Project, <designerror@yandex.ru>, et al.
+# Copyright (C) 2018, The WDC Project, <rusdevops@gmail.com>, et al.
 #
 # This software is licensed as described in the file LICENSE, which
-# you should have received as part of this distribution. 
+# you should have received as part of this distribution.
 #
 # You may opt to use, copy, modify, merge, publish, distribute and/or sell
 # copies of the Software, and permit persons to whom the Software is
@@ -31,25 +31,20 @@ namespace WebDAV
     class Header final
     {
     public:
-        void * handle;
+      void * handle;
 
-        Header(const std::initializer_list<std::string>& init_list) noexcept;
+      Header(const std::initializer_list<std::string>& init_list) noexcept;
+      Header(const Header& other) = delete;
+      Header(Header&& other) noexcept;
+      ~Header() noexcept;
 
-        ~Header() noexcept;
+      auto operator=(const Header& other) -> Header& = delete;
+      auto operator=(Header&& other) noexcept -> Header&;
 
-        Header(const Header& other) = delete;
-
-        auto operator=(const Header& other) -> Header& = delete;
-
-        Header(Header&& other) noexcept;
-
-        auto operator=(Header&& other) noexcept -> Header&;
-
-        void append(const std::string& item) noexcept;
+      void append(const std::string& item) noexcept;
 
     private:
-
-        auto swap(Header& other) noexcept -> void;
+      auto swap(Header& other) noexcept -> void;
     };
 } // namespace WebDAV
 
