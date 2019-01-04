@@ -29,7 +29,8 @@
 #include "request.hpp"
 #include "urn.hpp"
 
-#include <cstdlib>
+#include <boost/lexical_cast.hpp>
+
 #include <thread>
 #include <algorithm>
 
@@ -376,8 +377,7 @@ namespace WebDAV
     pugi::xml_node quota_available_bytes = prop.select_node("*[local-name()='quota-available-bytes']").node();
     std::string free_size_text = quota_available_bytes.first_child().value();
 
-    auto free_size = std::atoll(free_size_text.c_str());
-    return free_size;
+    return boost::lexical_cast<unsigned long long>(free_size_text);
   }
 
   bool
