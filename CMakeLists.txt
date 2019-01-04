@@ -2,14 +2,14 @@
 #                         __    __   _____       _____
 #   Project              |  |  |  | |     \     /  ___|
 #                        |  |__|  | |  |\  \   /  /
-#                        |        | |  | )  ) (  (     
+#                        |        | |  | )  ) (  (
 #                        |   /\   | |  |/  /   \  \___
 #                         \_/  \_/  |_____/     \_____|
 #
 # Copyright (C) 2018, The WDC Project, <rusdevops@gmail.com>, et al.
 #
 # This software is licensed as described in the file LICENSE, which
-# you should have received as part of this distribution. 
+# you should have received as part of this distribution.
 #
 # You may opt to use, copy, modify, merge, publish, distribute and/or sell
 # copies of the Software, and permit persons to whom the Software is
@@ -62,11 +62,16 @@ if(WDC_VERBOSE)
   target_compile_definitions(libwdc PUBLIC WDC_VERBOSE=1)
 endif()
 
-target_link_libraries(libwdc Boost::boost OpenSSL::SSL OpenSSL::Crypto CURL::libcurl pugixml)
+target_link_libraries(libwdc
+  PUBLIC OpenSSL::SSL OpenSSL::Crypto CURL::libcurl pugixml
+)
 
+target_include_directories(libwdc
+  PRIVATE $<TARGET_PROPERTY:Boost::boost,INTERFACE_INCLUDE_DIRECTORIES>
+)
 target_include_directories(libwdc PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
 )
 
 set(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
@@ -132,7 +137,7 @@ if(BUILD_TESTS)
 
     setup_target_for_coverage(unit_tests_coverage unit_tests coverage)
   else()
-    add_test(NAME unit_tests COMMAND check "-s" "-r" "compact" "--use-colour" "yes") 
+    add_test(NAME unit_tests COMMAND check "-s" "-r" "compact" "--use-colour" "yes")
   endif()
 
 endif()
