@@ -49,27 +49,27 @@ namespace WebDAV
     dict_t
     Client::options() const
     {
-        return dict_t
-        {
-            { "webdav_hostname", this->webdav_hostname },
-            { "webdav_root", this->webdav_root },
-            { "webdav_username", this->webdav_username },
-            { "webdav_password", this->webdav_password },
-            { "proxy_hostname", this->proxy_hostname },
-            { "proxy_username", this->proxy_username },
-            { "proxy_password", this->proxy_password },
-            { "cert_path", this->cert_path },
-            { "key_path", this->key_path },
-        };
+      return dict_t
+      {
+        { "webdav_hostname", this->webdav_hostname },
+        { "webdav_root", this->webdav_root },
+        { "webdav_username", this->webdav_username },
+        { "webdav_password", this->webdav_password },
+        { "proxy_hostname", this->proxy_hostname },
+        { "proxy_username", this->proxy_username },
+        { "proxy_password", this->proxy_password },
+        { "cert_path", this->cert_path },
+        { "key_path", this->key_path },
+      };
     }
 
   bool
-    Client::sync_download(
-        const std::string& remote_file,
-        const std::string& local_file,
-        callback_t callback,
-        progress_t progress
-    ) const
+  Client::sync_download(
+    const std::string& remote_file,
+    const std::string& local_file,
+    callback_t callback,
+    progress_t progress
+  ) const
   {
     bool is_existed = this->check(remote_file);
     if (!is_existed) return false;
@@ -103,13 +103,13 @@ namespace WebDAV
   }
 
   bool
-    Client::sync_download_to(
-        const std::string& remote_file,
-        char * & buffer_ptr,
-        unsigned long long & buffer_size,
-        callback_t callback,
-        progress_t progress
-    ) const
+  Client::sync_download_to(
+    const std::string& remote_file,
+    char * & buffer_ptr,
+    unsigned long long & buffer_size,
+    callback_t callback,
+    progress_t progress
+  ) const
   {
     bool is_existed = this->check(remote_file);
     if (!is_existed) return false;
@@ -142,17 +142,17 @@ namespace WebDAV
 
     buffer_ptr = data.buffer;
     buffer_size = data.size;
-        data.reset();
+    data.reset();
     return true;
   }
 
   bool
-    Client::sync_download_to(
-        const std::string& remote_file,
-        std::ostream & stream,
-        callback_t callback,
-        progress_t progress
-    ) const
+  Client::sync_download_to(
+    const std::string& remote_file,
+    std::ostream & stream,
+    callback_t callback,
+    progress_t progress
+  ) const
   {
     bool is_existed = this->check(remote_file);
     if (!is_existed) return false;
@@ -179,17 +179,17 @@ namespace WebDAV
 
     bool is_performed = request.perform();
     if (callback != nullptr) callback(is_performed);
-    
-        return is_performed;
+
+    return is_performed;
   }
 
   bool
-    Client::sync_upload(
-        const std::string& remote_file,
-        const std::string& local_file,
-        callback_t callback,
-        progress_t progress
-    ) const
+  Client::sync_upload(
+    const std::string& remote_file,
+    const std::string& local_file,
+    callback_t callback,
+    progress_t progress
+  ) const
   {
     bool is_existed = FileInfo::exists(local_file);
     if (!is_existed) return false;
@@ -229,13 +229,13 @@ namespace WebDAV
   }
 
   bool
-    Client::sync_upload_from(
-        const std::string& remote_file,
-        char * buffer_ptr,
-        unsigned long long buffer_size,
-        callback_t callback,
-        progress_t progress
-    ) const
+  Client::sync_upload_from(
+    const std::string& remote_file,
+    char * buffer_ptr,
+    unsigned long long buffer_size,
+    callback_t callback,
+    progress_t progress
+  ) const
   {
     auto root_urn = Path(this->webdav_root, true);
     auto file_urn = root_urn + remote_file;
@@ -246,7 +246,7 @@ namespace WebDAV
 
     auto url = this->webdav_hostname + file_urn.quote(request.handle);
 
-        Data response = { nullptr, 0, 0 };
+    Data response = { nullptr, 0, 0 };
 
     request.set(CURLOPT_UPLOAD, 1L);
     request.set(CURLOPT_URL, url.c_str());
@@ -268,17 +268,17 @@ namespace WebDAV
 
     if (callback != nullptr) callback(is_performed);
 
-        data.reset();
+    data.reset();
     return is_performed;
   }
 
   bool
-    Client::sync_upload_from(
-        const std::string& remote_file,
-        std::istream& stream,
-        callback_t callback,
-        progress_t progress
-    ) const
+  Client::sync_upload_from(
+      const std::string& remote_file,
+      std::istream& stream,
+      callback_t callback,
+      progress_t progress
+  ) const
   {
     auto root_urn = Path(this->webdav_root, true);
     auto file_urn = root_urn + remote_file;
@@ -330,7 +330,7 @@ namespace WebDAV
   }
 
   unsigned long long
-    Client::free_size() const
+  Client::free_size() const
   {
     Header header = {
       "Accept: */*",
@@ -381,7 +381,7 @@ namespace WebDAV
   }
 
   bool
-    Client::check(const std::string& remote_resource) const
+  Client::check(const std::string& remote_resource) const
   {
     auto root_urn = Path(this->webdav_root, true);
     auto resource_urn = root_urn + remote_resource;
@@ -410,7 +410,7 @@ namespace WebDAV
   }
 
   dict_t
-    Client::info(const std::string& remote_resource) const
+  Client::info(const std::string& remote_resource) const
   {
     auto root_urn = Path(this->webdav_root, true);
     auto target_urn = root_urn + remote_resource;
@@ -480,7 +480,7 @@ namespace WebDAV
   }
 
   bool
-    Client::is_directory(const std::string& remote_resource) const
+  Client::is_directory(const std::string& remote_resource) const
   {
     auto information = this->info(remote_resource);
     auto resource_type = information["type"];
@@ -489,7 +489,7 @@ namespace WebDAV
   }
 
   strings_t
-    Client::list(const std::string& remote_directory) const
+  Client::list(const std::string& remote_directory) const
   {
     bool is_existed = this->check(remote_directory);
     if (!is_existed) return strings_t{};
@@ -683,50 +683,50 @@ namespace WebDAV
   }
 
   bool
-    Client::upload(
-      const std::string& remote_file,
-      const std::string& local_file,
-      progress_t progress
-    ) const
+  Client::upload(
+    const std::string& remote_file,
+    const std::string& local_file,
+    progress_t progress
+  ) const
   {
     return this->sync_upload(remote_file, local_file, nullptr, std::move(progress));
   }
 
   void
-    Client::async_upload(
-      const std::string& remote_file,
-      const std::string& local_file,
-      callback_t callback,
-      progress_t progress
-    ) const
+  Client::async_upload(
+    const std::string& remote_file,
+    const std::string& local_file,
+    callback_t callback,
+    progress_t progress
+  ) const
   {
     std::thread uploading([=]() { this->sync_upload(remote_file, local_file, callback, std::move(progress)); });
     uploading.detach();
   }
 
   bool
-    Client::upload_from(
-      const std::string& remote_file,
-      std::istream& stream,
-      progress_t progress
-    ) const
+  Client::upload_from(
+    const std::string& remote_file,
+    std::istream& stream,
+    progress_t progress
+  ) const
   {
     return this->sync_upload_from(remote_file, stream, nullptr, std::move(progress));
   }
 
   bool
-    Client::upload_from(
-      const std::string& remote_file,
-      char * buffer_ptr,
-      unsigned long long buffer_size,
-      progress_t progress
-    ) const
+  Client::upload_from(
+    const std::string& remote_file,
+    char * buffer_ptr,
+    unsigned long long buffer_size,
+    progress_t progress
+  ) const
   {
     return this->sync_upload_from(remote_file, buffer_ptr, buffer_size, nullptr, std::move(progress));
   }
 
   bool
-    Client::clean(const std::string& remote_resource) const
+  Client::clean(const std::string& remote_resource) const
   {
     bool is_existed = this->check(remote_resource);
     if (!is_existed) return true;
@@ -753,15 +753,15 @@ namespace WebDAV
     return request.perform();
   }
 
-    class Environment {
-    public:
-        Environment()  {
-            curl_global_init(CURL_GLOBAL_ALL);
-        }
-        ~Environment()  {
-            curl_global_cleanup();
-        }
-    };
+  class Environment {
+  public:
+      Environment()  {
+        curl_global_init(CURL_GLOBAL_ALL);
+      }
+      ~Environment()  {
+        curl_global_cleanup();
+      }
+  };
 } // namespace WebDAV
 
 static const WebDAV::Environment env;
