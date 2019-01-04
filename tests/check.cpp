@@ -20,91 +20,93 @@
 #
 ############################################################################*/
 
-#include <catch.hpp>
 #include <webdav/client.hpp>
+
 #include "fixture.hpp"
 
 #include <memory>
 
-SCENARIO("Client must check an existing remote resources", "[check]") {
+#include <catch.hpp>
 
-    auto options = fixture::get_options();
-    auto content = fixture::get_buff_content();
-    auto dirname = fixture::get_dir_name();
-    auto filename = fixture::get_file_name();
+SCENARIO("Client must check an existing remote resources", "[check]")
+{
+  auto options = fixture::get_options();
+  auto content = fixture::get_buff_content();
+  auto dirname = fixture::get_dir_name();
+  auto filename = fixture::get_file_name();
 
-    CAPTURE(dirname);
-    CAPTURE(filename);
+  CAPTURE(dirname);
+  CAPTURE(filename);
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-	GIVEN("An existing remote resource") {
+  GIVEN("An existing remote resource")
+  {
+    std::string existing_file = filename;
+    std::string existing_directory = dirname; 
 
-		std::string existing_file = filename;
-		std::string existing_directory = dirname; 
+    client->upload_from(existing_file, (char *)content.c_str(), content.length());
+    client->create_directory(existing_directory);
 
-		client->upload_from(existing_file, (char *)content.c_str(), content.length());
-		client->create_directory(existing_directory);
+    WHEN("Check for existence of an existing remote file")
+    {
+      REQUIRE(client->check(existing_file));
 
-		WHEN("Check for existence of an existing remote file") {
+      auto is_success = client->check(existing_file);
 
-			REQUIRE(client->check(existing_file));
+      THEN("Check must be success")
+      {
+        CHECK(is_success);
+      }
+    }
 
-			auto is_success = client->check(existing_file);
+    WHEN("Check for existence of an existing remote directory")
+    {
+      REQUIRE(client->check(existing_directory));
 
-			THEN("Check must be success") {
+      auto is_success = client->check(existing_directory);
 
-				CHECK(is_success);
-			}
-		}
-
-		WHEN("Check for existence of an existing remote directory") {
-
-			REQUIRE(client->check(existing_directory));
-
-			auto is_success = client->check(existing_directory);
-
-			THEN("The directory is cleaning") {
-
-				CHECK(is_success);
-			}
-		}
-	}
+      THEN("The directory is cleaning")
+      {
+        CHECK(is_success);
+      }
+    }
+  }
 }
 
-SCENARIO("Client must check not an existing remote resources", "[check]") {
+SCENARIO("Client must check not an existing remote resources", "[check]")
+{
+  auto options = fixture::get_options();
 
-    auto options = fixture::get_options();
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  GIVEN("Not an existing remote resource")
+  {
+    std::string not_existing_file = "not_existing_file.dat";
+    std::string not_existing_directory = "not_existing_directory/";
 
-	GIVEN("Not an existing remote resource") {
+    WHEN("Check for existence of not an existing remote file")
+    {
+      REQUIRE(client->clean(not_existing_file));
 
-		std::string not_existing_file = "not_existing_file.dat";
-		std::string not_existing_directory = "not_existing_directory/";
+      auto is_success = client->check(not_existing_file);
 
-		WHEN("Check for existence of not an existing remote file") {
+      THEN("Check must be not success") {
 
-			REQUIRE(client->clean(not_existing_file));
+        CHECK_FALSE(is_success);
+      }
+    }
 
-			auto is_success = client->check(not_existing_file);
+    WHEN("Check for existence of an existing remote directory")
+    {
+      REQUIRE(client->clean(not_existing_directory));
 
-			THEN("Check must be not success") {
+      auto is_success = client->check(not_existing_directory);
 
-				CHECK_FALSE(is_success);
-			}
-		}
-
-		WHEN("Check for existence of an existing remote directory") {
-
-			REQUIRE(client->clean(not_existing_directory));
-
-			auto is_success = client->check(not_existing_directory);
-
-			THEN("Check must be not success") {
-
-				CHECK_FALSE(is_success);
-			}
-		}
-	}
+      THEN("Check must be not success")
+      {
+        CHECK_FALSE(is_success);
+      }
+    }
+  }
 }

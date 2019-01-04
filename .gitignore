@@ -1,6 +1,7 @@
 *.dat
 .idea/
 *build*/
+*logs*/
 *.swp
 .DS_Store
 *build*/

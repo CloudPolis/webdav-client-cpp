@@ -20,107 +20,110 @@
 #
 ############################################################################*/
 
-#include <catch.hpp>
 #include <webdav/client.hpp>
+
 #include "fixture.hpp"
+
+#include <catch.hpp>
 
 #include <fstream>
 #include <memory>
+#include <sstream>
 
-SCENARIO("Client must upload buffer", "[upload][buffer]") {
+SCENARIO("Client must upload buffer", "[upload][buffer]")
+{
+  auto options = fixture::get_options();
+  auto content = fixture::get_buff_content();
+  auto filename = fixture::get_file_name();
 
-    auto options = fixture::get_options();
-    auto content = fixture::get_buff_content();
-    auto filename = fixture::get_file_name();
+  CAPTURE(filename);
 
-    CAPTURE(filename);
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  GIVEN("A buffer")
+  {
+    std::string remote_resource = filename;
 
-	GIVEN("A buffer") {
+    auto buffer_pointer = const_cast<char *>(content.c_str());
+    auto buffer_size = content.length() * sizeof(content.c_str()[0]);
 
-		std::string remote_resource = filename;
+    WHEN("Upload the buffer")
+    {
+      REQUIRE(client->clean(remote_resource));
+      REQUIRE(!client->check(remote_resource));
 
-		auto buffer_pointer = const_cast<char *>(content.c_str());
-		auto buffer_size = content.length() * sizeof(content.c_str()[0]);
+      auto is_success = client->upload_from(remote_resource, buffer_pointer, buffer_size);
 
-		WHEN("Upload the buffer") {
+      THEN("buffer must be uploaded") {
 
-			REQUIRE(client->clean(remote_resource));
-			REQUIRE(!client->check(remote_resource));
-
-			auto is_success = client->upload_from(remote_resource, buffer_pointer, buffer_size);
-
-			THEN("buffer must be uploaded") {
-
-				CHECK(is_success);
-				CHECK(client->check(remote_resource));
-			}
-		}
-	}
+        CHECK(is_success);
+        CHECK(client->check(remote_resource));
+      }
+    }
+  }
 }
 
-SCENARIO("Client must upload string stream", "[upload][string][stream]") {
+SCENARIO("Client must upload string stream", "[upload][string][stream]")
+{
+  auto options = fixture::get_options();
+  auto content = fixture::get_buff_content();
+  auto filename = fixture::get_file_name();
 
-    auto options = fixture::get_options();
-    auto content = fixture::get_buff_content();
-    auto filename = fixture::get_file_name();
+  CAPTURE(filename);
 
-    CAPTURE(filename);
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  GIVEN("A stream")
+  {
+    std::stringstream stream(content);
+    std::string remote_resource = filename;
 
-	GIVEN("A stream") {
+    WHEN("Upload the stream")
+    {
+      REQUIRE(client->clean(remote_resource));
+      REQUIRE(!client->check(remote_resource));
 
-		std::stringstream stream(content);
-		std::string remote_resource = filename;
+      auto is_success = client->upload_from(remote_resource, stream);
 
-		WHEN("Upload the stream") {
+      THEN("stream must be uploaded")
+      {
+        CHECK(is_success);
+        CHECK(client->check(remote_resource));
+      }
+    }
+  }
+}
 
-			REQUIRE(client->clean(remote_resource));
-			REQUIRE(!client->check(remote_resource));
+SCENARIO("Client must upload file stream", "[upload][file][stream]")
+{
+  auto options = fixture::get_options();
+  auto content = fixture::get_file_content();
+  auto filename = fixture::get_file_name();
 
-			auto is_success = client->upload_from(remote_resource, stream);
+  CAPTURE(filename);
 
-			THEN("stream must be uploaded") {
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-				CHECK(is_success);
-				CHECK(client->check(remote_resource));
-			}
-		}
-	}
-}  
+  GIVEN("A stream")
+  {
+    std::ofstream out(filename);
+    out << content;
 
-SCENARIO("Client must upload file stream", "[upload][file][stream]") {
+    std::ifstream in(filename, std::ios::binary);
+    std::string remote_resource = filename;
 
-    auto options = fixture::get_options();
-    auto content = fixture::get_file_content();
-    auto filename = fixture::get_file_name();
+    WHEN("Upload the stream")
+    {
+      REQUIRE(client->clean(remote_resource));
+      REQUIRE(!client->check(remote_resource));
 
-    CAPTURE(filename);
+      auto is_success = client->upload_from(remote_resource, in);
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
-
-	GIVEN("A stream") {
-
-        std::ofstream out(filename);
-        out << content;
-
-		std::ifstream in(filename, std::ios::binary);
-		std::string remote_resource = filename;
-
-		WHEN("Upload the stream") {
-
-			REQUIRE(client->clean(remote_resource));
-			REQUIRE(!client->check(remote_resource));
-
-			auto is_success = client->upload_from(remote_resource, in);
-
-			THEN("stream must be uploaded") {
-
-				CHECK(is_success);
-				CHECK(client->check(remote_resource));
-			}
-		}
-	}
-}  
+      THEN("stream must be uploaded")
+      {
+        CHECK(is_success);
+        CHECK(client->check(remote_resource));
+      }
+    }
+  }
+}

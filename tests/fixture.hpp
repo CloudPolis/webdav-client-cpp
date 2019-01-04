@@ -27,13 +27,13 @@ using dict_t = std::map<std::string, std::string>;
 
 namespace fixture
 {
-    auto get_file_content() -> std::string;
+  auto get_file_content() -> std::string;
 
-    auto get_buff_content() -> std::string;
+  auto get_buff_content() -> std::string;
 
-    auto get_file_name() -> std::string;
-        
-    auto get_dir_name() -> std::string;
+  auto get_file_name() -> std::string;
 
-    auto get_options() -> dict_t;
+  auto get_dir_name() -> std::string;
+
+  auto get_options() -> dict_t;
 }

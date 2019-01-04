@@ -20,165 +20,167 @@
 #
 ############################################################################*/
 
-#include <catch.hpp>
 #include <webdav/client.hpp>
+
 #include "fixture.hpp"
+
+#include <catch.hpp>
 
 #include <memory>
 
-SCENARIO("Client must clean an existing remote resources", "[clean]") {
+SCENARIO("Client must clean an existing remote resources", "[clean]")
+{
+  auto options = fixture::get_options();
+  auto content = fixture::get_buff_content();
+  auto dirname = fixture::get_dir_name();
+  auto filename = fixture::get_file_name();
 
-    auto options = fixture::get_options();
-    auto content = fixture::get_buff_content();
-    auto dirname = fixture::get_dir_name();
-    auto filename = fixture::get_file_name();
+  CAPTURE(dirname);
+  CAPTURE(filename);
 
-    CAPTURE(dirname);
-    CAPTURE(filename);
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  GIVEN("An existing remote resource")
+  {
+    std::string existing_file = filename;
+    std::string existing_directory = dirname;
 
-	GIVEN("An existing remote resource") {
+    client->upload_from(existing_file, (char *)content.c_str(), content.length());
+    client->create_directory(existing_directory);
 
-		std::string existing_file = filename;
-		std::string existing_directory = dirname;
+    WHEN("Clean an existing remote file")
+    {
+      REQUIRE(client->check(existing_file));
 
-		client->upload_from(existing_file, (char *)content.c_str(), content.length());
-		client->create_directory(existing_directory);
+      auto is_success = client->clean(existing_file);
 
-		WHEN("Clean an existing remote file") {
+      THEN("The file is cleaning")
+      {
+        CHECK(is_success);
+        CHECK_FALSE(client->check(existing_file));
+      }
+    }
 
-			REQUIRE(client->check(existing_file));
+    WHEN("Clean an existing directory")
+    {
+      REQUIRE(client->check(existing_directory));
 
-			auto is_success = client->clean(existing_file);
+      auto is_success = client->clean(existing_directory);
 
-			THEN("The file is cleaning") {
-
-				CHECK(is_success);
-				CHECK_FALSE(client->check(existing_file));
-			}
-		}
-
-		WHEN("Clean an existing directory") {
-
-			REQUIRE(client->check(existing_directory));
-
-			auto is_success = client->clean(existing_directory);
-
-			THEN("The directory is cleaning") {
-
-				CHECK(is_success);
-				CHECK_FALSE(client->check(existing_directory));
-			}
-		}
-	}
+      THEN("The directory is cleaning")
+      {
+        CHECK(is_success);
+        CHECK_FALSE(client->check(existing_directory));
+      }
+    }
+  }
 }
 
-SCENARIO("Client must clean not an existing remote resources", "[clean]") {
+SCENARIO("Client must clean not an existing remote resources", "[clean]")
+{
+  auto options = fixture::get_options();
 
-    auto options = fixture::get_options();
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  GIVEN("Not an existing remote resource")
+  {
+    std::string not_existing_file = "not_existing_file.dat";
+    std::string not_existing_directory = "not_existing_directory/";
 
-	GIVEN("Not an existing remote resource") {
+    WHEN("Clean not an existing remote file")
+    {
+      REQUIRE_FALSE(client->check(not_existing_file));
 
-		std::string not_existing_file = "not_existing_file.dat";
-		std::string not_existing_directory = "not_existing_directory/";
+      auto is_success = client->clean(not_existing_file);
 
-		WHEN("Clean not an existing remote file") {
+      THEN("The file is cleaning")
+      {
+        CHECK(is_success);
+        CHECK_FALSE(client->check(not_existing_file));
+      }
+    }
 
-			REQUIRE_FALSE(client->check(not_existing_file));
+    WHEN("Clean not an existing directory")
+    {
+      REQUIRE_FALSE(client->check(not_existing_directory));
 
-			auto is_success = client->clean(not_existing_file);
+      auto is_success = client->clean(not_existing_directory);
 
-			THEN("The file is cleaning") {
-
-				CHECK(is_success);
-				CHECK_FALSE(client->check(not_existing_file));
-			}
-		}
-
-		WHEN("Clean not an existing directory") {
-
-			REQUIRE_FALSE(client->check(not_existing_directory));
-
-			auto is_success = client->clean(not_existing_directory);
-
-			THEN("The directory is cleaning") {
-
-				CHECK(is_success);
-				CHECK_FALSE(client->check(not_existing_directory));
-			}
-		}
-	}
+      THEN("The directory is cleaning")
+      {
+        CHECK(is_success);
+        CHECK_FALSE(client->check(not_existing_directory));
+      }
+    }
+  }
 }
 
-SCENARIO("Client must clean not an empty remote directories", "[clean]") {
+SCENARIO("Client must clean not an empty remote directories", "[clean]")
+{
+  auto options = fixture::get_options();
+  auto content = fixture::get_buff_content();
+  auto dirname = fixture::get_dir_name();
 
-    auto options = fixture::get_options();
-    auto content = fixture::get_buff_content();
-    auto dirname = fixture::get_dir_name();
+  CAPTURE(dirname);
 
-    CAPTURE(dirname);
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  GIVEN("Not an empty remote directory")
+  {
+    std::string not_empty_directory = dirname;
+    std::string attached_file = not_empty_directory + "/" + "attached_file.dat";
+    std::string attached_directory = not_empty_directory + "/" + "attached_directory/";
 
-	GIVEN("Not an empty remote directory") {
+    client->create_directory(not_empty_directory);
+    client->upload_from(attached_file, (char *)content.c_str(), content.length());
+    client->create_directory(attached_directory);
 
-		std::string not_empty_directory = dirname;
-		std::string attached_file = not_empty_directory + "/" + "attached_file.dat";
-		std::string attached_directory = not_empty_directory + "/" + "attached_directory/";
+    WHEN("Clean not an empty directory")
+    {
+      REQUIRE(client->check(not_empty_directory));
+      REQUIRE(client->check(attached_file));
+      REQUIRE(client->check(attached_directory));
 
-		client->create_directory(not_empty_directory);
-		client->upload_from(attached_file, (char *)content.c_str(), content.length());
-		client->create_directory(attached_directory);
+      auto is_success = client->clean(not_empty_directory);
 
-		WHEN("Clean not an empty directory") {
+      REQUIRE(is_success);
 
-			REQUIRE(client->check(not_empty_directory));
-			REQUIRE(client->check(attached_file));
-			REQUIRE(client->check(attached_directory));
-
-			auto is_success = client->clean(not_empty_directory);
-
-			REQUIRE(is_success);
-
-			THEN("The directory and the attached resources are cleaning") {
-
-				CHECK_FALSE(client->check(not_empty_directory));
-				CHECK_FALSE(client->check(attached_file));
-				CHECK_FALSE(client->check(attached_directory));
-			}
-		}
-	}
+      THEN("The directory and the attached resources are cleaning")
+      {
+        CHECK_FALSE(client->check(not_empty_directory));
+        CHECK_FALSE(client->check(attached_file));
+        CHECK_FALSE(client->check(attached_directory));
+      }
+    }
+  }
 }
 
-SCENARIO("Client must clean a remote directory", "[clean]") {
+SCENARIO("Client must clean a remote directory", "[clean]")
+{
+  auto options = fixture::get_options();
+  auto dirname = fixture::get_dir_name();
 
-    auto options = fixture::get_options();
-    auto dirname = fixture::get_dir_name();
+  CAPTURE(dirname);
 
-    CAPTURE(dirname);
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  GIVEN("An existing directory")
+  {
+    std::string directory_name = dirname; 
+    client->create_directory(directory_name);
 
-	GIVEN("An existing directory") {
-		
-		std::string directory_name = dirname;	
-		client->create_directory(directory_name);
+    WHEN("Clean directory by a name")
+    {
+      REQUIRE(client->check(directory_name));
 
-		WHEN("Clean directory by a name") {
+      auto is_success = client->clean(directory_name);
 
-			REQUIRE(client->check(directory_name));
+      REQUIRE(is_success);
 
-			auto is_success = client->clean(directory_name);
-    
-            REQUIRE(is_success);
-
-			THEN("The directory is cleaning") {
-
-				CHECK_FALSE(client->check(directory_name));
-			}
-		}
-	}
+      THEN("The directory is cleaning")
+      {
+        CHECK_FALSE(client->check(directory_name));
+      }
+    }
+  }
 }
