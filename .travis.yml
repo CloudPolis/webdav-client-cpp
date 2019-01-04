@@ -3,7 +3,7 @@ dist: trusty
 sudo: required
 git:
   depth: 1
-  submodules: false
+  submodules: true
 addons:
   apt:
     packages:
