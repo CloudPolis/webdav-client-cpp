@@ -30,11 +30,9 @@ Build
 Building WebDAV Client from sources:
 
 ```ShellSession
-$ git clone https://github.com/CloudPolis/webdav-client-cpp
+$ git clone --recursive https://github.com/CloudPolis/webdav-client-cpp
 $ cd webdav-client-cpp
-$ cmake -H. -B_builds # -DCMAKE_INSTALL_PREFIX=install
-$ cmake --build _builds
-$ cmake --build _builds --target install
+$ ./tools/polly/bin/polly --install
 ```
 
 Building documentation:
@@ -53,9 +51,7 @@ For run tests you need to set environment variables `WEBDAV_HOSTNAME`,
 $ export WEBDAV_HOSTNAME=<your_webdav_hostname>
 $ export WEBDAV_USERNAME=<your_webdav_username>
 $ export WEBDAV_PASSWORD=<your_webdav_password>
-$ cmake -H. -B_builds -DBUILD_TESTS=ON
-$ cmake --build _builds
-$ cmake --build _builds --target test -- ARGS=--verbose
+$ ./tools/polly/bin/polly --test --reconfig --fwd BUILD_TESTS=yes
 ```
 
 Usage
