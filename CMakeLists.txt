@@ -6,7 +6,7 @@
 #                        |   /\   | |  |/  /   \  \___
 #                         \_/  \_/  |_____/     \_____|
 #
-# Copyright (C) 2018, The WDC Project, <designerror@yandex.ru>, et al.
+# Copyright (C) 2018, The WDC Project, <rusdevops@gmail.com>, et al.
 #
 # This software is licensed as described in the file LICENSE, which
 # you should have received as part of this distribution. 
@@ -20,7 +20,7 @@
 #
 ############################################################################
 
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.4)
 
 include("tools/gate/cmake/HunterGate.cmake")
 huntergate(
@@ -31,13 +31,13 @@ huntergate(
 set(WDC_VERSION_MAJOR 1)
 set(WDC_VERSION_MINOR 1)
 set(WDC_VERSION_PATCH 4)
+set(WDC_VERSION_TWEAK 0)
 set(WDC_VERSION ${WDC_VERSION_MAJOR}.${WDC_VERSION_MINOR}.${WDC_VERSION_PATCH})
 
 project(WDC VERSION ${WDC_VERSION})
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_EXAMPLES "Build Examples" OFF)
@@ -50,8 +50,7 @@ find_package(CURL CONFIG REQUIRED)
 hunter_add_package(pugixml)
 find_package(pugixml CONFIG REQUIRED)
 
-file(GLOB ${PROJECT_NAME}_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/sources/*.cpp")
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
+file(GLOB WDC_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/sources/*.cpp")
 
 add_library(libwdc ${${PROJECT_NAME}_SOURCES})
 set_target_properties(libwdc PROPERTIES PREFIX "")
@@ -63,10 +62,6 @@ endif()
 target_link_libraries(libwdc OpenSSL::SSL OpenSSL::Crypto CURL::libcurl pugixml)
 
 target_include_directories(libwdc PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-)
-
 set(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
 
 set(CONFIG_INSTALL_DIR "lib/cmake/${PROJECT_NAME}")
@@ -119,7 +114,7 @@ if(BUILD_TESTS)
   add_executable(check ${${PROJECT_NAME}_TEST_SOURCES})
   target_link_libraries(check libwdc Catch::Catch Boost::filesystem Boost::system)
 
-  if (${CMAKE_BUILD_TYPE} MATCHES "Coverage")
+  if(${CMAKE_BUILD_TYPE} MATCHES "Coverage")
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
     include(CodeCoverage)
 
