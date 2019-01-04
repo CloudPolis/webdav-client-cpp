@@ -22,45 +22,49 @@
 
 #include <webdav/client.hpp>
 
+#include <iostream>
+#include <map>
 #include <memory>
+#include <string>
 
-int main() {
+int main()
+{
+  auto hostname_ptr = std::getenv("WEBDAV_HOSTNAME");
+  auto username_ptr = std::getenv("WEBDAV_USERNAME");
+  auto password_ptr = std::getenv("WEBDAV_PASSWORD");
+  auto root_ptr = std::getenv("WEBDAV_ROOT");
 
-    auto hostname_ptr = std::getenv("WEBDAV_HOSTNAME");
-    auto username_ptr = std::getenv("WEBDAV_USERNAME");
-    auto password_ptr = std::getenv("WEBDAV_PASSWORD");
-    auto root_ptr = std::getenv("WEBDAV_ROOT");
+  if (hostname_ptr == nullptr) return -1;
+  if (username_ptr == nullptr) return -1;
+  if (password_ptr == nullptr) return -1;
 
-    if (hostname_ptr == nullptr) return -1;
-    if (username_ptr == nullptr) return -1;
-    if (password_ptr == nullptr) return -1;
+  std::map<std::string, std::string> options =
+  {
+    { "webdav_hostname", hostname_ptr },
+    { "webdav_username", username_ptr },
+    { "webdav_password", password_ptr }
+  };
 
-    std::map<std::string, std::string> options =
-    {
-        { "webdav_hostname", hostname_ptr },
-        { "webdav_username", username_ptr },
-        { "webdav_password", password_ptr }
-    };
+  if (root_ptr != nullptr) {
+      options["webdav_root"] = root_ptr;
+  }
 
-    if (root_ptr != nullptr) {
-        options["webdav_root"] = root_ptr;
-    }
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  auto remote_resources = {
+    "existing_file.dat",
+    "not_existing_file.dat",
+    "existing_directory",
+    "existing_directory/",
+    "not_existing_directory",
+    "not_existing_directory/"
+  };
 
-    auto remote_resources = {
-        "existing_file.dat",
-        "not_existing_file.dat",
-        "existing_directory",
-        "existing_directory/",
-        "not_existing_directory",
-        "not_existing_directory/"
-    };
-
-    for (const auto& remote_resource : remote_resources) {
-        bool is_existed = client->check(remote_resource);
-        std::cout << "Resource: " << remote_resource << " is " << (is_existed ? "" : "not ") << "existed" << std::endl;
-    }
+  for (const auto& remote_resource : remote_resources) {
+    bool is_existed = client->check(remote_resource);
+    std::cout << "Resource: " << remote_resource 
+              << " is " << (is_existed ? "" : "not ") << "existed" << std::endl;
+  }
 }
 
 /// Resource: existing_file.dat is existed
