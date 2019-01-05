@@ -2,14 +2,14 @@
 #                         __    __   _____       _____
 #   Project              |  |  |  | |     \     /  ___|
 #                        |  |__|  | |  |\  \   /  /
-#                        |        | |  | )  ) (  (     
+#                        |        | |  | )  ) (  (
 #                        |   /\   | |  |/  /   \  \___
 #                         \_/  \_/  |_____/     \_____|
 #
-# Copyright (C) 2016, The WDC Project, <designerror@yandex.ru>, et al.
+# Copyright (C) 2018, The WDC Project, <rusdevops@gmail.com>, et al.
 #
 # This software is licensed as described in the file LICENSE, which
-# you should have received as part of this distribution. 
+# you should have received as part of this distribution.
 #
 # You may opt to use, copy, modify, merge, publish, distribute and/or sell
 # copies of the Software, and permit persons to whom the Software is
@@ -166,7 +166,7 @@ SCENARIO("Client must clean a remote directory", "[clean]")
 
   GIVEN("An existing directory")
   {
-    std::string directory_name = dirname; 
+    std::string directory_name = dirname;
     client->create_directory(directory_name);
 
     WHEN("Clean directory by a name")

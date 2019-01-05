@@ -6,7 +6,7 @@
 #                        |   /\   | |  |/  /   \  \___
 #                         \_/  \_/  |_____/     \_____|
 #
-# Copyright (C) 2016, The WDC Project, <designerror@yandex.ru>, et al.
+# Copyright (C) 2018, The WDC Project, <rusdevops@gmail.com>, et al.
 #
 # This software is licensed as described in the file LICENSE, which
 # you should have received as part of this distribution.
@@ -27,13 +27,9 @@ using dict_t = std::map<std::string, std::string>;
 
 namespace fixture
 {
-  auto get_file_content() -> std::string;
-
   auto get_buff_content() -> std::string;
-
-  auto get_file_name() -> std::string;
-
   auto get_dir_name() -> std::string;
-
+  auto get_file_content() -> std::string;
+  auto get_file_name() -> std::string;
   auto get_options() -> dict_t;
 }
