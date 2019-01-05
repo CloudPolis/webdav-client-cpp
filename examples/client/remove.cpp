@@ -2,14 +2,14 @@
 #                         __    __   _____       _____
 #   Project              |  |  |  | |     \     /  ___|
 #                        |  |__|  | |  |\  \   /  /
-#                        |        | |  | )  ) (  (     
+#                        |        | |  | )  ) (  (
 #                        |   /\   | |  |/  /   \  \___
 #                         \_/  \_/  |_____/     \_____|
 #
 # Copyright (C) 2016, The WDC Project, <designerror@yandex.ru>, et al.
 #
 # This software is licensed as described in the file LICENSE, which
-# you should have received as part of this distribution. 
+# you should have received as part of this distribution.
 #
 # You may opt to use, copy, modify, merge, publish, distribute and/or sell
 # copies of the Software, and permit persons to whom the Software is
@@ -24,32 +24,35 @@
 
 #include <memory>
 
-int main() {
+int main()
+{
 
-    std::map<std::string, std::string> options =
-    {
-        { "webdav_hostname", "https://webdav.yandex.ru" },
-        { "webdav_username", "{webdav_username}" },
-        { "webdav_password", "{webdav_password}" }
-    };
+  std::map<std::string, std::string> options =
+  {
+    { "webdav_hostname", "https://webdav.yandex.ru" },
+    { "webdav_username", "{webdav_username}" },
+    { "webdav_password", "{webdav_password}" }
+  };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    bool is_connected = client->check();
+  bool is_connected = client->check();
 
-    auto remote_resources = {
-        "existing_file.dat",
-        "not_existing_file.dat",
-        "existing_directory",
-        "existing_directory/",
-        "not_existing_directory",
-        "not_existing_directory/"
-    };
+  auto remote_resources =
+  {
+    "existing_file.dat",
+    "not_existing_file.dat",
+    "existing_directory",
+    "existing_directory/",
+    "not_existing_directory",
+    "not_existing_directory/"
+  };
 
-    for (const auto& remote_resource : remote_resources) {
-        bool is_clean = client->clean(remote_resource);
-        std::cout << "Resource: " << remote_resource << " is " << (is_clean ? "" : "not ") << "clean" << std::endl;
-    }
+  for (const auto& remote_resource : remote_resources)
+  {
+    bool is_clean = client->clean(remote_resource);
+    std::cout << "Resource: " << remote_resource << " is " << (is_clean ? "" : "not ") << "clean" << std::endl;
+  }
 }
 
 /// Resource: existing_file.dat is clean

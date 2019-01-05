@@ -2,14 +2,14 @@
 #                         __    __   _____       _____
 #   Project              |  |  |  | |     \     /  ___|
 #                        |  |__|  | |  |\  \   /  /
-#                        |        | |  | )  ) (  (     
+#                        |        | |  | )  ) (  (
 #                        |   /\   | |  |/  /   \  \___
 #                         \_/  \_/  |_____/     \_____|
 #
 # Copyright (C) 2016, The WDC Project, <designerror@yandex.ru>, et al.
 #
 # This software is licensed as described in the file LICENSE, which
-# you should have received as part of this distribution. 
+# you should have received as part of this distribution.
 #
 # You may opt to use, copy, modify, merge, publish, distribute and/or sell
 # copies of the Software, and permit persons to whom the Software is
@@ -29,20 +29,20 @@
 
 void download_to_file()
 {
-    std::map<std::string, std::string> options =
-    {
-        {"webdav_hostname", "https://webdav.yandex.ru"},
-        {"webdav_username", "{webdav_username}"},
-        {"webdav_password", "{webdav_password}"}
-    };
+  std::map<std::string, std::string> options =
+  {
+    {"webdav_hostname", "https://webdav.yandex.ru"},
+    {"webdav_username", "{webdav_username}"},
+    {"webdav_password", "{webdav_password}"}
+  };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::string remote_file = "dir/file.dat";
-    auto local_file = "/home/user/Downloads/file.dat";
-    bool is_downloaded = client->download(remote_file, local_file);
+  std::string remote_file = "dir/file.dat";
+  auto local_file = "/home/user/Downloads/file.dat";
+  bool is_downloaded = client->download(remote_file, local_file);
 
-    std::cout << remote_file << " resource is" << (is_downloaded ? "" : "not") << "downloaded" << std::endl;
+  std::cout << remote_file << " resource is" << (is_downloaded ? "" : "not") << "downloaded" << std::endl;
 }
 
 /// dir/file.dat resource is downloaded
@@ -53,22 +53,22 @@ void download_to_file()
 
 void async_download_to_file()
 {
-    std::map<std::string, std::string> options =
-    {
-        {"webdav_hostname", "https://webdav.yandex.ru"},
-        {"webdav_username", "{webdav_username}"},
-        {"webdav_password", "{webdav_password}"}
-    };
+  std::map<std::string, std::string> options =
+  {
+    {"webdav_hostname", "https://webdav.yandex.ru"},
+    {"webdav_username", "{webdav_username}"},
+    {"webdav_password", "{webdav_password}"}
+  };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::string remote_file = "dir/file.dat";
-    std::string local_file = "/home/user/Downloads/file.dat";
+  std::string remote_file = "dir/file.dat";
+  std::string local_file = "/home/user/Downloads/file.dat";
 
-    client->async_download(remote_file, local_file, [remote_file](bool is_downloaded)
-    {
-        std::cout << remote_file << " resource is" << (is_downloaded ? "" : "not") << "downloaded" << std::endl;
-    });
+  client->async_download(remote_file, local_file, [remote_file](bool is_downloaded)
+  {
+    std::cout << remote_file << " resource is" << (is_downloaded ? "" : "not") << "downloaded" << std::endl;
+  });
 }
 
 /// dir/file.dat resource is downloaded
@@ -79,22 +79,22 @@ void async_download_to_file()
 
 void download_to_buffer()
 {
-    std::map<std::string, std::string> options =
-    {
-        {"webdav_hostname", "https://webdav.yandex.ru"},
-        {"webdav_username", "{webdav_username}"},
-        {"webdav_password", "{webdav_password}"}
-    };
+  std::map<std::string, std::string> options =
+  {
+    {"webdav_hostname", "https://webdav.yandex.ru"},
+    {"webdav_username", "{webdav_username}"},
+    {"webdav_password", "{webdav_password}"}
+  };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::string remote_file = "dir/file.dat";
-    char * buffer_ptr = nullptr;
-    unsigned long long buffer_size = 0;
+  std::string remote_file = "dir/file.dat";
+  char* buffer_ptr = nullptr;
+  unsigned long long buffer_size = 0;
 
-    bool is_downloaded = client->download_to(remote_file, buffer_ptr, buffer_size);
+  bool is_downloaded = client->download_to(remote_file, buffer_ptr, buffer_size);
 
-    std::cout << remote_file << " resource is" << (is_downloaded ? "" : "not") << "downloaded" << std::endl;
+  std::cout << remote_file << " resource is" << (is_downloaded ? "" : "not") << "downloaded" << std::endl;
 }
 
 /// dir/file.dat resource is downloaded
@@ -105,25 +105,25 @@ void download_to_buffer()
 
 void async_download_to_buffer()
 {
-    /*
-    std::map<std::string, std::string> options =
-    {
-        {"webdav_hostname", "https://webdav.yandex.ru"},
-        {"webdav_username", "{webdav_username}"},
-        {"webdav_password", "{webdav_password}"}
-    };
+  /*
+  std::map<std::string, std::string> options =
+  {
+      {"webdav_hostname", "https://webdav.yandex.ru"},
+      {"webdav_username", "{webdav_username}"},
+      {"webdav_password", "{webdav_password}"}
+  };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::string remote_file = "dir/file.dat";
-    char * buffer_ptr = nullptr;
-    unsigned long long buffer_size = 0;
+  std::string remote_file = "dir/file.dat";
+  char * buffer_ptr = nullptr;
+  unsigned long long buffer_size = 0;
 
-    client->async_download(remote_file, buffer_ptr, buffer_size, [remote_file](bool is_downloaded)
-    {
-        std::cout << remote_file << " resource is" << (is_downloaded ? "" : "not") << "downloaded" << std::endl;
-    });
-    */
+  client->async_download(remote_file, buffer_ptr, buffer_size, [remote_file](bool is_downloaded)
+  {
+      std::cout << remote_file << " resource is" << (is_downloaded ? "" : "not") << "downloaded" << std::endl;
+  });
+  */
 }
 
 /// dir/file.dat resource is downloaded
@@ -134,31 +134,32 @@ void async_download_to_buffer()
 
 void download_from_stream()
 {
-    std::map<std::string, std::string> options =
-    {
-        {"webdav_hostname", "https://webdav.yandex.ru"},
-        {"webdav_username", "{webdav_username}"},
-        {"webdav_password", "{webdav_password}"}
-    };
+  std::map<std::string, std::string> options =
+  {
+    {"webdav_hostname", "https://webdav.yandex.ru"},
+    {"webdav_username", "{webdav_username}"},
+    {"webdav_password", "{webdav_password}"}
+  };
 
-    std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
+  std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-    std::string remote_file = "dir/file.dat";
-    std::ofstream stream("/home/user/Downloads/file.dat");
+  std::string remote_file = "dir/file.dat";
+  std::ofstream stream("/home/user/Downloads/file.dat");
 
-    bool is_downloaded = client->download_to(remote_file, stream);
+  bool is_downloaded = client->download_to(remote_file, stream);
 
-    std::cout << remote_file << " resource is" << (is_downloaded ? "" : "not") << "downloaded" << std::endl;
+  std::cout << remote_file << " resource is" << (is_downloaded ? "" : "not") << "downloaded" << std::endl;
 }
 
 /// dir/file.dat resource is downloaded
 
 //! [download_from_stream]
 
-int main() {
-    download_to_file();
-    download_to_buffer();
-    async_download_to_file();
-    async_download_to_buffer();
-    download_from_stream();
+int main()
+{
+  download_to_file();
+  download_to_buffer();
+  async_download_to_file();
+  async_download_to_buffer();
+  download_from_stream();
 }

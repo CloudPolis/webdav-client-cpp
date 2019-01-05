@@ -26,43 +26,44 @@
 
 namespace WebDAV
 {
-    Header::Header(const std::initializer_list<std::string>& init_list) noexcept : handle(nullptr)
+  Header::Header(const std::initializer_list<std::string>& init_list) noexcept : handle(nullptr)
+  {
+    for (auto& item : init_list)
     {
-        for (auto& item : init_list)
-        {
-            this->append(item);
-        }
+      this->append(item);
+    }
+  }
+
+  Header::~Header() noexcept
+  {
+    curl_slist_free_all(reinterpret_cast<curl_slist*>(this->handle));
+  }
+
+  Header::Header(Header&& other) noexcept
+  {
+    handle = other.handle;
+    other.handle = nullptr;
+  }
+
+  auto Header::operator=(Header&& other) noexcept -> Header&
+  {
+    if (this != &other)
+    {
+      Header(std::move(other)).swap(*this);
     }
 
-    Header::~Header() noexcept
-    {
-        curl_slist_free_all(reinterpret_cast<curl_slist *>(this->handle));
-    }
+    return *this;
+  }
 
-    Header::Header(Header&& other) noexcept
-    {
-        handle = other.handle;
-        other.handle = nullptr;
-    }
+  auto Header::swap(Header& other) noexcept -> void
+  {
+    using std::swap;
+    swap(handle, other.handle);
+  }
 
-    auto Header::operator=(Header&& other) noexcept -> Header&
-    {
-        if (this != &other) {
-            Header(std::move(other)).swap(*this);
-        }
-
-        return *this;
-    }
-
-    auto Header::swap(Header& other) noexcept -> void
-    {
-        using std::swap;
-        swap(handle, other.handle);
-    }
-
-    void
-    Header::append(const std::string& item) noexcept
-    {
-        this->handle = curl_slist_append(reinterpret_cast<curl_slist *>(this->handle), item.c_str());
-    }
+  void
+  Header::append(const std::string& item) noexcept
+  {
+    this->handle = curl_slist_append(reinterpret_cast<curl_slist*>(this->handle), item.c_str());
+  }
 } // namespace WebDAV

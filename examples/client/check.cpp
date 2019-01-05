@@ -2,14 +2,14 @@
 #                         __    __   _____       _____
 #   Project              |  |  |  | |     \     /  ___|
 #                        |  |__|  | |  |\  \   /  /
-#                        |        | |  | )  ) (  (     
+#                        |        | |  | )  ) (  (
 #                        |   /\   | |  |/  /   \  \___
 #                         \_/  \_/  |_____/     \_____|
 #
 # Copyright (C) 2016, The WDC Project, <designerror@yandex.ru>, et al.
 #
 # This software is licensed as described in the file LICENSE, which
-# you should have received as part of this distribution. 
+# you should have received as part of this distribution.
 #
 # You may opt to use, copy, modify, merge, publish, distribute and/or sell
 # copies of the Software, and permit persons to whom the Software is
@@ -45,13 +45,15 @@ int main()
     { "webdav_password", password_ptr }
   };
 
-  if (root_ptr != nullptr) {
-      options["webdav_root"] = root_ptr;
+  if (root_ptr != nullptr)
+  {
+    options["webdav_root"] = root_ptr;
   }
 
   std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };
 
-  auto remote_resources = {
+  auto remote_resources =
+  {
     "existing_file.dat",
     "not_existing_file.dat",
     "existing_directory",
@@ -60,9 +62,10 @@ int main()
     "not_existing_directory/"
   };
 
-  for (const auto& remote_resource : remote_resources) {
+  for (const auto& remote_resource : remote_resources)
+  {
     bool is_existed = client->check(remote_resource);
-    std::cout << "Resource: " << remote_resource 
+    std::cout << "Resource: " << remote_resource
               << " is " << (is_existed ? "" : "not ") << "existed" << std::endl;
   }
 }

@@ -49,7 +49,7 @@ namespace WebDAV
       auto name() const -> string;
       auto parent() const -> Path;
       auto path() const -> string;
-      auto quote(void * request) const -> string;
+      auto quote(void* request) const -> string;
 
     private:
 

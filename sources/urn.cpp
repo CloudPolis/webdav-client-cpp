@@ -65,7 +65,8 @@ namespace WebDAV
         {
           m_path.replace(first_position, double_separte.size(), Path::separate);
         }
-      } while (is_find);
+      }
+      while (is_find);
     }
 
     Path::Path(std::nullptr_t)
@@ -78,7 +79,7 @@ namespace WebDAV
       return m_path;
     }
 
-    auto escape(void * request, const string& name) -> string
+    auto escape(void* request, const string& name) -> string
     {
       string path = curl_easy_escape(request, name.c_str(), static_cast<int>(name.length()));
       return path;
@@ -92,7 +93,7 @@ namespace WebDAV
 
       while ((end = text.find_first_of(delims, start)) != text.npos)
       {
-        tokens.push_back(text.substr(start, end-start));
+        tokens.push_back(text.substr(start, end - start));
         start = text.find_first_not_of(delims, end);
       }
       if (start != text.npos)
@@ -102,14 +103,14 @@ namespace WebDAV
       return tokens;
     }
 
-    auto Path::quote(void *request) const -> string
+    auto Path::quote(void* request) const -> string
     {
       if (this->is_root()) return m_path;
 
       auto names = split(m_path, Path::separate);
       string quote_path;
 
-      std::for_each(names.begin(), names.end(), [&quote_path, request](string& name)
+      std::for_each(names.begin(), names.end(), [&quote_path, request](string & name)
       {
         auto escape_name = escape(request, name);
         quote_path.append(Path::separate);
@@ -183,7 +184,7 @@ namespace WebDAV
       bool is_dir = is_directory();
       if (is_dir)
       {
-        lhs_path = m_path.substr(0, m_path.length()-1);
+        lhs_path = m_path.substr(0, m_path.length() - 1);
       }
       else
       {
@@ -193,11 +194,11 @@ namespace WebDAV
       if (rhs.is_directory())
       {
         rhs_path = rhs.path();
-        rhs_path = rhs_path.substr(0, rhs_path.length()-1);
+        rhs_path = rhs_path.substr(0, rhs_path.length() - 1);
       }
       else
       {
-          rhs_path = rhs.path();
+        rhs_path = rhs.path();
       }
       return lhs_path == rhs_path;
     }

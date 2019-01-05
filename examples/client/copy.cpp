@@ -2,14 +2,14 @@
 #                         __    __   _____       _____
 #   Project              |  |  |  | |     \     /  ___|
 #                        |  |__|  | |  |\  \   /  /
-#                        |        | |  | )  ) (  (     
+#                        |        | |  | )  ) (  (
 #                        |   /\   | |  |/  /   \  \___
 #                         \_/  \_/  |_____/     \_____|
 #
 # Copyright (C) 2016, The WDC Project, <designerror@yandex.ru>, et al.
 #
 # This software is licensed as described in the file LICENSE, which
-# you should have received as part of this distribution. 
+# you should have received as part of this distribution.
 #
 # You may opt to use, copy, modify, merge, publish, distribute and/or sell
 # copies of the Software, and permit persons to whom the Software is
@@ -50,13 +50,14 @@ int main()
 
   std::map<std::string, std::string> options =
   {
-      { "webdav_hostname", hostname_ptr },
-      { "webdav_username", username_ptr },
-      { "webdav_password", password_ptr }
+    { "webdav_hostname", hostname_ptr },
+    { "webdav_username", username_ptr },
+    { "webdav_password", password_ptr }
   };
 
-  if (root_ptr != nullptr) {
-      options["webdav_root"] = root_ptr;
+  if (root_ptr != nullptr)
+  {
+    options["webdav_root"] = root_ptr;
   }
 
   std::unique_ptr<WebDAV::Client> client{ new WebDAV::Client{ options } };

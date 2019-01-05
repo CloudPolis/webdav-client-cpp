@@ -44,7 +44,7 @@ namespace WebDAV
     Request(Request&& other) noexcept;
     ~Request() noexcept;
 
-    auto operator=(const Request& other) -> Request & = delete;
+    auto operator=(const Request& other) -> Request& = delete;
     auto operator=(Request&& other) noexcept -> Request &;
 
     template <typename T>
@@ -55,7 +55,7 @@ namespace WebDAV
     }
 
     bool perform() const noexcept;
-    void * handle;
+    void* handle;
 
   private:
     const dict_t options;

@@ -43,26 +43,26 @@ namespace WebDAV
     else return it->second;
   }
 
-    using Urn::Path;
+  using Urn::Path;
 
-  using progress_funptr = int(*)(void *context, size_t dltotal, size_t dlnow, size_t ultotal, size_t ulnow);
+  using progress_funptr = int(*)(void* context, size_t dltotal, size_t dlnow, size_t ultotal, size_t ulnow);
 
-    dict_t
-    Client::options() const
+  dict_t
+  Client::options() const
+  {
+    return dict_t
     {
-      return dict_t
-      {
-        { "webdav_hostname", this->webdav_hostname },
-        { "webdav_root", this->webdav_root },
-        { "webdav_username", this->webdav_username },
-        { "webdav_password", this->webdav_password },
-        { "proxy_hostname", this->proxy_hostname },
-        { "proxy_username", this->proxy_username },
-        { "proxy_password", this->proxy_password },
-        { "cert_path", this->cert_path },
-        { "key_path", this->key_path },
-      };
-    }
+      { "webdav_hostname", this->webdav_hostname },
+      { "webdav_root", this->webdav_root },
+      { "webdav_username", this->webdav_username },
+      { "webdav_password", this->webdav_password },
+      { "proxy_hostname", this->proxy_hostname },
+      { "proxy_username", this->proxy_username },
+      { "proxy_password", this->proxy_password },
+      { "cert_path", this->cert_path },
+      { "key_path", this->key_path },
+    };
+  }
 
   bool
   Client::sync_download(
@@ -92,7 +92,8 @@ namespace WebDAV
 #ifdef WDC_VERBOSE
     request.set(CURLOPT_VERBOSE, 1);
 #endif
-    if (progress != nullptr) {
+    if (progress != nullptr)
+    {
       request.set(CURLOPT_XFERINFOFUNCTION, reinterpret_cast<size_t>(progress.target<progress_funptr>()));
       request.set(CURLOPT_NOPROGRESS, 0L);
     }
@@ -106,8 +107,8 @@ namespace WebDAV
   bool
   Client::sync_download_to(
     const std::string& remote_file,
-    char * & buffer_ptr,
-    unsigned long long & buffer_size,
+    char*& buffer_ptr,
+    unsigned long long& buffer_size,
     callback_t callback,
     progress_t progress
   ) const
@@ -132,7 +133,8 @@ namespace WebDAV
 #ifdef WDC_VERBOSE
     request.set(CURLOPT_VERBOSE, 1);
 #endif
-    if (progress != nullptr) {
+    if (progress != nullptr)
+    {
       request.set(CURLOPT_XFERINFOFUNCTION, reinterpret_cast<size_t>(progress.target<progress_funptr>()));
       request.set(CURLOPT_NOPROGRESS, 0L);
     }
@@ -150,7 +152,7 @@ namespace WebDAV
   bool
   Client::sync_download_to(
     const std::string& remote_file,
-    std::ostream & stream,
+    std::ostream& stream,
     callback_t callback,
     progress_t progress
   ) const
@@ -173,7 +175,8 @@ namespace WebDAV
 #ifdef WDC_VERBOSE
     request.set(CURLOPT_VERBOSE, 1);
 #endif
-    if (progress != nullptr) {
+    if (progress != nullptr)
+    {
       request.set(CURLOPT_XFERINFOFUNCTION, reinterpret_cast<size_t>(progress.target<progress_funptr>()));
       request.set(CURLOPT_NOPROGRESS, 0L);
     }
@@ -218,7 +221,8 @@ namespace WebDAV
 #ifdef WDC_VERBOSE
     request.set(CURLOPT_VERBOSE, 1);
 #endif
-    if (progress != nullptr) {
+    if (progress != nullptr)
+    {
       request.set(CURLOPT_XFERINFOFUNCTION, reinterpret_cast<size_t>(progress.target<progress_funptr>()));
       request.set(CURLOPT_NOPROGRESS, 0L);
     }
@@ -232,7 +236,7 @@ namespace WebDAV
   bool
   Client::sync_upload_from(
     const std::string& remote_file,
-    char * buffer_ptr,
+    char* buffer_ptr,
     unsigned long long buffer_size,
     callback_t callback,
     progress_t progress
@@ -260,7 +264,8 @@ namespace WebDAV
 #ifdef WDC_VERBOSE
     request.set(CURLOPT_VERBOSE, 1);
 #endif
-    if (progress != nullptr) {
+    if (progress != nullptr)
+    {
       request.set(CURLOPT_XFERINFOFUNCTION, reinterpret_cast<size_t>(progress.target<progress_funptr>()));
       request.set(CURLOPT_NOPROGRESS, 0L);
     }
@@ -275,10 +280,10 @@ namespace WebDAV
 
   bool
   Client::sync_upload_from(
-      const std::string& remote_file,
-      std::istream& stream,
-      callback_t callback,
-      progress_t progress
+    const std::string& remote_file,
+    std::istream& stream,
+    callback_t callback,
+    progress_t progress
   ) const
   {
     auto root_urn = Path(this->webdav_root, true);
@@ -304,7 +309,8 @@ namespace WebDAV
 #ifdef WDC_VERBOSE
     request.set(CURLOPT_VERBOSE, 1);
 #endif
-    if (progress != nullptr) {
+    if (progress != nullptr)
+    {
       request.set(CURLOPT_XFERINFOFUNCTION, reinterpret_cast<size_t>(progress.target<progress_funptr>()));
       request.set(CURLOPT_NOPROGRESS, 0L);
     }
@@ -333,7 +339,8 @@ namespace WebDAV
   unsigned long long
   Client::free_size() const
   {
-    Header header = {
+    Header header =
+    {
       "Accept: */*",
       "Depth: 0",
       "Content-Type: text/xml"
@@ -355,7 +362,7 @@ namespace WebDAV
     Request request(this->options());
 
     request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
-    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<struct curl_slist *>(header.handle));
+    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<struct curl_slist*>(header.handle));
     request.set(CURLOPT_POSTFIELDS, document_print.c_str());
     request.set(CURLOPT_POSTFIELDSIZE, static_cast<long>(size));
     request.set(CURLOPT_HEADER, 0);
@@ -386,7 +393,8 @@ namespace WebDAV
     auto root_urn = Path(this->webdav_root, true);
     auto resource_urn = root_urn + remote_resource;
 
-    Header header = {
+    Header header =
+    {
       "Accept: */*",
       "Depth: 1"
     };
@@ -399,7 +407,7 @@ namespace WebDAV
 
     request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
     request.set(CURLOPT_URL, url.c_str());
-    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
+    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist*>(header.handle));
     request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&data));
     request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Append::buffer));
 #ifdef WDC_VERBOSE
@@ -415,7 +423,8 @@ namespace WebDAV
     auto root_urn = Path(this->webdav_root, true);
     auto target_urn = root_urn + remote_resource;
 
-    Header header = {
+    Header header =
+    {
       "Accept: */*",
       "Depth: 1"
     };
@@ -428,7 +437,7 @@ namespace WebDAV
 
     request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
     request.set(CURLOPT_URL, url.c_str());
-    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
+    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist*>(header.handle));
     request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&data));
     request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Append::buffer));
 #ifdef WDC_VERBOSE
@@ -453,9 +462,10 @@ namespace WebDAV
       auto target_path = target_urn.path();
       auto target_path_without_sep = target_urn.path();
       if (!target_path_without_sep.empty() && target_path_without_sep.back() == '/')
-            target_path_without_sep.resize(target_path_without_sep.length() - 1);
+        target_path_without_sep.resize(target_path_without_sep.length() - 1);
       auto resource_path_without_sep = std::string(resource_path, 0, resource_path.rfind('/') + 1);
-      if (resource_path_without_sep == target_path_without_sep) {
+      if (resource_path_without_sep == target_path_without_sep)
+      {
         auto propstat = response.node().select_node("*[local-name()='propstat']").node();
         auto prop = propstat.select_node("*[local-name()='prop']").node();
         auto creation_date = prop.select_node("*[local-name()='creationdate']").node();
@@ -464,7 +474,8 @@ namespace WebDAV
         auto modified_date = prop.select_node("*[local-name()='getlastmodified']").node();
         auto resource_type = prop.select_node("*[local-name()='resourcetype']").node();
 
-        dict_t information = {
+        dict_t information =
+        {
           { "created", creation_date.first_child().value() },
           { "name", display_name.first_child().value() },
           { "size", content_length.first_child().value() },
@@ -497,7 +508,8 @@ namespace WebDAV
     auto target_urn = Path(this->webdav_root, true) + remote_directory;
     target_urn = Path(target_urn.path(), true);
 
-    Header header = {
+    Header header =
+    {
       "Accept: */*",
       "Depth: 1"
     };
@@ -510,7 +522,7 @@ namespace WebDAV
 
     request.set(CURLOPT_CUSTOMREQUEST, "PROPFIND");
     request.set(CURLOPT_URL, url.c_str());
-    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
+    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist*>(header.handle));
     request.set(CURLOPT_HEADER, 0);
     request.set(CURLOPT_WRITEDATA, reinterpret_cast<size_t>(&data));
     request.set(CURLOPT_WRITEFUNCTION, reinterpret_cast<size_t>(Callback::Append::buffer));
@@ -535,7 +547,7 @@ namespace WebDAV
       std::string resource_path = curl_unescape(encode_file_name.c_str(), static_cast<int>(encode_file_name.length()));
       auto target_path = target_urn.path();
       Path resource_urn(resource_path);
-            if (resource_urn == target_urn) continue;
+      if (resource_urn == target_urn) continue;
       resources.push_back(resource_urn.name());
     }
 
@@ -552,40 +564,43 @@ namespace WebDAV
   }
 
   void
-    Client::async_download(
-      const std::string& remote_file,
-      const std::string& local_file,
-      callback_t callback,
-      progress_t progress
-    ) const
+  Client::async_download(
+    const std::string& remote_file,
+    const std::string& local_file,
+    callback_t callback,
+    progress_t progress
+  ) const
   {
-    std::thread downloading([=]() { this->sync_download(remote_file, local_file, callback, std::move(progress)); });
+    std::thread downloading([ = ]()
+    {
+      this->sync_download(remote_file, local_file, callback, std::move(progress));
+    });
     downloading.detach();
   }
 
   bool
-    Client::download_to(
-      const std::string& remote_file,
-      char * & buffer_ptr,
-      unsigned long long & buffer_size,
-      progress_t progress
-    ) const
+  Client::download_to(
+    const std::string& remote_file,
+    char*& buffer_ptr,
+    unsigned long long& buffer_size,
+    progress_t progress
+  ) const
   {
     return this->sync_download_to(remote_file, buffer_ptr, buffer_size, nullptr, std::move(progress));
   }
 
   bool
-    Client::download_to(
-      const std::string& remote_file,
-      std::ostream& stream,
-      progress_t progress
-    ) const
+  Client::download_to(
+    const std::string& remote_file,
+    std::ostream& stream,
+    progress_t progress
+  ) const
   {
     return this->sync_download_to(remote_file, stream, nullptr, std::move(progress));
   }
 
   bool
-    Client::create_directory(const std::string& remote_directory, bool recursive) const
+  Client::create_directory(const std::string& remote_directory, bool recursive) const
   {
     bool is_existed = this->check(remote_directory);
     if (is_existed) return true;
@@ -593,14 +608,16 @@ namespace WebDAV
     bool resource_is_dir = true;
     Path directory_urn(remote_directory, resource_is_dir);
 
-    if (recursive) {
+    if (recursive)
+    {
       auto remote_parent_directory = directory_urn.parent().path();
       if (remote_parent_directory == remote_directory) return false;
       bool is_created = this->create_directory(remote_parent_directory, true);
       if (!is_created) return false;
     }
 
-    Header header = {
+    Header header =
+    {
       "Accept: */*",
       "Connection: Keep-Alive"
     };
@@ -614,7 +631,7 @@ namespace WebDAV
 
     request.set(CURLOPT_CUSTOMREQUEST, "MKCOL");
     request.set(CURLOPT_URL, url.c_str());
-    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
+    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist*>(header.handle));
 #ifdef WDC_VERBOSE
     request.set(CURLOPT_VERBOSE, 1);
 #endif
@@ -623,7 +640,7 @@ namespace WebDAV
   }
 
   bool
-    Client::move(const std::string& remote_source_resource, const std::string& remote_destination_resource) const
+  Client::move(const std::string& remote_source_resource, const std::string& remote_destination_resource) const
   {
     bool is_existed = this->check(remote_source_resource);
     if (!is_existed) return false;
@@ -633,7 +650,8 @@ namespace WebDAV
     auto source_resource_urn = root_urn + remote_source_resource;
     auto destination_resource_urn = root_urn + remote_destination_resource;
 
-    Header header = {
+    Header header =
+    {
       "Accept: */*",
       "Destination: " + destination_resource_urn.path()
     };
@@ -644,7 +662,7 @@ namespace WebDAV
 
     request.set(CURLOPT_CUSTOMREQUEST, "MOVE");
     request.set(CURLOPT_URL, url.c_str());
-    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
+    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist*>(header.handle));
 #ifdef WDC_VERBOSE
     request.set(CURLOPT_VERBOSE, 1);
 #endif
@@ -653,7 +671,7 @@ namespace WebDAV
   }
 
   bool
-    Client::copy(const std::string& remote_source_resource, const std::string& remote_destination_resource) const
+  Client::copy(const std::string& remote_source_resource, const std::string& remote_destination_resource) const
   {
     bool is_existed = this->check(remote_source_resource);
     if (!is_existed) return false;
@@ -663,7 +681,8 @@ namespace WebDAV
     auto source_resource_urn = root_urn + remote_source_resource;
     auto destination_resource_urn = root_urn + remote_destination_resource;
 
-    Header header = {
+    Header header =
+    {
       "Accept: */*",
       "Destination: " + destination_resource_urn.path()
     };
@@ -674,7 +693,7 @@ namespace WebDAV
 
     request.set(CURLOPT_CUSTOMREQUEST, "COPY");
     request.set(CURLOPT_URL, url.c_str());
-    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
+    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist*>(header.handle));
 #ifdef WDC_VERBOSE
     request.set(CURLOPT_VERBOSE, 1);
 #endif
@@ -700,7 +719,10 @@ namespace WebDAV
     progress_t progress
   ) const
   {
-    std::thread uploading([=]() { this->sync_upload(remote_file, local_file, callback, std::move(progress)); });
+    std::thread uploading([ = ]()
+    {
+      this->sync_upload(remote_file, local_file, callback, std::move(progress));
+    });
     uploading.detach();
   }
 
@@ -717,7 +739,7 @@ namespace WebDAV
   bool
   Client::upload_from(
     const std::string& remote_file,
-    char * buffer_ptr,
+    char* buffer_ptr,
     unsigned long long buffer_size,
     progress_t progress
   ) const
@@ -734,7 +756,8 @@ namespace WebDAV
     auto root_urn = Path(this->webdav_root, true);
     auto resource_urn = root_urn + remote_resource;
 
-    Header header = {
+    Header header =
+    {
       "Accept: */*",
       "Connection: Keep-Alive"
     };
@@ -745,7 +768,7 @@ namespace WebDAV
 
     request.set(CURLOPT_CUSTOMREQUEST, "DELETE");
     request.set(CURLOPT_URL, url.c_str());
-    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist *>(header.handle));
+    request.set(CURLOPT_HTTPHEADER, reinterpret_cast<curl_slist*>(header.handle));
 #ifdef WDC_VERBOSE
     request.set(CURLOPT_VERBOSE, 1);
 #endif
@@ -753,14 +776,17 @@ namespace WebDAV
     return request.perform();
   }
 
-  class Environment {
+  class Environment
+  {
   public:
-      Environment()  {
-        curl_global_init(CURL_GLOBAL_ALL);
-      }
-      ~Environment()  {
-        curl_global_cleanup();
-      }
+    Environment()
+    {
+      curl_global_init(CURL_GLOBAL_ALL);
+    }
+    ~Environment()
+    {
+      curl_global_cleanup();
+    }
   };
 } // namespace WebDAV
 

@@ -44,8 +44,8 @@ SCENARIO("Client must download into buffer", "[download][buffer]")
     std::string source_buffer = content;
     std::string remote_resource = filename;
 
-    auto buffer_pointer = const_cast<char *>(source_buffer.c_str());
-    unsigned long long buffer_size = (source_buffer.length() + 1)* sizeof(source_buffer.c_str()[0]);
+    auto buffer_pointer = const_cast<char*>(source_buffer.c_str());
+    unsigned long long buffer_size = (source_buffer.length() + 1) * sizeof(source_buffer.c_str()[0]);
 
     auto is_success = client->upload_from(remote_resource, buffer_pointer, buffer_size);
     REQUIRE(is_success);

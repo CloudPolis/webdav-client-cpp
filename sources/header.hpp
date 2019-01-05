@@ -28,24 +28,24 @@
 
 namespace WebDAV
 {
-    class Header final
-    {
-    public:
-      void * handle;
+  class Header final
+  {
+  public:
+    void* handle;
 
-      Header(const std::initializer_list<std::string>& init_list) noexcept;
-      Header(const Header& other) = delete;
-      Header(Header&& other) noexcept;
-      ~Header() noexcept;
+    Header(const std::initializer_list<std::string>& init_list) noexcept;
+    Header(const Header& other) = delete;
+    Header(Header&& other) noexcept;
+    ~Header() noexcept;
 
-      auto operator=(const Header& other) -> Header& = delete;
-      auto operator=(Header&& other) noexcept -> Header&;
+    auto operator=(const Header& other) -> Header& = delete;
+    auto operator=(Header&& other) noexcept -> Header&;
 
-      void append(const std::string& item) noexcept;
+    void append(const std::string& item) noexcept;
 
-    private:
-      auto swap(Header& other) noexcept -> void;
-    };
+  private:
+    auto swap(Header& other) noexcept -> void;
+  };
 } // namespace WebDAV
 
 #endif

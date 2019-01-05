@@ -45,7 +45,7 @@ SCENARIO("Client must clean an existing remote resources", "[clean]")
     std::string existing_file = filename;
     std::string existing_directory = dirname;
 
-    client->upload_from(existing_file, (char *)content.c_str(), content.length());
+    client->upload_from(existing_file, (char*)content.c_str(), content.length());
     client->create_directory(existing_directory);
 
     WHEN("Clean an existing remote file")
@@ -132,7 +132,7 @@ SCENARIO("Client must clean not an empty remote directories", "[clean]")
     std::string attached_directory = not_empty_directory + "/" + "attached_directory/";
 
     client->create_directory(not_empty_directory);
-    client->upload_from(attached_file, (char *)content.c_str(), content.length());
+    client->upload_from(attached_file, (char*)content.c_str(), content.length());
     client->create_directory(attached_directory);
 
     WHEN("Clean not an empty directory")

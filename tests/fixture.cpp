@@ -84,13 +84,15 @@ namespace fixture
       throw std::runtime_error("undefined WEBDAV_PASSWORD environment variable");
     }
 
-    std::map<std::string, std::string> options = {
+    std::map<std::string, std::string> options =
+    {
       {"webdav_hostname", hostname_ptr},
       {"webdav_username",    username_ptr},
       {"webdav_password", password_ptr}
     };
 
-    if (root_ptr != nullptr) {
+    if (root_ptr != nullptr)
+    {
       options["webdav_root"] = root_ptr;
     }
 

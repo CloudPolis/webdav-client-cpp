@@ -1,0 +1,19 @@
+--convert-tabs            # 4.2
+--indent=spaces=2         # 4.2
+--indent-namespaces
+--style=break             # 4.3.1
+--indent-cases            # 4.3.2
+--pad-comma               # 4.5.1
+--pad-header              # 4.5.5
+--pad-oper                # 4.5.6
+--align-pointer=type      # 4.5.7
+--align-reference=type    # 4.5.7
+--indent-col1-comments
+--mode=c
+# --indent-preproc-block
+# --delete-empty-lines
+# --remove-braces
+# --attach-return-type
+# --close-templates
+# --max-code-length=80
+# --break-after-logical

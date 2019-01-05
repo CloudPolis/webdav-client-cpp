@@ -51,9 +51,9 @@ SCENARIO("Client must list a remote files and a remote directories", "[list]")
     {
       auto number = std::to_string(i);
       auto directory = root + "/" + template_dirname + number;
-      auto file = root + "/"+ template_filename + number;
+      auto file = root + "/" + template_filename + number;
       client->create_directory(directory);
-      client->upload_from(file, (char *)content.c_str(), content.length());
+      client->upload_from(file, (char*)content.c_str(), content.length());
     }
 
     WHEN("List the directory")
@@ -82,7 +82,7 @@ SCENARIO("Client can not list a remote file", "[list][file]")
   {
     std::string existing_file = filename;
 
-    client->upload_from(existing_file, (char *)content.c_str(), content.length());
+    client->upload_from(existing_file, (char*)content.c_str(), content.length());
 
     WHEN("List content of the file")
     {

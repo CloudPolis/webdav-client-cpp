@@ -31,11 +31,11 @@
 
 namespace WebDAV
 {
-  using progress_t = std::function<int(void *context,
-                size_t dltotal,
-                size_t dlnow,
-                size_t ultotal,
-                size_t ulnow)> ;
+  using progress_t = std::function<int(void* context,
+                                       size_t dltotal,
+                                       size_t dlnow,
+                                       size_t ultotal,
+                                       size_t ulnow)> ;
 
   using callback_t = std::function<void(bool)> ;
 
@@ -163,8 +163,8 @@ namespace WebDAV
     ///
     auto download_to(
       const std::string& remote_file,
-      char * & buffer_ptr,
-      unsigned long long & buffer_size,
+      char*& buffer_ptr,
+      unsigned long long& buffer_size,
       progress_t progress = nullptr
     ) const -> bool;
 
@@ -219,7 +219,7 @@ namespace WebDAV
     ///
     auto upload_from(
       const std::string& remote_file,
-      char * buffer_ptr,
+      char* buffer_ptr,
       unsigned long long buffer_size,
       progress_t progress = nullptr
     ) const -> bool;
@@ -263,8 +263,8 @@ namespace WebDAV
 
     auto sync_download_to(
       const std::string& remote_file,
-      char * & buffer_ptr,
-      unsigned long long & buffer_size,
+      char*& buffer_ptr,
+      unsigned long long& buffer_size,
       callback_t callback = nullptr,
       progress_t progress = nullptr
     ) const -> bool;
@@ -285,7 +285,7 @@ namespace WebDAV
 
     auto sync_upload_from(
       const std::string& remote_file,
-      char * buffer_ptr,
+      char* buffer_ptr,
       unsigned long long buffer_size,
       callback_t callback = nullptr,
       progress_t progress = nullptr

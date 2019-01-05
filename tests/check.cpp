@@ -45,7 +45,7 @@ SCENARIO("Client must check an existing remote resources", "[check]")
     std::string existing_file = filename;
     std::string existing_directory = dirname;
 
-    client->upload_from(existing_file, (char *)content.c_str(), content.length());
+    client->upload_from(existing_file, (char*)content.c_str(), content.length());
     client->create_directory(existing_directory);
 
     WHEN("Check for existence of an existing remote file")
@@ -91,7 +91,8 @@ SCENARIO("Client must check not an existing remote resources", "[check]")
 
       auto is_success = client->check(not_existing_file);
 
-      THEN("Check must be not success") {
+      THEN("Check must be not success")
+      {
 
         CHECK_FALSE(is_success);
       }

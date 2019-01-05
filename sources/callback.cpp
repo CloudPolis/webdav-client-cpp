@@ -32,9 +32,9 @@ namespace WebDAV
   {
     namespace Read
     {
-      size_t stream(char * ptr, size_t item_size, size_t item_count, void * stream)
+      size_t stream(char* ptr, size_t item_size, size_t item_count, void* stream)
       {
-        auto in_stream = reinterpret_cast<std::istream *>(stream);
+        auto in_stream = reinterpret_cast<std::istream*>(stream);
         auto read_bytes = static_cast<unsigned long long>(item_size * item_count);
         auto position = static_cast<unsigned long long>(in_stream->tellg());
         in_stream->seekg(0, std::ios::end);
@@ -46,7 +46,7 @@ namespace WebDAV
         return read_bytes;
       }
 
-      size_t buffer(char * ptr, size_t item_size, size_t item_count, void * buffer)
+      size_t buffer(char* ptr, size_t item_size, size_t item_count, void* buffer)
       {
         auto data = (Data*)buffer;
         auto size = static_cast<unsigned long long>(item_size * item_count);
@@ -60,17 +60,17 @@ namespace WebDAV
 
     namespace Write
     {
-      size_t stream(char * ptr, size_t item_size, size_t item_count, void * stream)
+      size_t stream(char* ptr, size_t item_size, size_t item_count, void* stream)
       {
-        auto out_stream = reinterpret_cast<std::ostream *>(stream);
+        auto out_stream = reinterpret_cast<std::ostream*>(stream);
         size_t write_bytes = item_size * item_count;
         out_stream->write(ptr, write_bytes);
         return write_bytes;
       }
 
-      size_t buffer(char * ptr, size_t item_size, size_t item_count, void * buffer)
+      size_t buffer(char* ptr, size_t item_size, size_t item_count, void* buffer)
       {
-        auto data = reinterpret_cast<Data *>(buffer);
+        auto data = reinterpret_cast<Data*>(buffer);
         auto size = static_cast<unsigned long long>(item_size * item_count);
         auto rest_bytes = data->size - data->position;
         auto copied_bytes = std::min<unsigned long long>(size, rest_bytes);
@@ -82,9 +82,9 @@ namespace WebDAV
 
     namespace Append
     {
-      size_t buffer(char * ptr, size_t item_size, size_t item_count, void * buffer)
+      size_t buffer(char* ptr, size_t item_size, size_t item_count, void* buffer)
       {
-        auto data = reinterpret_cast<Data *>(buffer);
+        auto data = reinterpret_cast<Data*>(buffer);
         auto append_size = item_size * item_count;
         auto new_buffer_size = data->size + append_size;
         auto new_buffer = new char[new_buffer_size];
@@ -96,9 +96,9 @@ namespace WebDAV
         return append_size;
       }
 
-      size_t stream(char * ptr, size_t item_size, size_t item_count, void * stream)
+      size_t stream(char* ptr, size_t item_size, size_t item_count, void* stream)
       {
-        auto out_stream = reinterpret_cast<std::ostream *>(stream);
+        auto out_stream = reinterpret_cast<std::ostream*>(stream);
         size_t write_bytes = item_size * item_count;
         out_stream->seekp(0, std::ios::end);
         out_stream->write(ptr, write_bytes);

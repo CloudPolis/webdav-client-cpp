@@ -44,7 +44,7 @@ SCENARIO("Client must upload buffer", "[upload][buffer]")
   {
     std::string remote_resource = filename;
 
-    auto buffer_pointer = const_cast<char *>(content.c_str());
+    auto buffer_pointer = const_cast<char*>(content.c_str());
     auto buffer_size = content.length() * sizeof(content.c_str()[0]);
 
     WHEN("Upload the buffer")
@@ -54,7 +54,8 @@ SCENARIO("Client must upload buffer", "[upload][buffer]")
 
       auto is_success = client->upload_from(remote_resource, buffer_pointer, buffer_size);
 
-      THEN("buffer must be uploaded") {
+      THEN("buffer must be uploaded")
+      {
 
         CHECK(is_success);
         CHECK(client->check(remote_resource));
