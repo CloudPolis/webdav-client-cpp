@@ -42,7 +42,7 @@ namespace WebDAV
     Header::Header(Header&& other) noexcept
     {
         handle = other.handle;
-        other.handle = nullptr;   
+        other.handle = nullptr;
     }
 
     auto Header::operator=(Header&& other) noexcept -> Header&
@@ -59,7 +59,6 @@ namespace WebDAV
         using std::swap;
         swap(handle, other.handle);
     }
-        
 
     void
     Header::append(const std::string& item) noexcept

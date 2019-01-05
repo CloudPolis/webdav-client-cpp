@@ -31,8 +31,8 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <thread>
 #include <algorithm>
+#include <thread>
 
 namespace WebDAV
 {

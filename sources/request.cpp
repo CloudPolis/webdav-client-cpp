@@ -68,7 +68,7 @@ namespace WebDAV
       this->set(CURLOPT_SSLCERT, const_cast<char *>(cert_path.c_str()));
       this->set(CURLOPT_SSLKEY, const_cast<char *>(key_path.c_str()));
     }
-    
+
     this->set(CURLOPT_URL, const_cast<char *>(webdav_hostname.c_str()));
     this->set(CURLOPT_HTTPAUTH, static_cast<int>(CURLAUTH_BASIC));
     auto token = webdav_username + ":" + webdav_password;

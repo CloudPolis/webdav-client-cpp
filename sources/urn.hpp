@@ -29,7 +29,7 @@
 
 namespace WebDAV
 {
-  namespace Urn 
+  namespace Urn
   {
     using std::string;
     using std::nullptr_t;

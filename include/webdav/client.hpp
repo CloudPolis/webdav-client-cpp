@@ -49,7 +49,7 @@ namespace WebDAV
   /// \date 3/16/2018
   ///
   class Client
-  { 
+  {
   public:
 
     ///
@@ -251,7 +251,7 @@ namespace WebDAV
       callback_t callback = nullptr,
       progress_t progress = nullptr
     ) const -> void;
-       
+
   private:
 
     auto sync_download(

@@ -34,8 +34,8 @@ namespace WebDAV
     return code == CURLE_OK;
   }
 
-  using dict_t = std::map<std::string, std::string>; 
-  
+  using dict_t = std::map<std::string, std::string>;
+
   class Request
   {
   public:
