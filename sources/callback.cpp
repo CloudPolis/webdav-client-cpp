@@ -90,8 +90,8 @@ namespace WebDAV
         auto new_buffer = new char[new_buffer_size];
         if (data->size != 0) memcpy(new_buffer, data->buffer, data->size);
         memcpy(new_buffer + data->size, ptr, append_size);
-        data->buffer = new_buffer;
         delete[] data->buffer;
+        data->buffer = new_buffer;
         data->size = new_buffer_size;
         return append_size;
       }
