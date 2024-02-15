@@ -460,10 +460,12 @@ namespace WebDAV
       std::string encode_file_name = href.first_child().value();
       std::string resource_path = curl_unescape(encode_file_name.c_str(), static_cast<int>(encode_file_name.length()));
       auto target_path = target_urn.path();
-      auto target_path_without_sep = target_urn.path();
+      auto target_path_without_sep = target_path;
       if (!target_path_without_sep.empty() && target_path_without_sep.back() == '/')
         target_path_without_sep.resize(target_path_without_sep.length() - 1);
-      auto resource_path_without_sep = std::string(resource_path, 0, resource_path.rfind('/') + 1);
+      auto resource_path_without_sep = resource_path;
+      if (!resource_path_without_sep.empty() && resource_path_without_sep.back() == '/')
+        resource_path_without_sep.resize(resource_path_without_sep.length() - 1);
       if (resource_path_without_sep == target_path_without_sep)
       {
         auto propstat = response.node().select_node("*[local-name()='propstat']").node();
